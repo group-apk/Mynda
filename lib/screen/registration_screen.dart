@@ -203,27 +203,25 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
 
     // states
-    String? selectedValue3 = null;
-    final stateField = DropdownButtonFormField(
-      autofocus: false,
-      decoration: InputDecoration(
-        prefixIcon: Icon(Icons.location_city),
-        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-        hintText: "State",
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-      value: selectedValue3,
-      onChanged: (String? newValue) {
-        setState(() {
-          selectedValue3 = newValue!;
-        });
-        statesEditingController.text = selectedValue3!;
-      },
-      validator: (value) => value == null ? "Select your state" : null,
-      items: eastMalaysiaStateItems,
-    );
+    var stateField = stateDropdown(item: null);
+    if (regionEditingController.text == "Northern Region"){
+      stateField = stateDropdown(item: northStateItems);
+    }
+    else if (regionEditingController.text == "Eastern Region"){
+      stateField = stateDropdown(item: eastStateItems);
+    }
+    else if (regionEditingController.text == "Central Region"){
+      stateField = stateDropdown(item: centralStateItems);
+    }
+    else if (regionEditingController.text == "Southern Region"){
+      stateField = stateDropdown(item: southernStateItems);
+    }
+    else if (regionEditingController.text == "East Malaysia"){
+      stateField = stateDropdown(item: eastMalaysiaStateItems);
+    }
+    
 
-    // signup button
+    // sign up button
     final signupButton = Material(
       elevation: 5,
       borderRadius: BorderRadius.circular(30),
@@ -235,7 +233,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           signUp(emailEditingController.text, passwordEditingController.text);
         },
         child: Text(
-          "SignUp",
+          "Sign Up",
           textAlign: TextAlign.center,
           style: TextStyle(
               fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
@@ -281,7 +279,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     //   ),
                     // ),
                     const Text(
-                      "Signup as member",
+                      "Sign Up as member",
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 44.0,
@@ -320,7 +318,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             //             RegistrationScreen()));
                           },
                           child: Text(
-                            "SignUp as staff",
+                            "Sign Up as staff",
                             style: TextStyle(
                                 color: Color(0xFF0069FE),
                                 fontWeight: FontWeight.bold,
@@ -386,6 +384,28 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     //     context, MaterialPageRoute(builder: (context) => ProfileScreen()));
   }
 
+  String? selectedValue3 = null;
+  Widget stateDropdown({required item}){
+    return DropdownButtonFormField(
+      autofocus: false,
+      decoration: InputDecoration(
+        prefixIcon: Icon(Icons.location_city),
+        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        hintText: "State",
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+      value: selectedValue3,
+      onChanged: (String? newValue) {
+        setState(() {
+          selectedValue3 = newValue!;
+        });
+        statesEditingController.text = selectedValue3!;
+      },
+      validator: (value) => value == null ? "Select your state" : null,
+      items: item,
+    );
+  }
+
   List<DropdownMenuItem<String>> get genderItems {
     List<DropdownMenuItem<String>> menuItems = [
       DropdownMenuItem(child: Text("Male"), value: "Male"),
@@ -396,7 +416,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   List<DropdownMenuItem<String>> get regionItems {
     List<DropdownMenuItem<String>> menuItems = [
-      DropdownMenuItem(child: Text("Northen Region"), value: "Northen Region"),
+      DropdownMenuItem(child: Text("Northern Region"), value: "Northern Region"),
       DropdownMenuItem(child: Text("Eastern Region"), value: "Eastern Region"),
       DropdownMenuItem(child: Text("Central Region"), value: "Central Region"),
       DropdownMenuItem(
