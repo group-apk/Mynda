@@ -1,17 +1,18 @@
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../screen/registration_screen.dart';
-import 'main.dart';
+import '../main.dart';
+// ignore_for_file: prefer_const_constructors
+// ignore_for_file: avoid_print
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+class Dashboard extends StatefulWidget {
+  const Dashboard({Key? key}) : super(key: key);
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<Dashboard> createState() => _DashboardState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _DashboardState extends State<Dashboard> {
 
   final FirebaseAuth auth = FirebaseAuth.instance;
   //signout function 

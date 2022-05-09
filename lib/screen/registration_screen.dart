@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 // import 'package:map_proj/profile_screen.dart';
 // ignore_for_file: prefer_const_constructors
+// ignore_for_file: avoid_print
+
 import '../model/user_model.dart';
 
 class RegistrationScreen extends StatefulWidget {
