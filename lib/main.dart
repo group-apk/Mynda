@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import '../profile_screen.dart';
 import '../screen/registration_screen.dart';
-
+// ignore_for_file: prefer_const_constructors
 void main() {
   runApp(const MyApp());
 }
@@ -140,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
             height: 88.0,
           ),
           SizedBox(height: 88),
-          Container(
+          SizedBox(
             width: double.infinity,
             child: RawMaterialButton(
               fillColor: const Color(0xFF0069FE),
