@@ -5,7 +5,9 @@ class UserModel {
       ic,
       gender,
       region,
-      states;
+      states,
+      role,
+      academic;
 
   UserModel(
       {this.uid,
@@ -14,7 +16,9 @@ class UserModel {
       this.ic,
       this.gender,
       this.region,
-      this.states});
+      this.states,
+      this.role,
+      this.academic});
 
   // receive data from server
   factory UserModel.fromMap(map) {
@@ -25,7 +29,9 @@ class UserModel {
         ic: map['ic'],
         gender: map['gender'],
         region: map['region'],
-        states: map['states']);
+        states: map['states'],
+        role: map['role'],
+        academic: map['academic']);
   }
 
   // sending to server
@@ -37,7 +43,9 @@ class UserModel {
       'ic': ic,
       'gender': gender,
       'region': region,
-      'states': states
+      'states': states,
+      'role': role,
+      'academic': academic,
     };
   }
 }
