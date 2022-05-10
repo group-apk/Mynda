@@ -4,20 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../screen/login_screen.dart';
-import '../screen/registration_screen_staff.dart';
 // import 'package:map_proj/profile_screen.dart';
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: avoid_print
 import '../model/user_model.dart';
 
-class RegistrationScreen extends StatefulWidget {
-  const RegistrationScreen({Key? key}) : super(key: key);
+class RegistrationScreenStaff extends StatefulWidget {
+  const RegistrationScreenStaff({ Key? key }) : super(key: key);
 
   @override
-  State<RegistrationScreen> createState() => _RegistrationScreenState();
+  State<RegistrationScreenStaff> createState() => _RegistrationScreenStaffState();
 }
 
-class _RegistrationScreenState extends State<RegistrationScreen> {
+class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
   final _auth = FirebaseAuth.instance;
   // form key
   final _formKey = GlobalKey<FormState>();
@@ -29,6 +28,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final confirmPasswordEditingController = new TextEditingController();
   final ICEditingController = new TextEditingController();
   final genderEditingController = new TextEditingController();
+  final academicEditingController = new TextEditingController();
   final regionEditingController = new TextEditingController();
   final statesEditingController = new TextEditingController();
 
@@ -185,6 +185,32 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       items: genderItems,
     );
 
+    // highest academic qualification
+    final academicField = TextFormField(
+        autofocus: false,
+        controller: academicEditingController,
+        keyboardType: TextInputType.text,
+        validator: (value) {
+          RegExp regex = new RegExp(r'^.{3,}$');
+          if (value!.isEmpty) {
+            return ("Please Enter Your Highest Academic Qualification");
+          }
+          if (!regex.hasMatch(value)) {
+            return ("Min. 3 characters required");
+          }
+          return null;
+        },
+        onSaved: (value) {
+          academicEditingController.text = value!;
+        },
+        textInputAction: TextInputAction.next,
+        decoration: InputDecoration(
+          prefixIcon: Icon(Icons.school),
+          contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+          hintText: "Highest Academic Qualification",
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        ));
+
     // region
     String? selectedValue2 = null;
     final regionField = DropdownButtonFormField(
@@ -283,7 +309,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     //   ),
                     // ),
                     const Text(
-                      "Sign Up as Member",
+                      "Sign Up as Staff",
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 44.0,
@@ -303,34 +329,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     SizedBox(height: 15),
                     genderField,
                     SizedBox(height: 15),
+                    academicField,
+                    SizedBox(height: 15),
                     regionField,
                     SizedBox(height: 15),
                     stateField,
                     SizedBox(height: 15),
                     signupButton,
                     SizedBox(height: 15),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text("Are you a staff? "),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        RegistrationScreenStaff()));
-                          },
-                          child: Text(
-                            "Sign Up as staff",
-                            style: TextStyle(
-                                color: Color(0xFF0069FE),
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15),
-                          ),
-                        )
-                      ],
-                    ),
                   ],
                 ),
               ),
@@ -339,9 +345,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         ),
       ),
     );
-  }
+}
 
-  void signUp(String email, String password) async {
+ void signUp(String email, String password) async {
     if (_formKey.currentState!.validate()) {
       await _auth
           .createUserWithEmailAndPassword(email: email, password: password)
@@ -370,7 +376,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     userModel.gender = genderEditingController.text;
     userModel.region = regionEditingController.text;
     userModel.states = statesEditingController.text;
-    userModel.role = "member";
+    userModel.role = "staff";
+    userModel.academic = academicEditingController.text;
 
     await firebaseFirestore
         .collection("users")
