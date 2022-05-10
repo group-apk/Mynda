@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:map_proj/dashboard.dart';
+import 'package:map_proj/landing.dart';
 import '../profile_screen.dart';
 import '../screen/registration_screen.dart';
 
@@ -14,7 +16,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: HomePage(),
+      // home: ProfileScreen(),
+      // home: HomePage(),
+      // home: LandingScreen(),
+      home: DashboardScreen(),
     );
   }
 }
@@ -85,113 +90,133 @@ class _LoginScreenState extends State<LoginScreen> {
     TextEditingController _emailController = TextEditingController();
     TextEditingController _passwordController = TextEditingController();
 
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            "MyApp Title",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 28.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const Text(
-            "Login to Your App",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 44.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(
-            height: 44.0,
-          ),
-          TextField(
-            controller: _emailController,
-            keyboardType: TextInputType.emailAddress,
-            decoration: const InputDecoration(
-              hintText: "User Email",
-              prefixIcon: Icon(Icons.mail, color: Colors.black),
-            ),
-          ),
-          const SizedBox(
-            height: 26.0,
-          ),
-          TextField(
-            controller: _passwordController,
-            obscureText: true,
-            decoration: const InputDecoration(
-              hintText: "User Password",
-              prefixIcon: Icon(Icons.lock, color: Colors.black),
-            ),
-          ),
-          const SizedBox(
-            height: 12.0,
-          ),
-          const Text(
-            "Don't remember your password?",
-            style: TextStyle(color: Colors.blue),
-          ),
-          const SizedBox(
-            height: 88.0,
-          ),
-          SizedBox(height: 88),
-          Container(
-            width: double.infinity,
-            child: RawMaterialButton(
-              fillColor: const Color(0xFF0069FE),
-              elevation: 0.0,
-              padding: const EdgeInsets.symmetric(vertical: 20.0),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0)),
-              onPressed: () async {
-                User? user = await loginUsingEmailPassword(
-                    email: _emailController.text,
-                    password: _passwordController.text,
-                    context: context);
-                print(user);
-                if (user != null) {
-                  Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => ProfileScreen()));
-                  //make a new screen
-                }
-              },
-              child: const Text(
-                "Login",
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "MyApp Title",
                 style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18.0,
+                  color: Colors.black,
+                  fontSize: 28.0,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
-          ),
-          SizedBox(height: 15),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text("Don't have an account? "),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => RegistrationScreen()));
-                },
-                child: Text(
-                  "SignUp",
-                  style: TextStyle(
-                      color: Color(0xFF0069FE),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15),
+              const Text(
+                "Login to Your App",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 44.0,
+                  fontWeight: FontWeight.bold,
                 ),
-              )
+              ),
+              const SizedBox(
+                height: 44.0,
+              ),
+              TextField(
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: const InputDecoration(
+                  hintText: "User Email",
+                  prefixIcon: Icon(Icons.mail, color: Colors.black),
+                ),
+              ),
+              const SizedBox(
+                height: 26.0,
+              ),
+              TextField(
+                controller: _passwordController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  hintText: "User Password",
+                  prefixIcon: Icon(Icons.lock, color: Colors.black),
+                ),
+              ),
+              const SizedBox(
+                height: 12.0,
+              ),
+              const Text(
+                "Don't remember your password?",
+                style: TextStyle(color: Colors.blue),
+              ),
+              const SizedBox(
+                height: 88.0,
+              ),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      child: RawMaterialButton(
+                        fillColor: const Color(0xFF0069FE),
+                        elevation: 0.0,
+                        padding: const EdgeInsets.symmetric(vertical: 20.0),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.0)),
+                        onPressed: () async {
+                          User? user = await loginUsingEmailPassword(
+                              email: _emailController.text,
+                              password: _passwordController.text,
+                              context: context);
+                          print(user);
+                          if (user != null) {
+                            Navigator.of(context)
+                                .pushReplacement(MaterialPageRoute(
+                                    builder: (context) => ProfileScreen(
+                                          user: user,
+                                        )));
+                            // builder: (context) => ProfileScreen(
+                            //   user: user,
+                            // )));
+                            //make a new screen
+                          }
+                        },
+                        child: const Text(
+                          "Login",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text("Don't have an account? "),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          RegistrationScreen()));
+                            },
+                            child: Text(
+                              "SignUp",
+                              style: TextStyle(
+                                  color: Color(0xFF0069FE),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // SizedBox(height: 88),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
