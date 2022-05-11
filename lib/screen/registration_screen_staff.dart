@@ -287,57 +287,59 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
           },
         ),
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Container(
-            color: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.all(36.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    // SizedBox(
-                    //   // app logo here
-
-                    //   height: 180,
-                    //   child: Image.asset(
-                    //     "",
-                    //     fit: BoxFit.contain,
-                    //   ),
-                    // ),
-                    const Text(
-                      "Sign Up as Staff",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 44.0,
-                        fontWeight: FontWeight.bold,
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            child: Container(
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(36.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      // SizedBox(
+                      //   // app logo here
+      
+                      //   height: 180,
+                      //   child: Image.asset(
+                      //     "",
+                      //     fit: BoxFit.contain,
+                      //   ),
+                      // ),
+                      const Text(
+                        "Sign Up as Staff",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 44.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 44),
-                    fullNameField,
-                    SizedBox(height: 15),
-                    emailField,
-                    SizedBox(height: 15),
-                    passwordField,
-                    SizedBox(height: 15),
-                    confirmPasswordField,
-                    SizedBox(height: 15),
-                    ICfield,
-                    SizedBox(height: 15),
-                    genderField,
-                    SizedBox(height: 15),
-                    academicField,
-                    SizedBox(height: 15),
-                    regionField,
-                    SizedBox(height: 15),
-                    stateField,
-                    SizedBox(height: 15),
-                    signupButton,
-                    SizedBox(height: 15),
-                  ],
+                      SizedBox(height: 44),
+                      fullNameField,
+                      SizedBox(height: 15),
+                      emailField,
+                      SizedBox(height: 15),
+                      passwordField,
+                      SizedBox(height: 15),
+                      confirmPasswordField,
+                      SizedBox(height: 15),
+                      ICfield,
+                      SizedBox(height: 15),
+                      genderField,
+                      SizedBox(height: 15),
+                      academicField,
+                      SizedBox(height: 15),
+                      regionField,
+                      SizedBox(height: 15),
+                      stateField,
+                      SizedBox(height: 15),
+                      signupButton,
+                      SizedBox(height: 15),
+                    ],
+                  ),
                 ),
               ),
             ),
