@@ -19,37 +19,17 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
 
   // editing controller
-  final TextEditingController emailController =  TextEditingController();
-  final TextEditingController passwordController =  TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   // firebase
   final _auth = FirebaseAuth.instance;
-  
+
   // string for displaying the error Message
   String? errorMessage;
 
   @override
   Widget build(BuildContext context) {
-
-          const Text(
-            "MyApp Title",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 28.0,
-              fontWeight: FontWeight.bold,
-            ),
-          );
-          const Text(
-            "Login to Your App",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 44.0,
-              fontWeight: FontWeight.bold,
-            ),
-          );
-          const SizedBox(
-            height: 44.0);
-
     //email field
     final emailField = TextFormField(
         autofocus: false,
@@ -85,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
         controller: passwordController,
         obscureText: true,
         validator: (value) {
-          RegExp regex =  RegExp(r'^.{6,}$');
+          RegExp regex = RegExp(r'^.{6,}$');
           if (value!.isEmpty) {
             return ("Password is required for login");
           }
@@ -129,7 +109,6 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Center(
-          
           child: SingleChildScrollView(
             child: Container(
               color: Colors.white,
@@ -147,7 +126,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: Color.fromARGB(255, 16, 100, 168),
                           fontSize: 28.0,
                           fontWeight: FontWeight.bold,
-                        ),),
+                        ),
+                      ),
                       SizedBox(
                           height: 200,
                           child: Image.asset(
@@ -168,8 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            ResetPassword()));
+                                        builder: (context) => ResetPassword()));
                               },
                               child: Text(
                                 "Reset Password",

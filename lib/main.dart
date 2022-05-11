@@ -1,9 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:map_proj/dashboard.dart';
 import 'package:map_proj/landing.dart';
-import '../profile_screen.dart';
-import '../screen/registration_screen.dart';
 import '../screen/login_screen.dart';
 // ignore_for_file: prefer_const_constructors
 
@@ -17,10 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      // home: ProfileScreen(),
-      // home: HomePage(),
-      // home: LandingScreen(),
-      home: DashboardScreen(),
+      home: HomePage(),
     );
   }
 }
@@ -46,7 +40,7 @@ class _HomePageState extends State<HomePage> {
         future: _initializeFirebase(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return LoginScreen();
+            return LandingScreen();
           }
           return const Center(
             child: CircularProgressIndicator(),

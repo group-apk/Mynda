@@ -84,7 +84,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     child: Card(
                       margin: EdgeInsets.all(15),
                       child: SizedBox(
-                        child: Center(child: Text('article')),
+                        child: Center(child: Text('articles here')),
                       ),
                     ),
                   ),
