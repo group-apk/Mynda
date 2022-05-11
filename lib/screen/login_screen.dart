@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:map_proj/screen/reset_password_screen.dart';
 import 'dashboard_screen.dart';
 import '../screen/registration_screen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -168,7 +169,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            RegistrationScreen()));
+                                            ResetPassword()));
                               },
                               child: Text(
                                 "Reset Password",
