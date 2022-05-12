@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../main.dart';
@@ -13,9 +12,9 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-
   final FirebaseAuth auth = FirebaseAuth.instance;
-  //signout function 
+
+  //signout function
   signOut() async {
     await auth.signOut();
     Navigator.pushReplacement(
@@ -30,21 +29,20 @@ class _DashboardState extends State<Dashboard> {
         backgroundColor: Colors.blue,
         title: Text("Mynda"),
       ),
-        
-      //  floating Action Button using for signout , 
-  
+
+      //  floating Action Button using for signout ,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          signOut();
+        onPressed: () async {
+          await auth.signOut();
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => MyApp()));
         },
         child: Icon(Icons.logout_rounded),
         backgroundColor: Colors.blue,
       ),
-  
       body: Center(
         child: Text("Home page"),
       ),
     );
   }
 }
-

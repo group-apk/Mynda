@@ -3,20 +3,21 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import '../screen/login_screen.dart';
+import 'package:map_proj/view/login_screen.dart';
+import 'package:map_proj/view/registration_screen_staff.dart';
 // import 'package:map_proj/profile_screen.dart';
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: avoid_print
 import '../model/user_model.dart';
 
-class RegistrationScreenStaff extends StatefulWidget {
-  const RegistrationScreenStaff({ Key? key }) : super(key: key);
+class RegistrationScreen extends StatefulWidget {
+  const RegistrationScreen({Key? key}) : super(key: key);
 
   @override
-  State<RegistrationScreenStaff> createState() => _RegistrationScreenStaffState();
+  State<RegistrationScreen> createState() => _RegistrationScreenState();
 }
 
-class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
+class _RegistrationScreenState extends State<RegistrationScreen> {
   final _auth = FirebaseAuth.instance;
   // form key
   final _formKey = GlobalKey<FormState>();
@@ -28,7 +29,6 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
   final confirmPasswordEditingController = new TextEditingController();
   final ICEditingController = new TextEditingController();
   final genderEditingController = new TextEditingController();
-  final academicEditingController = new TextEditingController();
   final regionEditingController = new TextEditingController();
   final statesEditingController = new TextEditingController();
 
@@ -185,32 +185,6 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
       items: genderItems,
     );
 
-    // highest academic qualification
-    final academicField = TextFormField(
-        autofocus: false,
-        controller: academicEditingController,
-        keyboardType: TextInputType.text,
-        validator: (value) {
-          RegExp regex = new RegExp(r'^.{3,}$');
-          if (value!.isEmpty) {
-            return ("Please Enter Your Highest Academic Qualification");
-          }
-          if (!regex.hasMatch(value)) {
-            return ("Min. 3 characters required");
-          }
-          return null;
-        },
-        onSaved: (value) {
-          academicEditingController.text = value!;
-        },
-        textInputAction: TextInputAction.next,
-        decoration: InputDecoration(
-          prefixIcon: Icon(Icons.school),
-          contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Highest Academic Qualification",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-        ));
-
     // region
     String? selectedValue2 = null;
     final regionField = DropdownButtonFormField(
@@ -234,22 +208,17 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
 
     // states
     var stateField = stateDropdown(item: null);
-    if (regionEditingController.text == "Northern Region"){
+    if (regionEditingController.text == "Northern Region") {
       stateField = stateDropdown(item: northStateItems);
-    }
-    else if (regionEditingController.text == "Eastern Region"){
+    } else if (regionEditingController.text == "Eastern Region") {
       stateField = stateDropdown(item: eastStateItems);
-    }
-    else if (regionEditingController.text == "Central Region"){
+    } else if (regionEditingController.text == "Central Region") {
       stateField = stateDropdown(item: centralStateItems);
-    }
-    else if (regionEditingController.text == "Southern Region"){
+    } else if (regionEditingController.text == "Southern Region") {
       stateField = stateDropdown(item: southernStateItems);
-    }
-    else if (regionEditingController.text == "East Malaysia"){
+    } else if (regionEditingController.text == "East Malaysia") {
       stateField = stateDropdown(item: eastMalaysiaStateItems);
     }
-    
 
     // sign up button
     final signupButton = Material(
@@ -302,7 +271,7 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
                     children: <Widget>[
                       // SizedBox(
                       //   // app logo here
-      
+
                       //   height: 180,
                       //   child: Image.asset(
                       //     "",
@@ -310,7 +279,7 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
                       //   ),
                       // ),
                       const Text(
-                        "Sign Up as Staff",
+                        "Sign Up as Member",
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 44.0,
@@ -330,14 +299,34 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
                       SizedBox(height: 15),
                       genderField,
                       SizedBox(height: 15),
-                      academicField,
-                      SizedBox(height: 15),
                       regionField,
                       SizedBox(height: 15),
                       stateField,
                       SizedBox(height: 15),
                       signupButton,
                       SizedBox(height: 15),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text("Are you a staff? "),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          RegistrationScreenStaff()));
+                            },
+                            child: Text(
+                              "Sign Up as staff",
+                              style: TextStyle(
+                                  color: Color(0xFF0069FE),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15),
+                            ),
+                          )
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -347,9 +336,9 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
         ),
       ),
     );
-}
+  }
 
- void signUp(String email, String password) async {
+  void signUp(String email, String password) async {
     if (_formKey.currentState!.validate()) {
       await _auth
           .createUserWithEmailAndPassword(email: email, password: password)
@@ -378,8 +367,7 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
     userModel.gender = genderEditingController.text;
     userModel.region = regionEditingController.text;
     userModel.states = statesEditingController.text;
-    userModel.role = "staff";
-    userModel.academic = academicEditingController.text;
+    userModel.role = "member";
 
     await firebaseFirestore
         .collection("users")
@@ -387,11 +375,12 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
         .set(userModel.toMap());
     Fluttertoast.showToast(msg: "Account created successfully! Please Login");
 
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => LoginScreen()));
   }
 
   String? selectedValue3 = null;
-  Widget stateDropdown({required item}){
+  Widget stateDropdown({required item}) {
     return DropdownButtonFormField(
       autofocus: false,
       decoration: InputDecoration(
@@ -422,7 +411,8 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
 
   List<DropdownMenuItem<String>> get regionItems {
     List<DropdownMenuItem<String>> menuItems = [
-      DropdownMenuItem(child: Text("Northern Region"), value: "Northern Region"),
+      DropdownMenuItem(
+          child: Text("Northern Region"), value: "Northern Region"),
       DropdownMenuItem(child: Text("Eastern Region"), value: "Eastern Region"),
       DropdownMenuItem(child: Text("Central Region"), value: "Central Region"),
       DropdownMenuItem(

@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:map_proj/screen/reset_password_screen.dart';
-import 'dashboard_screen.dart';
-import '../screen/registration_screen.dart';
+import 'package:map_proj/view/dashboard_member.dart';
+import 'package:map_proj/view/registration_screen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:map_proj/view/reset_password_screen.dart';
 
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: avoid_print
@@ -202,8 +202,10 @@ class _LoginScreenState extends State<LoginScreen> {
             .signInWithEmailAndPassword(email: email, password: password)
             .then((uid) => {
                   Fluttertoast.showToast(msg: "Login Successful"),
-                  Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => Dashboard())),
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const DashboardScreenMember())),
                 });
       } on FirebaseAuthException catch (error) {
         switch (error.code) {
