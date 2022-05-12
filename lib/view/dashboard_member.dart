@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:map_proj/landing.dart';
 import 'package:map_proj/main.dart';
 
 class DashboardScreenMember extends StatefulWidget {
@@ -15,8 +16,8 @@ class _DashboardScreenMemberState extends State<DashboardScreenMember> {
   //signout function
   signOut() async {
     await auth.signOut();
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const MyApp()));
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (context) => const LandingScreen()));
   }
 
   Widget notificationDrawer() => Drawer(
@@ -42,9 +43,9 @@ class _DashboardScreenMemberState extends State<DashboardScreenMember> {
 
   Widget logoutButton() => FloatingActionButton(
         onPressed: () async {
-          await auth.signOut();
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => const MyApp()));
+          await signOut();
+          // Navigator.pushReplacement(
+          //     context, MaterialPageRoute(builder: (context) => const MyApp()));
         },
         child: const Icon(Icons.logout_rounded),
         backgroundColor: Colors.blue,
