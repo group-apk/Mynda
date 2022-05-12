@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:map_proj/landing.dart';
-import 'package:map_proj/main.dart';
 
 class DashboardScreenMember extends StatefulWidget {
   const DashboardScreenMember({Key? key}) : super(key: key);

@@ -23,14 +23,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final _formKey = GlobalKey<FormState>();
 
   // editing controller
-  final fullNameEditingController = new TextEditingController();
-  final emailEditingController = new TextEditingController();
-  final passwordEditingController = new TextEditingController();
-  final confirmPasswordEditingController = new TextEditingController();
-  final ICEditingController = new TextEditingController();
-  final genderEditingController = new TextEditingController();
-  final regionEditingController = new TextEditingController();
-  final statesEditingController = new TextEditingController();
+  final fullNameEditingController = TextEditingController();
+  final emailEditingController = TextEditingController();
+  final passwordEditingController = TextEditingController();
+  final confirmPasswordEditingController = TextEditingController();
+  final ICEditingController = TextEditingController();
+  final genderEditingController = TextEditingController();
+  final regionEditingController = TextEditingController();
+  final statesEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         controller: fullNameEditingController,
         keyboardType: TextInputType.name,
         validator: (value) {
-          RegExp regex = new RegExp(r'^.{3,}$');
+          RegExp regex = RegExp(r'^.{3,}$');
           if (value!.isEmpty) {
             return ("Please Enter Your Full Name");
           }
@@ -93,7 +93,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         controller: passwordEditingController,
         obscureText: true,
         validator: (value) {
-          RegExp regex = new RegExp(r'^.{6,}$');
+          RegExp regex = RegExp(r'^.{6,}$');
           if (value!.isEmpty) {
             return ("Please Enter Your Password");
           }
@@ -141,7 +141,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         controller: ICEditingController,
         keyboardType: TextInputType.number,
         validator: (value) {
-          RegExp regex = new RegExp(r'^[0-9]{12}$');
+          RegExp regex = RegExp(r'^[0-9]{12}$');
           if (value!.isEmpty) {
             return ("Please Enter Your IC");
           }

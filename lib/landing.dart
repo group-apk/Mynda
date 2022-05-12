@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:map_proj/view/dashboard.dart';
-import 'package:map_proj/view/dashboard_member.dart';
 import 'package:map_proj/view/login_screen.dart';
 
 class LandingScreen extends StatefulWidget {
