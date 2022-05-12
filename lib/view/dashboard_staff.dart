@@ -16,7 +16,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           children: [
             Expanded(
                 child: Container(
-              color: Colors.purple,
+              color: Colors.blue[300],
               child: Padding(
                 padding: const EdgeInsets.all(32.0),
                 child: Row(
@@ -31,7 +31,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     Expanded(
                       child: MaterialButton(
                         shape: const CircleBorder(),
-                        color: Colors.purple[100],
+                        color: Colors.blue[100],
                         onPressed: () {},
                         child: const Icon(
                           Icons.notifications,
@@ -66,9 +66,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       children: [
                         const Text('Unsure what to do?'),
                         MaterialButton(
-                          color: Colors.purple[200],
+                          color: Colors.blue[300],
                           onPressed: () {},
-                          child: const Text('Take a test!'),
+                          child: const Text(
+                            'Take a test!',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       ],
                     ),

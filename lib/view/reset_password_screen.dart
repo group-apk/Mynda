@@ -120,24 +120,40 @@ class _ResetPasswordState extends State<ResetPassword> {
 
   Future resetPasswordFunc(String email) async {
     if (_formKey.currentState!.validate()) {
+      FocusScope.of(context).unfocus();
       showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (context) => Center(child: CircularProgressIndicator()),
+        builder: (context) => const Center(child: CircularProgressIndicator()),
       );
 
-      await _auth
-          .sendPasswordResetEmail(email: email)
-          .then((value) => {emailPasswordReset()})
-          .catchError((e) {
-        Fluttertoast.showToast(msg: e!.message);
-        Navigator.of(context).pop();
-      });
+      try {
+        await _auth
+            .sendPasswordResetEmail(email: email)
+            .then((value) => {emailPasswordReset()});
+      } catch (e) {
+        var err = e.toString();
+        // manipulate err
+        Fluttertoast.showToast(msg: err);
+        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        //   behavior: SnackBarBehavior.floating,
+        //   content: Text(err),
+        // ));
+        Navigator.of(context, rootNavigator: true).pop();
+      }
     }
   }
 
   emailPasswordReset() async {
-    Fluttertoast.showToast(msg: 'Email sent! Please check your email to reset your password.');
-    Navigator.of(context).popUntil((route) => route.isFirst);
+    var msg = 'Email sent! Please check your email to reset your password.';
+    Fluttertoast.showToast(msg: msg);
+    // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    //   behavior: SnackBarBehavior.floating,
+    //   content: Text(msg),
+    // ));
+    // Navigator.of(context).popUntil((route) => route.isFirst);
+    for (var i = 0; i < 2; i++) {
+      Navigator.of(context, rootNavigator: true).pop();
+    }
   }
 }
