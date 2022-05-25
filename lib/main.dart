@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:map_proj/landing.dart';
 // ignore_for_file: prefer_const_constructors
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
