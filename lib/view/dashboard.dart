@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'category_quiz.dart';
+
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
 
@@ -78,12 +80,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           MaterialButton(
                             color: Colors.blue[300],
                             onPressed: () {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                behavior: SnackBarBehavior.floating,
-                                content: Text('Test will be available soon.'),
-                              ));
-                            },
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      Category()));
+                        },
                             child: const Text(
                               'Take a test!',
                               style: TextStyle(color: Colors.white),

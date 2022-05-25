@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../core/services/database.dart';
+import '../model/question_model.dart';
 import '../view/quiz_play.dart';
 import '../widgets/widget.dart';
 import 'create_quiz.dart';
@@ -12,25 +14,25 @@ class Category extends StatefulWidget {
 }
 
 class _CategoryState extends State<Category> {
-  Stream quizStream;
+  late Stream quizStream;
   DatabaseService databaseService = new DatabaseService(uid: '');
 
   Widget quizList() {
     return Container(
       child: Column(
         children: [
-          StreamBuilder(
+          StreamBuilder<dynamic>(
             stream: quizStream,
-            builder: (context, snapshot) {
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
               return snapshot.data == null
                   ? Container()
                   : ListView.builder(
                       shrinkWrap: true,
                       physics: const ClampingScrollPhysics(),
-                      itemCount: snapshot.data?.documents.length,
+                      itemCount: snapshot.data.documents.length,
                       itemBuilder: (context, index) {
                         return QuizTile(
-                          noOfQuestions: snapshot.data?.documents.length,
+                          noOfQuestions: snapshot.data.documents.length,
                           imageUrl:
                               snapshot.data?.documents[index].data['quizImgUrl'],
                           title:

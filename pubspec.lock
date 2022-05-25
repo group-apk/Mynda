@@ -78,7 +78,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.16.0"
-<<<<<<< Updated upstream
   crypto:
     dependency: transitive
     description:
@@ -86,8 +85,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.2"
-=======
->>>>>>> Stashed changes
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -102,7 +99,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
-<<<<<<< Updated upstream
   ffi:
     dependency: transitive
     description:
@@ -117,8 +113,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.1.2"
-=======
->>>>>>> Stashed changes
   firebase_auth:
     dependency: "direct main"
     description:
@@ -281,7 +275,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.1"
-<<<<<<< Updated upstream
   path_provider:
     dependency: transitive
     description:
@@ -352,8 +345,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.0"
-=======
->>>>>>> Stashed changes
   plugin_platform_interface:
     dependency: transitive
     description:
@@ -394,7 +385,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.2"
-<<<<<<< Updated upstream
   sqflite:
     dependency: transitive
     description:
@@ -409,8 +399,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.1+1"
-=======
->>>>>>> Stashed changes
   stack_trace:
     dependency: transitive
     description:
@@ -474,7 +462,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.2"
-<<<<<<< Updated upstream
   win32:
     dependency: transitive
     description:
@@ -499,8 +486,3 @@ packages:
 sdks:
   dart: ">=2.17.0 <3.0.0"
   flutter: ">=2.8.1"
-=======
-sdks:
-  dart: ">=2.17.0-0 <3.0.0"
-  flutter: ">=1.12.13+hotfix.5"
->>>>>>> Stashed changes

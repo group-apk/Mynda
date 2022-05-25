@@ -5,6 +5,6 @@ class QuestionModel{
   String? optionb;
   String? optionc;
   String? optiond;
-  String? correctOption;
-  bool? answered;
+  late String correctOption;
+  late bool answered;
 }

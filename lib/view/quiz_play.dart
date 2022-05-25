@@ -6,7 +6,7 @@ import '../model/question_model.dart';
 import '../core/services/database.dart';
 import '../widgets/widget.dart';
 import '../widgets/quiz_play_widgets.dart';
-import 'create_quiz.dart';
+
 
 
 class QuizPlay extends StatefulWidget {
@@ -23,10 +23,10 @@ int _notAttempted = 0;
 int total = 0;
 
 /// Stream
-Stream infoStream;
+late Stream infoStream;
 
 class _QuizPlayState extends State<QuizPlay> {
-  QuerySnapshot questionSnaphot;
+  late QuerySnapshot questionSnaphot;
   DatabaseService databaseService = DatabaseService(uid: '');
 
   bool isLoading = true;
@@ -60,14 +60,14 @@ class _QuizPlayState extends State<QuizPlay> {
       DocumentSnapshot questionSnapshot) {
     QuestionModel questionModel = QuestionModel();
 
-    questionModel.question = questionSnapshot.data["question"];
+    questionModel.question = questionSnapshot.get("question");
 
     /// shuffling the options
     List<String> options = [
-      questionSnapshot.data["optiona"],
-      questionSnapshot.data["optionb"],
-      questionSnapshot.data["optionc"],
-      questionSnapshot.data["optiond"]
+      questionSnapshot.get("optiona"),
+      questionSnapshot.get("optionb"),
+      questionSnapshot.get("optionc"),
+      questionSnapshot.get("optiond")
     ];
     options.shuffle();
 
@@ -75,17 +75,17 @@ class _QuizPlayState extends State<QuizPlay> {
     questionModel.optionb = options[1];
     questionModel.optionc = options[2];
     questionModel.optiond = options[3];
-    questionModel.correctOption = questionSnapshot.data["optiona"];
+    questionModel.correctOption = questionSnapshot.get("optiona");
     questionModel.answered = false;
 
-    print(questionModel.correctOption!.toLowerCase());
+    print(questionModel.correctOption.toLowerCase());
 
     return questionModel;
   }
 
   @override
   void dispose() {
-    infoStream = null;
+    final infoStream = null;
     super.dispose();
   }
 
@@ -139,7 +139,7 @@ class _QuizPlayState extends State<QuizPlay> {
 class InfoHeader extends StatefulWidget {
   final int length;
 
-  InfoHeader({@required this.length});
+  InfoHeader({required this.length});
 
   @override
   _InfoHeaderState createState() => _InfoHeaderState();
@@ -187,7 +187,7 @@ class QuizPlayTile extends StatefulWidget {
   final QuestionModel questionModel;
   final int index;
 
-  QuizPlayTile({@required this.questionModel, @required this.index});
+  QuizPlayTile({required this.questionModel, required this.index});
 
   @override
   _QuizPlayTileState createState() => _QuizPlayTileState();
