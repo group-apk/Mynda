@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:map_proj/new_api/test_api.dart';
+import 'package:map_proj/new_notifier/test_notifier.dart';
+import 'package:map_proj/new_view/test_category_screen.dart';
 import 'package:map_proj/view/dashboard.dart';
 import 'package:map_proj/view/login_screen.dart';
+import 'package:provider/provider.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({Key? key}) : super(key: key);
@@ -12,6 +16,9 @@ class LandingScreen extends StatefulWidget {
 class _LandingScreenState extends State<LandingScreen> {
   @override
   Widget build(BuildContext context) {
+    var testProvider = context.read<TestNotifier>();
+    getTest(testProvider);
+    
     return Scaffold(
       body: WillPopScope(
         onWillPop: () async => false,
@@ -64,7 +71,7 @@ class _LandingScreenState extends State<LandingScreen> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      const DashboardScreen()));
+                                      HealthTestCategoryScreen()));
                         },
                       ),
                     ),

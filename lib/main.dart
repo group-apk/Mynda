@@ -1,11 +1,22 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:map_proj/landing.dart';
+import 'package:map_proj/new_notifier/test_notifier.dart';
+// import 'package:map_proj/notifier/question_notifier.dart';
+import 'package:provider/provider.dart';
 // ignore_for_file: prefer_const_constructors
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+        create: (context) => TestNotifier(),
+        child: const MyApp()),
+  );
 }
+
+// void main() {
+//   runApp(const MyApp());
+// }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
