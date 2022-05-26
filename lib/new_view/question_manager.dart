@@ -33,14 +33,31 @@ class _EditTestScreenState extends State<EditTestScreen> {
     );
   }
 
-  Widget qustionField(TestModel _currentTestModel) {
+  Widget questionField(TestModel _currentTestModel) {
     // Text('${_currentTestModel.questions}')
-    return FutureBuilder(future:getQuestionFuture(_currentTestModel), builder: (context, snapshot) {
-      if(snapshot.connectionState == ConnectionState.waiting){
-        return const CircularProgressIndicator();
-      }
-      return Text('${_currentTestModel.questions}');
-    },);
+    return FutureBuilder(
+      future: getQuestionFuture(_currentTestModel),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        }
+        // return Text('${_currentTestModel.questions}');
+        return ListView.builder(
+          shrinkWrap: true,
+          itemCount: _currentTestModel.questions!.length,
+          itemBuilder: ((context, i) => ListTile(
+                title: Text('${_currentTestModel.questions![i].question}'),
+                subtitle: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children:
+                        // [
+                        _currentTestModel.questions![i].answer!
+                            .map((e) => Text(e))
+                            .toList()),
+              )),
+        );
+      },
+    );
   }
 
   @override
@@ -88,7 +105,7 @@ class _EditTestScreenState extends State<EditTestScreen> {
                     SizedBox(height: 10),
                     testNameField(_currentTestModel),
                     SizedBox(height: 10),
-                    qustionField(_currentTestModel),
+                    questionField(_currentTestModel),
                   ],
                 ),
               ),
