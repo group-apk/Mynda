@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:map_proj/new_api/test_api.dart';
+import 'package:map_proj/new_model/test_model.dart';
 import 'package:map_proj/new_notifier/test_notifier.dart';
 import 'package:map_proj/new_view/add_test.dart';
+import 'package:map_proj/new_view/question_manager.dart';
 import 'package:map_proj/new_view/test_question_edit_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -12,8 +14,28 @@ class HealthTestCategoryScreen extends StatefulWidget {
 }
 
 class _HealthTestCategoryScreenState extends State<HealthTestCategoryScreen> {
+  int i = 0;
   @override
+
+  void initState(){
+    TestNotifier testNotifier = Provider.of<TestNotifier>(context, listen: false);
+    getTest(testNotifier);
+    super.initState();
+  }
+
+  int checkTestName(String name){
+    int index = 0;
+    TestNotifier testNotifier = Provider.of<TestNotifier>(context, listen: false);
+    for(int i = 0; i < testNotifier.testList.length; i++){
+      if(name == testNotifier.testList[i].testName){
+        index = i;
+      }
+    }
+    return index;
+  }
+
   Widget build(BuildContext context) {
+    TestNotifier testNotifier = Provider.of<TestNotifier>(context, listen: false);
     var testProvider = context.read<TestNotifier>();
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -45,96 +67,49 @@ class _HealthTestCategoryScreenState extends State<HealthTestCategoryScreen> {
         color: Colors.white,
         child: Padding(
           padding: const EdgeInsets.all(36.0),
-          child: Consumer<TestNotifier>( builder: (context, value, child) => GridView.count(
-              shrinkWrap: true,
-              primary: false,
-              crossAxisSpacing: 20,
-              mainAxisSpacing: 20,
-              crossAxisCount: 2,
-              children: testProvider.testList
-                  .map((e) => Card(
-                        elevation: 5,
-                        shadowColor: Colors.blue,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('${e.testName}'),
-                          ],
-                        ),
-                      ))
-                  .toList(),
-            ),
+          child: FutureBuilder(
+            future: getTestFuture(testProvider),
+            builder: ((context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              return Consumer<TestNotifier>(
+                builder: (context, value, child) => GridView.count(
+                  shrinkWrap: true,
+                  primary: false,
+                  crossAxisSpacing: 20,
+                  mainAxisSpacing: 20,
+                  crossAxisCount: 2,
+                  children: testProvider.testList
+                      .map((e) => InkWell(
+                            onTap: () {
+                              testNotifier.currentTestModel = testNotifier.testList[checkTestName('${e.testName}')];
+                              // getQuestion(testNotifier.currentTestModel);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => EditTestScreen(
+                                          testName: '${e.testName}')));
+                            },
+                            child: Card(
+                              elevation: 5,
+                              shadowColor: Colors.blue,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text('${e.testName}'),
+                                ],
+                              ),
+                            ),
+                          ))
+                      .toList(),
+                ),
+              );
+            }),
           ),
 
-          //  child: FutureBuilder(
-          //   future: getTestFuture(testProvider),
-          //   builder: ((context, snapshot) {
-          //     if(snapshot.connectionState == ConnectionState.waiting){
-          //       return const Center(child: CircularProgressIndicator());
-          //     }
-              
-          //     return Consumer<TestNotifier>( 
-          //       builder: (context, value, child) => GridView.count(
-          //       shrinkWrap: true,
-          //       primary: false,
-          //       crossAxisSpacing: 20,
-          //       mainAxisSpacing: 20,
-          //       crossAxisCount: 2,
-          //       children: testProvider.testList
-          //           .map((e) => Card(
-          //                 elevation: 5,
-          //                 shadowColor: Colors.blue,
-          //                 child: Column(
-          //                   mainAxisAlignment: MainAxisAlignment.center,
-          //                   children: [
-          //                     Text('${e.testName}'),
-          //                   ],
-          //                 ),
-          //               ))
-          //           .toList(),
-          //                 ),
-          //     );
-          //   }) ,
-          // ),
 
-            // testNotifier.currentTestModel.testName.map((testname) => Card(child:Center(child: Text(testname, style: const TextStyle(
-            //               color: Colors.white,
-            //               fontSize: 22.0,
-            //               fontWeight: FontWeight.bold,
-            //             )),)))
-            /*
-                [
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const HealthTestEditScreen(
-                                  testName: 'Psychosis')));
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Color.fromARGB(255, 10, 25, 190)),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const [
-                          Text(
-                            "Psychosis Test",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 22.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-                */
         ),
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:map_proj/new_api/test_api.dart';
 import 'package:map_proj/new_notifier/test_notifier.dart';
+import 'package:map_proj/new_view/test_category_screen.dart';
 import 'package:provider/provider.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -83,11 +84,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           MaterialButton(
                             color: Colors.blue[300],
                             onPressed: () {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                behavior: SnackBarBehavior.floating,
-                                content: Text('Test will be available soon.'),
-                              ));
+                              // ScaffoldMessenger.of(context)
+                              //     .showSnackBar(const SnackBar(
+                              //   behavior: SnackBarBehavior.floating,
+                              //   content: Text('Test will be available soon.'),
+                              // ));
+                              Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HealthTestCategoryScreen()));
                             },
                             child: const Text(
                               'Take a test!',

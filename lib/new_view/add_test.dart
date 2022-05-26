@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:map_proj/new_api/test_api.dart';
 
 class AddTestScreen extends StatefulWidget {
-
   @override
   State<AddTestScreen> createState() => _AddTestScreenState();
 }
@@ -19,37 +18,34 @@ class _AddTestScreenState extends State<AddTestScreen> {
   final testNameEditiingController = TextEditingController();
 
   @override
+  // void initState() {
+  //   super.initState();
+  //   TestNotifier testNotifier =
+  //       Provider.of<TestNotifier>(context, listen: false);
+  // }
 
-  void initState(){
-    super.initState();
-    TestNotifier testNotifier = Provider.of<TestNotifier>(context, listen: false);
-  }
-
-  uploadTest(TestModel test){
-    TestNotifier testNotifier = Provider.of<TestNotifier>(context, listen: false);
-    testNotifier.addTest(test);
+  Future uploadTest(TestModel test) async {
+    TestNotifier testNotifier =
+        Provider.of<TestNotifier>(context, listen: false);
     uploadNewTest(_currentTestModel);
-    // getTest(testNotifier);
+    getTest(testNotifier);
   }
 
   Widget build(BuildContext context) {
-
     final testNameField = TextFormField(
       autofocus: false,
       controller: testNameEditiingController,
       keyboardType: TextInputType.text,
-      validator: (value){
-        if(value!.isEmpty){
+      validator: (value) {
+        if (value!.isEmpty) {
           return ("Please enter a test name");
         }
       },
       textInputAction: TextInputAction.done,
-      onSaved: (value){
+      onSaved: (value) {
         testNameEditiingController.text = value!;
       },
-      decoration: InputDecoration(
-        labelText: 'Test Name'
-      ),
+      decoration: InputDecoration(labelText: 'Test Name'),
     );
 
     final saveButton = Material(
@@ -59,20 +55,20 @@ class _AddTestScreenState extends State<AddTestScreen> {
         padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
         minWidth: MediaQuery.of(context).size.width,
         onPressed: () {
-          if(_formKey.currentState!.validate()){
-        _currentTestModel.testName = testNameEditiingController.text;
-        // _currentTestModel.id = Uuid().v1();
-          uploadTest(_currentTestModel);
-            Fluttertoast.showToast(msg: testNameEditiingController.text + " test created");
-            Navigator.of(context).pop();
+          if (_formKey.currentState!.validate()) {
+            _currentTestModel.testName = testNameEditiingController.text;
+            // _currentTestModel.id = Uuid().v1();
+            uploadTest(_currentTestModel).then((value) {
+              Fluttertoast.showToast(msg: testNameEditiingController.text + " test created");
+              Navigator.of(context).pop();
+            });
           }
         },
         child: Text(
           "Add New Test",
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold
-          ),
+              fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -97,37 +93,36 @@ class _AddTestScreenState extends State<AddTestScreen> {
         ),
       ),
       body: SafeArea(
-            child: SingleChildScrollView(
-          child: Container(
-            color: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.all(36.0),
-              child: Form(
-                key: _formKey,
-                // autovalidateMode: AutovalidateMode.always,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    const Text(
-                      "Create new Health Assessment Test",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                      ),
+          child: SingleChildScrollView(
+        child: Container(
+          color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.all(36.0),
+            child: Form(
+              key: _formKey,
+              // autovalidateMode: AutovalidateMode.always,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  const Text(
+                    "Create new Health Assessment Test",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
                     ),
-                    SizedBox(height: 44),
-                    testNameField,
-                    SizedBox(height: 30),
-                    saveButton,
-                  ],
-                ),
+                  ),
+                  SizedBox(height: 44),
+                  testNameField,
+                  SizedBox(height: 30),
+                  saveButton,
+                ],
               ),
             ),
           ),
-        )
-      ),
+        ),
+      )),
     );
   }
 }

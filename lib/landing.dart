@@ -3,6 +3,7 @@ import 'package:map_proj/new_api/test_api.dart';
 import 'package:map_proj/new_notifier/test_notifier.dart';
 import 'package:map_proj/new_view/test_category_screen.dart';
 import 'package:map_proj/view/dashboard.dart';
+import 'package:map_proj/view/dashboard_screen.dart';
 import 'package:map_proj/view/login_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -71,7 +72,7 @@ class _LandingScreenState extends State<LandingScreen> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      HealthTestCategoryScreen()));
+                                      DashboardScreen()));
                         },
                       ),
                     ),

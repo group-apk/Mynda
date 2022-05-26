@@ -11,14 +11,6 @@ class TestModel{
     questions = data['questions'];
   }
 
-  // TestModel({
-  //   id, testName, questions
-  // }){
-  //   this.id = id;
-  //   this.testName = testName;
-  //   this.questions = questions;
-  // }
-
   TestModel();
 
   Map<String, dynamic> toMap(){
