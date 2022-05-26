@@ -6,6 +6,8 @@ import 'package:map_proj/provider/user_provider.dart';
 import 'package:map_proj/view/login_screen.dart';
 import 'package:provider/provider.dart';
 
+import 'category_screen.dart';
+
 class DashboardMain extends StatefulWidget {
   const DashboardMain({Key? key}) : super(key: key);
 
@@ -213,7 +215,10 @@ class _HomepageScreenState extends State<HomepageScreen> {
                         MaterialButton(
                           color: Colors.blue[300],
                           onPressed: () {
-                            snackbar(text: 'Test will be available soon.');
+                            Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>  CategoryScreen()));
                           },
                           child: const Text(
                             'Take a test!',
