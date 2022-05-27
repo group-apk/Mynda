@@ -4,7 +4,6 @@ import 'package:map_proj/new_model/test_model.dart';
 import 'package:map_proj/new_notifier/test_notifier.dart';
 import 'package:map_proj/new_view/add_test.dart';
 import 'package:map_proj/new_view/question_manager.dart';
-import 'package:map_proj/new_view/test_question_edit_screen.dart';
 import 'package:provider/provider.dart';
 
 class HealthTestCategoryScreen extends StatefulWidget {
@@ -64,7 +63,7 @@ class _HealthTestCategoryScreenState extends State<HealthTestCategoryScreen> {
         ),
       ),
       body: Container(
-        color: Colors.white,
+        color: Colors.transparent,
         child: Padding(
           padding: const EdgeInsets.all(36.0),
           child: FutureBuilder(

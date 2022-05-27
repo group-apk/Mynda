@@ -25,4 +25,9 @@ class TestNotifier with ChangeNotifier{
     _testList.add(test);
     notifyListeners();
   }
+
+  deleteTest(TestModel test){
+    _testList.remove((_test) => _test.id == test.id);
+    notifyListeners();
+  }
 }
