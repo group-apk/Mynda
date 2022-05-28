@@ -30,4 +30,9 @@ class TestNotifier with ChangeNotifier{
     _testList.remove((_test) => _test.id == test.id);
     notifyListeners();
   }
+
+  deleteQuestion(TestModel test, int index){
+    _testList.remove((_test) => _test.questions[index].qid == test.questions![index].qid);
+    notifyListeners();
+  }
 }

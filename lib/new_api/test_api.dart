@@ -107,9 +107,7 @@ addNewQuestion(TestModel test, int index) async{
   await db.doc(id).update({"qid": id});
 }
 
-// uploadNewTest(TestModel test) async {
-//   final CollectionReference db = FirebaseFirestore.instance.collection('test');
-//   var id = await db.add(test.toMap()).then((doc) => doc.id);
-//   // print(id);
-//   await db.doc(id).update({"id": id});
-// }
+deleteExisitingQuestion(TestModel test, int index) async{
+  final CollectionReference db = FirebaseFirestore.instance.collection('test').doc(test.id).collection('questions');
+  await db.doc(test.questions![index].qid).delete();
+}

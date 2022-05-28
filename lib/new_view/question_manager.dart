@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:map_proj/new_api/test_api.dart';
+import 'package:map_proj/new_model/question_model.dart';
 import 'package:map_proj/new_model/test_model.dart';
 import 'package:map_proj/new_notifier/test_notifier.dart';
 import 'package:map_proj/new_view/question_edit.dart';
@@ -27,12 +28,11 @@ class _EditTestScreenState extends State<EditTestScreen> {
   Future deleteTest(TestModel _currentTestModel) async {
     TestNotifier testNotifier =
         Provider.of<TestNotifier>(context, listen: false);
-        deleteExistingTest(_currentTestModel);
-        getTest(testNotifier);
+    deleteExistingTest(_currentTestModel);
+    getTest(testNotifier);
   }
 
   Widget build(BuildContext context) {
-
     TestNotifier testNotifier =
         Provider.of<TestNotifier>(context, listen: false);
     TestModel _currentTestModel = testNotifier.currentTestModel;
@@ -40,12 +40,16 @@ class _EditTestScreenState extends State<EditTestScreen> {
         TextEditingController(text: _currentTestModel.testName);
 
     int questionLength = 0;
-    _currentTestModel.questions?.forEach((element) { 
-      questionLength++;
-    });
+    // setState(() {
+    //   questionLength = _currentTestModel.questions!.length;
+    // });
+    // _currentTestModel.questions?.forEach((element) { 
+    //   questionLength++;
+    // });
 
     Widget questionField(TestModel _currentTestModel) {
-    /*
+      
+      /*
     return FutureBuilder(
       future: getQuestionFuture(_currentTestModel),
       builder: (context, snapshot) {
@@ -70,37 +74,42 @@ class _EditTestScreenState extends State<EditTestScreen> {
     );
     */
 
-    return FutureBuilder(
-      future: getQuestionFuture(_currentTestModel),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
-        }
-        return Consumer<TestNotifier>(builder: (context, value, child) => 
-          ListView.separated(
-            shrinkWrap: true,
-            itemCount: _currentTestModel.questions?.length ?? 0,
-            itemBuilder: ((context, i) => ListTile(
-                  title: Text('Question ${i + 1}'),
-                  subtitle: Text('${_currentTestModel.questions![i].question}'),
-                  trailing: const Icon(Icons.edit),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => EditQuestionScreen(index: i, isAdd: false,)));
-                  },
-                )),
-            separatorBuilder: (BuildContext context, int index) {
-              return const Divider(
-                color: Colors.black,
+      return Consumer<TestNotifier>( builder: (context, value, child) => FutureBuilder(
+          future: getQuestionFuture(_currentTestModel),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            }
+            questionLength = _currentTestModel.questions!.length;
+            return ListView.separated(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: _currentTestModel.questions?.length ?? 0,
+                itemBuilder: ((context, i) => ListTile(
+                      title: Text('Question ${i + 1}'),
+                      subtitle:
+                          Text('${_currentTestModel.questions![i].question}'),
+                      trailing: const Icon(Icons.edit),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditQuestionScreen(
+                                      index: i,
+                                      isAdd: false,
+                                    )));
+                      },
+                    )),
+                separatorBuilder: (BuildContext context, int index) {
+                  return const Divider(
+                    color: Colors.black,
+                  );
+                },
               );
-            },
-          ),
-        );
-      },
-    );
-  }
+          },
+        ),
+      );
+    }
 
     Widget testNameField(TestModel _currentTestModel) {
       return TextFormField(
@@ -133,10 +142,18 @@ class _EditTestScreenState extends State<EditTestScreen> {
       child: MaterialButton(
         padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
         onPressed: () {
-          Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => EditQuestionScreen(index: questionLength, isAdd: true)));
+          print(questionLength);
+          if (_formKey.currentState!.validate()) {
+            _currentTestModel.questions!.add(QuestionModel());
+            _currentTestModel.questions![questionLength].question = "";
+            _currentTestModel.questions![questionLength].answer = [""];
+            addNewQuestion(_currentTestModel, questionLength);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => EditQuestionScreen(
+                        index: questionLength, isAdd: true)));
+          }
         },
         child: Text(
           "Add New Question",
@@ -152,16 +169,17 @@ class _EditTestScreenState extends State<EditTestScreen> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
-            backgroundColor: Colors.red,
-            child: Icon(Icons.delete), 
-            onPressed: () {
-              testNotifier.deleteTest(_currentTestModel);
-              deleteTest(_currentTestModel).then((value){
-                Fluttertoast.showToast(msg: "Test deleted");
-                Navigator.of(context).pop();
-              });
-            }
-          ),
+              backgroundColor: Colors.red,
+              child: Icon(Icons.delete),
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  testNotifier.deleteTest(_currentTestModel);
+                  deleteTest(_currentTestModel).then((value) {
+                    Fluttertoast.showToast(msg: "Test deleted");
+                    Navigator.of(context).pop();
+                  });
+                }
+              }),
           SizedBox(width: 10),
           FloatingActionButton(
             backgroundColor: Colors.green[900],
@@ -172,7 +190,9 @@ class _EditTestScreenState extends State<EditTestScreen> {
                 updateTest(_currentTestModel).then((value) {
                   Fluttertoast.showToast(msg: "Test name updated");
                   // Navigator.of(context).pop();
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: ((context) => EditTestScreen(testName: testNameEditingController.text))));
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: ((context) => EditTestScreen(
+                          testName: testNameEditingController.text))));
                 });
               }
             },

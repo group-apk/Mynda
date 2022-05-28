@@ -24,7 +24,7 @@ class _AddTestScreenState extends State<AddTestScreen> {
   //       Provider.of<TestNotifier>(context, listen: false);
   // }
 
-  Future uploadTest(TestModel test) async {
+  Future uploadTest(TestModel _currentTestModel) async {
     TestNotifier testNotifier =
         Provider.of<TestNotifier>(context, listen: false);
     uploadNewTest(_currentTestModel);
