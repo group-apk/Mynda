@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-//import 'package:map_proj/view/quiz_play.dart';
+import 'package:map_proj/view/question_screen.dart';
 import '../widget/widget.dart';
-//import 'create_quiz.dart';
-import 'dashboard.dart';
+import 'question_screen.dart';
 
 class CategoryScreen extends StatefulWidget {
   @override
@@ -36,11 +34,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
               return ListView.builder(
                 shrinkWrap: true,
                 physics: const AlwaysScrollableScrollPhysics(),
-                itemCount: 3 ,// data.size,
+                itemCount: data.size,
                 itemBuilder:(context,index){
                   return QuizTile( 
-                        noOfQuestions: 
-                        int.parse('${data.docs[index]['question']}'),
+                        //noOfQuestions: 
+                        //int.parse('${data.docs[index]['question']}'),
                             //snapshot.data.documents.length,
                         imageUrl:
                         '${data.docs[index]['quizImgurl']}',
@@ -84,13 +82,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
         //brightness: Brightness.li,
       ),
       body: quizList(),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => CategoryScreen()));
-        },
-      ),
+
     );
   }
 }
@@ -98,21 +90,24 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
 class QuizTile extends StatelessWidget {
   final String imageUrl, title, id, description;
-  final int noOfQuestions;
-
+  //final int noOfQuestions;
+String getQuestionId(){
+  return id;
+}
   QuizTile(
       {required this.title,
       required this.imageUrl,
       required this.description,
       required this.id,
-      required this.noOfQuestions});
+      //required this.noOfQuestions
+      });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const DashboardMain()));
+            context, MaterialPageRoute(builder: (context) =>  QuestionScreen(questionsId: id,)));
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 5),
@@ -144,7 +139,7 @@ class QuizTile extends StatelessWidget {
                         height: 4,
                       ),
                       Text(
-                        description,
+                        id,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                             fontSize: 13,

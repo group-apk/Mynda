@@ -1,10 +1,14 @@
-class QuestionModel{
+class Question{
+  List<String>? option;
+  String? question;
 
-  late String question;
-  late String option1;
-  late String option2;
-  late String option3;
-  late String option4;
-  late String correctOption;
-  late bool answered;
+  Question();
+
+  Map<String, dynamic> toJson() =>{'option':option,'question':question};
+
+  Question.fromSnapshot(snapshot)
+    : option=List.from(snapshot.data()['option']),
+      question=snapshot.data()['question'];
+
+
 }

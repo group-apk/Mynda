@@ -14,17 +14,17 @@ class DatabaseService {
   getData() async {
     return await FirebaseFirestore.instance.collection("users").snapshots();
   }
-/*
-  Future<void> addQuizData(Map quizData, String quizId) async {
+
+  Future<void> addQuizData( quizData, String quizId) async {
     await FirebaseFirestore.instance
-        .collection("Quiz")
+        .collection("QuizList")
         .doc(quizId)
         .set(quizData)
         .catchError((e) {
       print(e);
     });
   }
-*/
+
   Future<void> addQuestionData(quizData, String quizId) async {
     await FirebaseFirestore.instance
         .collection("QuizList")
@@ -42,9 +42,9 @@ class DatabaseService {
 
   getQuestionData(String quizId) async{
     return await FirebaseFirestore.instance
-        .collection("Quiz")
+        .collection("QuizList")
         .doc(quizId)
-        .collection("QNA")
+        .collection("Questions")
         .get();
   }
 }
