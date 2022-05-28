@@ -7,6 +7,8 @@ import 'package:map_proj/new_view/question_manager.dart';
 import 'package:provider/provider.dart';
 
 class HealthTestCategoryScreen extends StatefulWidget {
+  const HealthTestCategoryScreen({Key? key}) : super(key: key);
+
   @override
   _HealthTestCategoryScreenState createState() =>
       _HealthTestCategoryScreenState();
@@ -14,31 +16,35 @@ class HealthTestCategoryScreen extends StatefulWidget {
 
 class _HealthTestCategoryScreenState extends State<HealthTestCategoryScreen> {
   int i = 0;
-  @override
 
-  void initState(){
-    TestNotifier testNotifier = Provider.of<TestNotifier>(context, listen: false);
+  @override
+  void initState() {
+    TestNotifier testNotifier =
+        Provider.of<TestNotifier>(context, listen: false);
     getTest(testNotifier);
     super.initState();
   }
 
-  int checkTestName(String name){
+  int checkTestName(String name) {
     int index = 0;
-    TestNotifier testNotifier = Provider.of<TestNotifier>(context, listen: false);
-    for(int i = 0; i < testNotifier.testList.length; i++){
-      if(name == testNotifier.testList[i].testName){
+    TestNotifier testNotifier =
+        Provider.of<TestNotifier>(context, listen: false);
+    for (int i = 0; i < testNotifier.testList.length; i++) {
+      if (name == testNotifier.testList[i].testName) {
         index = i;
       }
     }
     return index;
   }
 
+  @override
   Widget build(BuildContext context) {
-    TestNotifier testNotifier = Provider.of<TestNotifier>(context, listen: false);
+    TestNotifier testNotifier =
+        Provider.of<TestNotifier>(context, listen: false);
     var testProvider = context.read<TestNotifier>();
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         onPressed: () {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => AddTestScreen()));
@@ -83,7 +89,8 @@ class _HealthTestCategoryScreenState extends State<HealthTestCategoryScreen> {
                   children: testProvider.testList
                       .map((e) => InkWell(
                             onTap: () {
-                              testNotifier.currentTestModel = testNotifier.testList[checkTestName('${e.testName}')];
+                              testNotifier.currentTestModel = testNotifier
+                                  .testList[checkTestName('${e.testName}')];
                               // getQuestion(testNotifier.currentTestModel);
                               Navigator.push(
                                   context,
@@ -107,8 +114,6 @@ class _HealthTestCategoryScreenState extends State<HealthTestCategoryScreen> {
               );
             }),
           ),
-
-
         ),
       ),
     );

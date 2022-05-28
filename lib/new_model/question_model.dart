@@ -1,22 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class QuestionModel{
+class QuestionModel {
   String? qid, question;
   List? answer;
 
-  QuestionModel.fromMap(Map<String, dynamic> data){
+  QuestionModel.fromMap(Map<String, dynamic> data) {
     qid = data['qid'];
     question = data['question'];
     answer = data['answer'];
   }
 
-  QuestionModel();
+  QuestionModel() {
+    question = '';
+    answer = [''];
+  }
 
-  Map<String, dynamic> toMap(){
-    return{
+  Map<String, dynamic> toMap() {
+    return {
       'qid': qid,
       'question': question,
-      'answer': answer
+      'answer': answer,
+      'createdAt': Timestamp.now()
     };
   }
 }

@@ -13,24 +13,18 @@ class AddTestScreen extends StatefulWidget {
 
 class _AddTestScreenState extends State<AddTestScreen> {
   final _formKey = GlobalKey<FormState>();
-  TestModel _currentTestModel = TestModel();
-
+  final TestModel _currentTestModel = TestModel();
   final testNameEditiingController = TextEditingController();
-
-  @override
-  // void initState() {
-  //   super.initState();
-  //   TestNotifier testNotifier =
-  //       Provider.of<TestNotifier>(context, listen: false);
-  // }
 
   Future uploadTest(TestModel _currentTestModel) async {
     TestNotifier testNotifier =
         Provider.of<TestNotifier>(context, listen: false);
-    uploadNewTest(_currentTestModel);
+    _currentTestModel = await uploadNewTest(_currentTestModel);
+    print('_currentTestModel = ${_currentTestModel.id}');
     getTest(testNotifier);
   }
 
+  @override
   Widget build(BuildContext context) {
     final testNameField = TextFormField(
       autofocus: false,
@@ -57,9 +51,9 @@ class _AddTestScreenState extends State<AddTestScreen> {
         onPressed: () {
           if (_formKey.currentState!.validate()) {
             _currentTestModel.testName = testNameEditiingController.text;
-            // _currentTestModel.id = Uuid().v1();
             uploadTest(_currentTestModel).then((value) {
-              Fluttertoast.showToast(msg: testNameEditiingController.text + " test created");
+              Fluttertoast.showToast(
+                  msg: testNameEditiingController.text + " test created");
               Navigator.of(context).pop();
             });
           }

@@ -1,23 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:map_proj/new_model/question_model.dart';
 
-class TestModel{
+class TestModel {
   String? id, testName;
-  List<QuestionModel>? questions;
+  List<QuestionModel>? questions = [];
 
-  TestModel.fromMap(Map<String, dynamic> data){
+  TestModel.fromMap(Map<String, dynamic> data) {
     id = data['id'];
     testName = data['testName'];
-    questions = data['questions'];
+    // questions = data['questions'];
   }
 
   TestModel();
 
-  Map<String, dynamic> toMap(){
-    return{
+  Map<String, dynamic> toMap() {
+    return {
       'id': id,
       'testName': testName,
-      'questions': questions,
+      // 'questions': (questions != null) ? questions : <QuestionModel>[],
     };
   }
 }

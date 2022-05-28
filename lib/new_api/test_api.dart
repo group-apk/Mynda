@@ -43,6 +43,7 @@ Future getQuestionFuture(TestModel testModel) async {
         .collection('test')
         .doc(testModel.id)
         .collection('questions')
+        .orderBy('createdAt')
         .get();
     testModel.questions = snapshot.docs
         .map((e) => QuestionModel.fromMap(e.data() as Map<String, dynamic>))
@@ -73,14 +74,22 @@ getTest(TestNotifier testNotifier) async {
 }
 
 Future getTestFuture(TestNotifier testNotifier) async {
-  getTest(testNotifier);
+  QuerySnapshot snapshot =
+      await FirebaseFirestore.instance.collection('test').get();
+  List<TestModel> _testList = snapshot.docs
+      .map((e) => TestModel.fromMap(e.data() as Map<String, dynamic>))
+      .toList();
+
+  testNotifier.testList = _testList;
 }
 
-uploadNewTest(TestModel test) async {
+Future<TestModel> uploadNewTest(TestModel test) async {
   final CollectionReference db = FirebaseFirestore.instance.collection('test');
-  var id = await db.add(test.toMap()).then((doc) => doc.id);
-  // print(id);
-  await db.doc(id).update({"id": id});
+  // var id = await db.add(test.toMap()).then((doc) => doc.id);
+  test.id = await db.add({'testName': test.testName}).then((doc) => doc.id);
+  // print('upload test id: ${id}');
+  await db.doc(test.id).update({"id": test.id});
+  return test;
 }
 
 updateExistingTest(TestModel test) async {
@@ -94,20 +103,40 @@ deleteExistingTest(TestModel test) async {
   await db.doc(test.id).delete();
 }
 
-updateExistingQuestion(TestModel test, int index) async{
-  final CollectionReference db = FirebaseFirestore.instance.collection('test').doc(test.id).collection('questions');
-  await db.doc(test.questions![index].qid).update({"question": test.questions![index].question, "answer": test.questions![index].answer});
+updateExistingQuestion(TestModel test, int index) async {
+  print('updateqid: ${test.questions![index].qid}');
+  final CollectionReference db = FirebaseFirestore.instance
+      .collection('test')
+      .doc(test.id)
+      .collection('questions');
+
+  await db.doc(test.questions![index].qid).set({
+    "createdAt": Timestamp.now(),
+    "qid": test.questions![index].qid,
+    "question": test.questions![index].question,
+    "answer": test.questions![index].answer
+  });
   print("question:" + test.questions![index].question.toString());
   print(test.questions![index].answer);
 }
 
-addNewQuestion(TestModel test, int index) async{
-  final CollectionReference db = FirebaseFirestore.instance.collection('test').doc(test.id).collection('questions');
+Future<TestModel> addNewQuestion(TestModel test, int index) async {
+  test.questions!.add(QuestionModel());
+  final CollectionReference db = FirebaseFirestore.instance
+      .collection('test')
+      .doc(test.id)
+      .collection('questions');
   var id = await db.add(test.questions![index].toMap()).then((doc) => doc.id);
-  await db.doc(id).update({"qid": id});
+  print('qid: $id');
+  test.questions![index].qid = id;
+  await db.doc(id).set({"qid": id, 'createdAt': Timestamp.now()});
+  return test;
 }
 
-deleteExisitingQuestion(TestModel test, int index) async{
-  final CollectionReference db = FirebaseFirestore.instance.collection('test').doc(test.id).collection('questions');
+deleteExisitingQuestion(TestModel test, int index) async {
+  final CollectionReference db = FirebaseFirestore.instance
+      .collection('test')
+      .doc(test.id)
+      .collection('questions');
   await db.doc(test.questions![index].qid).delete();
 }

@@ -18,59 +18,49 @@ class EditQuestionScreen extends StatefulWidget {
 }
 
 class _EditQuestionScreenState extends State<EditQuestionScreen> {
-  final _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
-  Future updateQuestion(TestModel _currentTestModel) async {
-    TestNotifier testNotifier =
-        Provider.of<TestNotifier>(context, listen: false);
-    updateExistingQuestion(_currentTestModel, widget.index);
-    getTest(testNotifier);
-  }
-
-  Future deleteQuestion(TestModel _currentTestModel) async {
-    TestNotifier testNotifier =
-        Provider.of<TestNotifier>(context, listen: false);
-    deleteExisitingQuestion(_currentTestModel, widget.index);
-    testNotifier.deleteQuestion(_currentTestModel, widget.index);
-    getTest(testNotifier);
-  }
-
   Widget build(BuildContext context) {
     TestNotifier testNotifier =
         Provider.of<TestNotifier>(context, listen: false);
     TestModel _currentTestModel = testNotifier.currentTestModel;
 
-    // widget.isAdd ? _currentTestModel.questions!.add(QuestionModel()) : "";
-    // widget.isAdd ? _currentTestModel.questions![widget.index].answer = [""] : "";
-    // widget.isAdd ? addNewQuestion(_currentTestModel, widget.index) : "";
-
-    final questionNameEditingController = widget.isAdd
+    TextEditingController questionNameEditingController = widget.isAdd
         ? TextEditingController()
         : TextEditingController(
             text: _currentTestModel.questions![widget.index].question);
-
-    // final questionNameEditingController = TextEditingController(
-    //     text: _currentTestModel.questions![widget.index].question);
 
     List<TextEditingController> answerEditingController = [];
     _currentTestModel.questions![widget.index].answer?.forEach((element) {
       answerEditingController.add(TextEditingController(text: element));
     });
 
+    Future updateQuestion(TestModel _currentTestModel) async {
+      updateExistingQuestion(_currentTestModel, widget.index);
+      getTest(testNotifier);
+    }
+
+    Future deleteQuestion(TestModel _currentTestModel) async {
+      deleteExisitingQuestion(_currentTestModel, widget.index);
+      testNotifier.deleteQuestion(_currentTestModel, widget.index);
+      getTest(testNotifier);
+    }
+
     Widget testQuestionField(TestModel _currentTestModel) {
       return TextFormField(
         autofocus: false,
-        decoration: InputDecoration(labelText: 'Question Name'),
-        // initialValue: _currentTestModel.questions![widget.index].question,
+        decoration: const InputDecoration(labelText: 'Question Name'),
         controller: questionNameEditingController,
         maxLines: null,
         keyboardType: TextInputType.multiline,
-        style: TextStyle(fontSize: 20),
+        style: const TextStyle(fontSize: 20),
         validator: (value) {
-          if (value!.isEmpty) {
+          if (value == null || value.isEmpty) {
             return ("Please enter a question name");
           }
+          print('question: a${value} a');
+          return null;
         },
         textInputAction: TextInputAction.next,
         onSaved: (value) {
@@ -88,11 +78,13 @@ class _EditQuestionScreenState extends State<EditQuestionScreen> {
           }
           return SingleChildScrollView(
             child: ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount:
-                  _currentTestModel.questions![widget.index].answer?.length,
+                  _currentTestModel.questions![widget.index].answer?.length ??
+                      0,
               itemBuilder: ((context, i) => TextFormField(
+                    // key: _answerKey,
                     autofocus: false,
                     decoration: InputDecoration(
                         labelText: 'Answer ${i + 1}',
@@ -104,14 +96,15 @@ class _EditQuestionScreenState extends State<EditQuestionScreen> {
                                 onPressed: () {},
                                 icon: const Icon(Icons.delete),
                               )),
-                    // initialValue: _currentTestModel.questions![widget.index].answer![i],
                     controller: answerEditingController[i],
                     maxLines: null,
                     keyboardType: TextInputType.multiline,
                     validator: (value) {
-                      if (value!.isEmpty) {
+                      if (value == null || value.isEmpty) {
                         return ("Please enter an answer");
                       }
+                      print('answer: $value');
+                      return null;
                     },
                     textInputAction: TextInputAction.done,
                     onSaved: (value) {
@@ -124,40 +117,46 @@ class _EditQuestionScreenState extends State<EditQuestionScreen> {
       );
     }
 
+    print(_currentTestModel.questions![widget.index].qid);
     return Scaffold(
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          FloatingActionButton(
-              backgroundColor: Colors.red,
-              child: Icon(Icons.delete),
-              onPressed: () {
-                if (!_formKey.currentState!.validate() || _formKey.currentState!.validate()) {
+          Padding(
+            padding: const EdgeInsets.only(left: 5.0),
+            child: FloatingActionButton(
+                heroTag: 'delete',
+                backgroundColor: Colors.red,
+                child: const Icon(Icons.delete),
+                onPressed: () {
                   deleteQuestion(_currentTestModel).then((value) {
                     Fluttertoast.showToast(msg: "Question deleted");
                     Navigator.of(context).pop();
                   });
+                }),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+            child: FloatingActionButton(
+              heroTag: 'save',
+              backgroundColor: Colors.green[900],
+              child: const Icon(Icons.save),
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  print(widget.index);
+                  _currentTestModel.questions![widget.index].question =
+                      questionNameEditingController.text;
+                  for (int i = 0; i < answerEditingController.length; i++) {
+                    _currentTestModel.questions![widget.index].answer![i] =
+                        answerEditingController[i].text;
+                  }
+                  updateQuestion(_currentTestModel).then((value) {
+                    Fluttertoast.showToast(msg: "Question updated");
+                    Navigator.of(context).pop();
+                  });
                 }
-              }),
-          SizedBox(width: 10),
-          FloatingActionButton(
-            backgroundColor: Colors.green[900],
-            child: Icon(Icons.save),
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                print(widget.index);
-                _currentTestModel.questions![widget.index].question =
-                    questionNameEditingController.text;
-                for (int i = 0; i < answerEditingController.length; i++) {
-                  _currentTestModel.questions![widget.index].answer![i] =
-                      answerEditingController[i].text;
-                }
-              }
-              updateQuestion(_currentTestModel).then((value) {
-                Fluttertoast.showToast(msg: "Question updated");
-                Navigator.of(context).pop();
-              });
-            },
+              },
+            ),
           ),
         ],
       ),
@@ -165,19 +164,22 @@ class _EditQuestionScreenState extends State<EditQuestionScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: const Text('Question Edit'),
-        titleTextStyle: TextStyle(
+        titleTextStyle: const TextStyle(
             color: Colors.blue, fontSize: 20.0, fontWeight: FontWeight.bold),
         elevation: 2,
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: Color(0xFF0069FE),
           ),
-          onPressed: () {widget.isAdd ?
-                 deleteQuestion(_currentTestModel).then((value) {
+          onPressed: () {
+            print(widget.isAdd);
+            widget.isAdd
+                ? deleteQuestion(_currentTestModel).then((value) {
+                    Fluttertoast.showToast(msg: "Question Add cancelled");
                     Navigator.of(context).pop();
                   })
-                  : Navigator.of(context).pop();
+                : Navigator.of(context).pop();
           },
         ),
       ),
@@ -190,17 +192,17 @@ class _EditQuestionScreenState extends State<EditQuestionScreen> {
               child: Form(
                 key: _formKey,
                 child: Column(
-                  children: <Widget>[
+                  children: [
                     Text(
                       widget.isAdd ? "Add new question" : "Question Editor",
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.black,
                           fontSize: 22.0,
                           fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     testQuestionField(_currentTestModel),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     testAnswersField(_currentTestModel),
                   ],
                 ),
