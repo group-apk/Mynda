@@ -100,6 +100,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           if (!regex.hasMatch(value)) {
             return ("Please Enter at least 6 Character for Password");
           }
+          return null;
         },
         onSaved: (value) {
           passwordEditingController.text = value!;
@@ -165,7 +166,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         ));
 
     // gender
-    String? selectedValue = null;
+    String? selectedValue;
     final genderField = DropdownButtonFormField(
       autofocus: false,
       decoration: InputDecoration(
@@ -186,7 +187,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
 
     // region
-    String? selectedValue2 = null;
+    String? selectedValue2;
     final regionField = DropdownButtonFormField(
       autofocus: false,
       decoration: InputDecoration(
@@ -340,12 +341,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   void signUp(String email, String password) async {
     if (_formKey.currentState!.validate()) {
-      await _auth
-          .createUserWithEmailAndPassword(email: email, password: password)
-          .then((value) => {postDetailsToFirestore()})
-          .catchError((e) {
-        Fluttertoast.showToast(msg: e!.message);
-      });
+      try {
+        await _auth
+            .createUserWithEmailAndPassword(email: email, password: password)
+            .then((value) => {postDetailsToFirestore()});
+      } catch (e) {
+        var err = e.toString();
+        // manipulate err
+        Fluttertoast.showToast(msg: err);
+      }
     }
   }
 
@@ -379,7 +383,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         MaterialPageRoute(builder: (context) => LoginScreen()));
   }
 
-  String? selectedValue3 = null;
+  String? selectedValue3;
   Widget stateDropdown({required item}) {
     return DropdownButtonFormField(
       autofocus: false,

@@ -1,15 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
-  String? uid,
-      email,
-      fullName,
-      ic,
-      gender,
-      region,
-      states,
-      role,
-      academic;
+  String? uid, email, fullName, ic, gender, region, states, role, academic;
 
   UserModel(
       {this.uid,

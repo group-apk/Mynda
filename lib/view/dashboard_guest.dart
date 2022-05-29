@@ -1,28 +1,25 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:map_proj/new_view/test_category_screen.dart';
 import 'package:map_proj/profile_screen.dart';
-import 'package:map_proj/provider/user_provider.dart';
-import 'package:map_proj/view/login_screen.dart';
-import 'package:provider/provider.dart';
 
-class DashboardMain extends StatefulWidget {
-  const DashboardMain({Key? key, this.index = 0}) : super(key: key);
-  // ignore: prefer_typing_uninitialized_variables
-  final index;
+class DashboardScreen extends StatefulWidget {
+  const DashboardScreen({Key? key}) : super(key: key);
 
   @override
-  State<DashboardMain> createState() => _DashboardMainState();
+  State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _DashboardMainState extends State<DashboardMain> {
-  final FirebaseAuth auth = FirebaseAuth.instance;
-  static final List<Widget> _widgetOptions = [
-    const HomepageScreen(),
-    const HealthTestCategoryScreen(),
-    Container(),
-    Container(),
-    const ProfileScreen()
+class _DashboardScreenState extends State<DashboardScreen> {
+  var currentIndex = 0;
+  static const List<Widget> _widgetOptions = <Widget>[
+    Text('Home Page',
+        style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
+    Text('Tests Page',
+        style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
+    Text('Articles Page',
+        style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
+    Text('Appointment Page',
+        style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
+    ProfileScreen(),
   ];
 
   @override
@@ -30,29 +27,25 @@ class _DashboardMainState extends State<DashboardMain> {
     return Scaffold(
       bottomNavigationBar: bottomNavigator(context),
       endDrawer: const NotificationDrawer(),
-      body: Center(child: _widgetOptions.elementAt(widget.index)),
+      body: Center(child: _widgetOptions.elementAt(currentIndex)),
     );
   }
 
   Widget bottomNavigator(BuildContext context) {
     return BottomNavigationBar(
-      currentIndex: widget.index,
+      currentIndex: currentIndex,
       onTap: (value) {
         switch (value) {
-          // case 1:
-          //   snackbar(text: 'Tests will be available soon.');
-          //   break;
+          case 1:
+            snackbar(text: 'Tests will be available soon.');
+            break;
           case 2:
             snackbar(text: 'Articles will be available soon.');
             break;
-          case 3:
-            snackbar(text: 'Appointments will be available soon.');
-            break;
-          // case 4:
-          //   snackbar(text: 'Profile will be available soon.');
-          //   break;
           default:
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => DashboardMain(index: value,),) );
+            setState(() {
+              currentIndex = value;
+            });
         }
       },
       selectedFontSize: 12,
@@ -70,84 +63,8 @@ class _DashboardMainState extends State<DashboardMain> {
     );
   }
 
-  void snackbar(
-      {required String text, Duration duration = const Duration(seconds: 1)}) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      duration: duration,
-      behavior: SnackBarBehavior.floating,
-      content: Text(text),
-    ));
-  }
-}
-
-class HomepageScreen extends StatefulWidget {
-  const HomepageScreen({Key? key}) : super(key: key);
-
-  @override
-  State<HomepageScreen> createState() => _HomepageScreenState();
-}
-
-class _HomepageScreenState extends State<HomepageScreen> {
-  @override
-  Widget build(BuildContext context) {
-    var provider = context.read<UserProvider>();
-
-    void snackbar(
-        {required String text,
-        Duration duration = const Duration(seconds: 1)}) {
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        duration: duration,
-        behavior: SnackBarBehavior.floating,
-        content: Text(text),
-      ));
-    }
-
-    Widget greet() {
-      if (provider.user.role != 'Guest') {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Hi, ${provider.user.fullName}.',
-              style: const TextStyle(color: Colors.white),
-            ),
-            Text(
-              'Registered as a ${provider.user.role}!',
-              style: const TextStyle(color: Colors.white),
-            ),
-          ],
-        );
-      }
-
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Hi, ${provider.user.role}.',
-            style: const TextStyle(color: Colors.white),
-          ),
-          Text(
-            'Registered as a ${provider.user.role}!',
-            style: const TextStyle(color: Colors.white),
-          ),
-          MaterialButton(
-            color: Colors.blue[100],
-            textColor: Colors.blue,
-            onPressed: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()));
-            },
-            child: const Text('Login'),
-          )
-        ],
-      );
-    }
-
-    Widget homepageGuestContent = SafeArea(
+  Widget dashboardBody() {
+    return SafeArea(
       child: Column(
         children: [
           Expanded(
@@ -157,8 +74,11 @@ class _HomepageScreenState extends State<HomepageScreen> {
               padding: const EdgeInsets.all(32.0),
               child: Row(
                 children: [
-                  Expanded(
-                    child: greet(),
+                  const Expanded(
+                    child: Text(
+                      'Hi, Guest !',
+                      style: TextStyle(color: Colors.white),
+                    ),
                     flex: 3,
                   ),
                   Expanded(
@@ -211,7 +131,6 @@ class _HomepageScreenState extends State<HomepageScreen> {
                           color: Colors.blue[300],
                           onPressed: () {
                             snackbar(text: 'Test will be available soon.');
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const DashboardMain(index: 1,),));
                           },
                           child: const Text(
                             'Take a test!',
@@ -259,8 +178,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                               elevation: 5,
                               margin: EdgeInsets.symmetric(vertical: 8.0),
                               child: SizedBox(
-                                child: Center(
-                                    child: Text('Articles will be here soon!')),
+                                child: Center(child: Text('articles here')),
                               ),
                             ),
                           ),
@@ -288,20 +206,16 @@ class _HomepageScreenState extends State<HomepageScreen> {
         ],
       ),
     );
+  }
 
-    Widget homepageMemberContent = WillPopScope(
-      onWillPop: (() async => false),
-      child: homepageGuestContent,
-    );
-    // Widget homepageStaffContent = Container();
-
-    if (provider.user.role == 'member') {
-      return homepageMemberContent;
-    }
-    // else if (provider.user.role == 'Staff') {
-    //   return homepageStaffContent;
-    // }
-    return homepageGuestContent;
+  void snackbar(
+      {required String text, Duration duration = const Duration(seconds: 1)}) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      duration: duration,
+      behavior: SnackBarBehavior.floating,
+      content: Text(text),
+    ));
   }
 }
 
