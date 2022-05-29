@@ -97,6 +97,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                         '${e.quizImgurl}',
                                         fit: BoxFit.cover,
                                         width: MediaQuery.of(context).size.width,
+                                        height: 250,
+                                       
                                       ),
                                       Container(
                                         color: Colors.black26,
