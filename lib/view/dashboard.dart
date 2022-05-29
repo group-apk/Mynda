@@ -215,7 +215,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                         MaterialButton(
                           color: Colors.blue[300],
                           onPressed: () {
-                            snackbar(text: 'Test will be available soon.');
+                            // snackbar(text: 'Test will be available soon.');
                             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const DashboardMain(index: 1,),));
                           },
                           child: const Text(
