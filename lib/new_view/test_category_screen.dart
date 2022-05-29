@@ -82,6 +82,7 @@ class _HealthTestCategoryScreenState extends State<HealthTestCategoryScreen> {
                               testNotifier.currentTestModel = testNotifier
                                   .testList[checkTestName('${e.quizTitle}')];
                               // getQuestion(testNotifier.currentTestModel);
+                              // edit test variables
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(

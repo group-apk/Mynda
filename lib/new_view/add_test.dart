@@ -14,12 +14,14 @@ class AddTestScreen extends StatefulWidget {
 
 class _AddTestScreenState extends State<AddTestScreen> {
   final _formKey = GlobalKey<FormState>();
+  // create new test model
   final TestModel _currentTestModel = TestModel();
   final testNameEditiingController = TextEditingController();
 
   Future uploadTest(TestModel _currentTestModel) async {
     TestNotifier testNotifier =
         Provider.of<TestNotifier>(context, listen: false);
+        // send to database new test model
     _currentTestModel = await uploadNewTest(_currentTestModel);
     // print('_currentTestModel = ${_currentTestModel.quizId}');
     getTest(testNotifier);

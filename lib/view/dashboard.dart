@@ -27,7 +27,7 @@ class _DashboardMainState extends State<DashboardMain> {
     final List<Widget> _widgetOptions = [
       const HomepageScreen(),
       // const HealthTestCategoryScreen(),
-      (userProvider.user.role == 'Guest') ? const CategoryScreen() : const HealthTestCategoryScreen(),
+      (userProvider.user.role == 'staff') ? const HealthTestCategoryScreen() : const CategoryScreen(),
       Container(),
       Container(),
       const ProfileScreen()
