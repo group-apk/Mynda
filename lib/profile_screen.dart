@@ -42,7 +42,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       return Container();
     }
 
-    return SafeArea(
+    Widget body = SafeArea(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -60,5 +60,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ],
       ),
     );
+
+    if(provider.user.role != 'Guest'){
+      return WillPopScope(child: body, onWillPop: (() async => false));
+    }
+    return body;
   }
 }

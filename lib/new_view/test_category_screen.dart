@@ -4,6 +4,7 @@ import 'package:map_proj/new_api/test_api.dart';
 import 'package:map_proj/new_notifier/test_notifier.dart';
 import 'package:map_proj/new_view/add_test.dart';
 import 'package:map_proj/new_view/question_manager.dart';
+import 'package:map_proj/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class HealthTestCategoryScreen extends StatefulWidget {
@@ -41,8 +42,8 @@ class _HealthTestCategoryScreenState extends State<HealthTestCategoryScreen> {
   Widget build(BuildContext context) {
     TestNotifier testNotifier =
         Provider.of<TestNotifier>(context, listen: false);
-    var testProvider = context.read<TestNotifier>();
-    return Scaffold(
+    var userProvider = context.read<UserProvider>();
+    Widget body = WillPopScope(child: Scaffold(
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
@@ -57,23 +58,14 @@ class _HealthTestCategoryScreenState extends State<HealthTestCategoryScreen> {
         titleTextStyle: const TextStyle(
             color: Colors.blue, fontSize: 20.0, fontWeight: FontWeight.bold),
         elevation: 2,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_new,
-            color: Color(0xFF0069FE),
-          ),
-          onPressed: () {
-            // passing this to root
-            Navigator.of(context).pop();
-          },
-        ),
+        automaticallyImplyLeading: false,
       ),
       body: Container(
         color: Colors.transparent,
         child: Padding(
           padding: const EdgeInsets.all(36.0),
           child: FutureBuilder(
-            future: getTestFuture(testProvider),
+            future: getTestFuture(testNotifier),
             builder: ((context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
@@ -86,7 +78,7 @@ class _HealthTestCategoryScreenState extends State<HealthTestCategoryScreen> {
                   crossAxisSpacing: 20,
                   mainAxisSpacing: 20,
                   crossAxisCount: 2,
-                  children: testProvider.testList
+                  children: testNotifier.testList
                       .map((e) => InkWell(
                             onTap: () {
                               testNotifier.currentTestModel = testNotifier
@@ -116,6 +108,8 @@ class _HealthTestCategoryScreenState extends State<HealthTestCategoryScreen> {
           ),
         ),
       ),
-    );
+    ), onWillPop: (() async => false),);
+
+    return body;
   }
 }

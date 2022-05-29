@@ -46,16 +46,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
         titleTextStyle: const TextStyle(
             color: Colors.blue, fontSize: 20.0, fontWeight: FontWeight.bold),
         elevation: 2,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_new,
-            color: Color(0xFF0069FE),
-          ),
-          onPressed: () {
-            // passing this to root
-            Navigator.of(context).pop();
-          },
-        ),
+        automaticallyImplyLeading: false,
       ),
       body: Container(
         color: Colors.transparent,
