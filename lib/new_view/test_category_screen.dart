@@ -4,7 +4,6 @@ import 'package:map_proj/new_api/test_api.dart';
 import 'package:map_proj/new_notifier/test_notifier.dart';
 import 'package:map_proj/new_view/add_test.dart';
 import 'package:map_proj/new_view/question_manager.dart';
-import 'package:map_proj/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class HealthTestCategoryScreen extends StatefulWidget {
@@ -42,7 +41,6 @@ class _HealthTestCategoryScreenState extends State<HealthTestCategoryScreen> {
   Widget build(BuildContext context) {
     TestNotifier testNotifier =
         Provider.of<TestNotifier>(context, listen: false);
-    var userProvider = context.read<UserProvider>();
     Widget body = WillPopScope(child: Scaffold(
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
