@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:map_proj/new_api/test_api.dart';
 import 'package:map_proj/new_notifier/test_notifier.dart';
@@ -94,7 +95,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>CategoryScreen()
+                                builder: (context) => CategoryScreen()
                                 //CategoryScreen()
                                 ));
                             },

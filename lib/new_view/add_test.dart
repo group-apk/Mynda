@@ -20,7 +20,7 @@ class _AddTestScreenState extends State<AddTestScreen> {
     TestNotifier testNotifier =
         Provider.of<TestNotifier>(context, listen: false);
     _currentTestModel = await uploadNewTest(_currentTestModel);
-    print('_currentTestModel = ${_currentTestModel.id}');
+    print('_currentTestModel = ${_currentTestModel.quizId}');
     getTest(testNotifier);
   }
 
@@ -50,7 +50,7 @@ class _AddTestScreenState extends State<AddTestScreen> {
         minWidth: MediaQuery.of(context).size.width,
         onPressed: () {
           if (_formKey.currentState!.validate()) {
-            _currentTestModel.testName = testNameEditiingController.text;
+            _currentTestModel.quizTitle = testNameEditiingController.text;
             uploadTest(_currentTestModel).then((value) {
               Fluttertoast.showToast(
                   msg: testNameEditiingController.text + " test created");

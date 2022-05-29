@@ -24,7 +24,7 @@ class _EditTestScreenState extends State<EditTestScreen> {
         Provider.of<TestNotifier>(context, listen: false);
     TestModel _currentTestModel = testNotifier.currentTestModel;
     final testNameEditingController =
-        TextEditingController(text: _currentTestModel.testName);
+        TextEditingController(text: _currentTestModel.quizTitle);
 
     Future updateTest(TestModel _currentTestModel) async {
       updateExistingTest(_currentTestModel);
@@ -133,7 +133,7 @@ class _EditTestScreenState extends State<EditTestScreen> {
       );
     }
 
-    print('id: ${_currentTestModel.id}');
+    print('id: ${_currentTestModel.quizId}');
     return Scaffold(
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -162,7 +162,7 @@ class _EditTestScreenState extends State<EditTestScreen> {
               child: const Icon(Icons.save),
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  _currentTestModel.testName = testNameEditingController.text;
+                  _currentTestModel.quizTitle = testNameEditingController.text;
                   updateTest(_currentTestModel).then((value) {
                     Fluttertoast.showToast(msg: "Test name updated");
                     // Navigator.of(context).pop();

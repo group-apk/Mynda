@@ -47,7 +47,7 @@ class _QuestionPlay extends State<QuestionPlay> {
         Provider.of<TestNotifier>(context, listen: false);
     TestModel _currentTestModel = testNotifier.currentTestModel;
     final testNameEditingController =
-        TextEditingController(text: _currentTestModel.testName);
+        TextEditingController(text: _currentTestModel.quizTitle);
 
     int questionLength = 0;
     _currentTestModel.questions?.forEach((element) { 
@@ -77,7 +77,7 @@ class _QuestionPlay extends State<QuestionPlay> {
                   subtitle: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children:
-                          _currentTestModel.questions![i].answer!
+                          _currentTestModel.questions![i].option!
                               .map((e) => 
                               GestureDetector(
                                 
@@ -171,7 +171,7 @@ class _QuestionPlay extends State<QuestionPlay> {
             child: Icon(Icons.done),
             onPressed: () {
               if (_formKey.currentState!.validate()) {
-                _currentTestModel.testName = testNameEditingController.text;
+                _currentTestModel.quizTitle = testNameEditingController.text;
                 updateTest(_currentTestModel).then((value) {
                   Fluttertoast.showToast(msg: "Test name updated");
                   // Navigator.of(context).pop();

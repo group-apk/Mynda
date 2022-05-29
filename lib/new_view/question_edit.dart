@@ -32,7 +32,7 @@ class _EditQuestionScreenState extends State<EditQuestionScreen> {
             text: _currentTestModel.questions![widget.index].question);
 
     List<TextEditingController> answerEditingController = [];
-    _currentTestModel.questions![widget.index].answer?.forEach((element) {
+    _currentTestModel.questions![widget.index].option?.forEach((element) {
       answerEditingController.add(TextEditingController(text: element));
     });
 
@@ -81,7 +81,7 @@ class _EditQuestionScreenState extends State<EditQuestionScreen> {
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount:
-                  _currentTestModel.questions![widget.index].answer?.length ??
+                  _currentTestModel.questions![widget.index].option?.length ??
                       0,
               itemBuilder: ((context, i) => TextFormField(
                     // key: _answerKey,
@@ -147,7 +147,7 @@ class _EditQuestionScreenState extends State<EditQuestionScreen> {
                   _currentTestModel.questions![widget.index].question =
                       questionNameEditingController.text;
                   for (int i = 0; i < answerEditingController.length; i++) {
-                    _currentTestModel.questions![widget.index].answer![i] =
+                    _currentTestModel.questions![widget.index].option![i] =
                         answerEditingController[i].text;
                   }
                   updateQuestion(_currentTestModel).then((value) {

@@ -27,7 +27,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
     int index = 0;
     TestNotifier testNotifier = Provider.of<TestNotifier>(context, listen: false);
     for(int i = 0; i < testNotifier.testList.length; i++){
-      if(name == testNotifier.testList[i].testName){
+      if(name == testNotifier.testList[i].quizTitle){
         index = i;
       }
     }
@@ -78,13 +78,13 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   children: testProvider.testList
                       .map((e) => GestureDetector(
                             onTap: () {
-                              testNotifier.currentTestModel = testNotifier.testList[checkTestName('${e.testName}')];
+                              testNotifier.currentTestModel = testNotifier.testList[checkTestName('${e.quizTitle}')];
                               // getQuestion(testNotifier.currentTestModel);
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => QuestionPlay(
-                                          testName: '${e.testName}')));
+                                          testName: '${e.quizTitle}')));
                             },
                             child:  Container(
                                 padding: EdgeInsets.symmetric(horizontal: 8),
@@ -94,8 +94,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                   child: Stack(
                                     children: [
                                       Image.network(
-                                        'https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=799&q=80',
-                                        //'${e.quizImgurl}',
+                                        '${e.quizImgurl}',
                                         fit: BoxFit.cover,
                                         width: MediaQuery.of(context).size.width,
                                       ),
@@ -106,7 +105,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
                                               Text(
-                                                '${e.testName}',
+                                                '${e.quizTitle}',
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontSize: 18,

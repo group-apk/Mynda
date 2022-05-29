@@ -28,7 +28,7 @@ class TestNotifier with ChangeNotifier {
   }
 
   deleteTest(TestModel test) {
-    _testList.removeWhere((element) => element.id == test.id);
+    _testList.removeWhere((element) => element.quizId == test.quizId);
     notifyListeners();
   }
 

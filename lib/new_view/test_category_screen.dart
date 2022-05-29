@@ -30,7 +30,7 @@ class _HealthTestCategoryScreenState extends State<HealthTestCategoryScreen> {
     TestNotifier testNotifier =
         Provider.of<TestNotifier>(context, listen: false);
     for (int i = 0; i < testNotifier.testList.length; i++) {
-      if (name == testNotifier.testList[i].testName) {
+      if (name == testNotifier.testList[i].quizTitle) {
         index = i;
       }
     }
@@ -90,13 +90,13 @@ class _HealthTestCategoryScreenState extends State<HealthTestCategoryScreen> {
                       .map((e) => InkWell(
                             onTap: () {
                               testNotifier.currentTestModel = testNotifier
-                                  .testList[checkTestName('${e.testName}')];
+                                  .testList[checkTestName('${e.quizTitle}')];
                               // getQuestion(testNotifier.currentTestModel);
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => EditTestScreen(
-                                          testName: '${e.testName}')));
+                                          testName: '${e.quizTitle}')));
                             },
                             child: Card(
                               elevation: 5,
@@ -104,7 +104,7 @@ class _HealthTestCategoryScreenState extends State<HealthTestCategoryScreen> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text('${e.testName}'),
+                                  Text('${e.quizTitle}'),
                                 ],
                               ),
                             ),
