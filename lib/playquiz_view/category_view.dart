@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:map_proj/new_api/test_api.dart';
-import 'package:map_proj/new_model/test_model.dart';
 import 'package:map_proj/new_notifier/test_notifier.dart';
-import 'package:map_proj/new_view/add_test.dart';
-import 'package:map_proj/new_view/question_manager.dart';
 import 'package:map_proj/playquiz_view/question_play.dart';
 import 'package:provider/provider.dart';
 
 class CategoryScreen extends StatefulWidget {
+  const CategoryScreen({Key? key}) : super(key: key);
+
   @override
   _CategoryScreenState createState() =>
       _CategoryScreenState();
@@ -34,6 +33,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
     return index;
   }
 
+  @override
   Widget build(BuildContext context) {
     TestNotifier testNotifier = Provider.of<TestNotifier>(context, listen: false);
     var testProvider = context.read<TestNotifier>();
@@ -87,7 +87,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                           testName: '${e.quizTitle}')));
                             },
                             child:  Container(
-                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                padding: const EdgeInsets.symmetric(horizontal: 8),
                                 height: 150,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
@@ -107,7 +107,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                               Text(
                                                 '${e.quizTitle}',
                                                 textAlign: TextAlign.center,
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     fontSize: 18,
                                                     color: Colors.white,
                                                     fontWeight: FontWeight.w500),

@@ -1,15 +1,7 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:map_proj/new_model/question_model.dart';
 import 'package:map_proj/new_model/test_model.dart';
 import 'package:map_proj/new_notifier/test_notifier.dart';
-
-getAllQuestions(List<TestModel> testModels) async {
-  testModels.forEach((e) {
-    getQuestion(e);
-  });
-}
 
 getQuestion(TestModel testModel) async {
   if (testModel.quizId != null) {
@@ -104,7 +96,7 @@ deleteExistingTest(TestModel test) async {
 }
 
 updateExistingQuestion(TestModel test, int index) async {
-  print('updateqid: ${test.questions![index].qid}');
+  // print('updateqid: ${test.questions![index].qid}');
   final CollectionReference db = FirebaseFirestore.instance
       .collection('QuizList')
       .doc(test.quizId)
@@ -116,8 +108,8 @@ updateExistingQuestion(TestModel test, int index) async {
     "question": test.questions![index].question,
     "option": test.questions![index].option
   });
-  print("question:" + test.questions![index].question.toString());
-  print(test.questions![index].option);
+  // print("question:" + test.questions![index].question.toString());
+  // print(test.questions![index].option);
 }
 
 Future<TestModel> addNewQuestion(TestModel test, int index) async {
@@ -127,7 +119,7 @@ Future<TestModel> addNewQuestion(TestModel test, int index) async {
       .doc(test.quizId)
       .collection('Questions');
   var id = await db.add(test.questions![index].toMap()).then((doc) => doc.id);
-  print('qid: $id');
+  // print('qid: $id');
   test.questions![index].qid = id;
   await db.doc(id).set({"qid": id, 'createdAt': Timestamp.now()});
   return test;

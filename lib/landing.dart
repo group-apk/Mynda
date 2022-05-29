@@ -69,7 +69,7 @@ class _LandingScreenState extends State<LandingScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const DashboardMain()));
+                                  builder: (context) => DashboardMain()));
                         },
                       ),
                     ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:map_proj/new_api/test_api.dart';
-import 'package:map_proj/new_model/question_model.dart';
 import 'package:map_proj/new_model/test_model.dart';
 import 'package:map_proj/new_notifier/test_notifier.dart';
 import 'package:map_proj/new_view/question_edit.dart';
@@ -43,7 +42,7 @@ class _EditTestScreenState extends State<EditTestScreen> {
       child: MaterialButton(
         padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
         onPressed: () {
-          print(_currentTestModel.questions!.length);
+          // print(_currentTestModel.questions!.length);
           if (_formKey.currentState!.validate()) {
             addNewQuestion(
                     _currentTestModel, _currentTestModel.questions!.length)
@@ -87,7 +86,7 @@ class _EditTestScreenState extends State<EditTestScreen> {
                                   '${_currentTestModel.questions![i].question}'),
                               trailing: const Icon(Icons.edit),
                               onTap: () {
-                                print(_currentTestModel.questions![i].qid);
+                                // print(_currentTestModel.questions![i].qid);
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -121,6 +120,7 @@ class _EditTestScreenState extends State<EditTestScreen> {
           if (value!.isEmpty) {
             return ("Please enter a test name");
           }
+          return null;
         },
         textInputAction: TextInputAction.next,
         onSaved: (value) {
@@ -133,7 +133,7 @@ class _EditTestScreenState extends State<EditTestScreen> {
       );
     }
 
-    print('id: ${_currentTestModel.quizId}');
+    // print('id: ${_currentTestModel.quizId}');
     return Scaffold(
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,

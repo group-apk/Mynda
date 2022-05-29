@@ -1,9 +1,6 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:map_proj/new_api/test_api.dart';
-import 'package:map_proj/new_model/question_model.dart';
 import 'package:map_proj/new_model/test_model.dart';
 import 'package:map_proj/new_notifier/test_notifier.dart';
 import 'package:provider/provider.dart';
@@ -59,7 +56,6 @@ class _EditQuestionScreenState extends State<EditQuestionScreen> {
           if (value == null || value.isEmpty) {
             return ("Please enter a question name");
           }
-          print('question: a${value} a');
           return null;
         },
         textInputAction: TextInputAction.next,
@@ -103,7 +99,6 @@ class _EditQuestionScreenState extends State<EditQuestionScreen> {
                       if (value == null || value.isEmpty) {
                         return ("Please enter an answer");
                       }
-                      print('answer: $value');
                       return null;
                     },
                     textInputAction: TextInputAction.done,
@@ -117,7 +112,7 @@ class _EditQuestionScreenState extends State<EditQuestionScreen> {
       );
     }
 
-    print(_currentTestModel.questions![widget.index].qid);
+    // print(_currentTestModel.questions![widget.index].qid);
     return Scaffold(
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -143,7 +138,6 @@ class _EditQuestionScreenState extends State<EditQuestionScreen> {
               child: const Icon(Icons.save),
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  print(widget.index);
                   _currentTestModel.questions![widget.index].question =
                       questionNameEditingController.text;
                   for (int i = 0; i < answerEditingController.length; i++) {
@@ -173,7 +167,6 @@ class _EditQuestionScreenState extends State<EditQuestionScreen> {
             color: Color(0xFF0069FE),
           ),
           onPressed: () {
-            print(widget.isAdd);
             widget.isAdd
                 ? deleteQuestion(_currentTestModel).then((value) {
                     Fluttertoast.showToast(msg: "Question Add cancelled");

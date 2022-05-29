@@ -27,7 +27,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final emailEditingController = TextEditingController();
   final passwordEditingController = TextEditingController();
   final confirmPasswordEditingController = TextEditingController();
-  final ICEditingController = TextEditingController();
+  final icEditingController = TextEditingController();
   final genderEditingController = TextEditingController();
   final regionEditingController = TextEditingController();
   final statesEditingController = TextEditingController();
@@ -137,9 +137,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         ));
 
     // IC field
-    final ICfield = TextFormField(
+    final icfield = TextFormField(
         autofocus: false,
-        controller: ICEditingController,
+        controller: icEditingController,
         keyboardType: TextInputType.number,
         validator: (value) {
           RegExp regex = RegExp(r'^[0-9]{12}$');
@@ -152,7 +152,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           return null;
         },
         onSaved: (value) {
-          ICEditingController.text = value!;
+          icEditingController.text = value!;
         },
         inputFormatters: [
           LengthLimitingTextInputFormatter(12),
@@ -296,7 +296,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       SizedBox(height: 15),
                       confirmPasswordField,
                       SizedBox(height: 15),
-                      ICfield,
+                      icfield,
                       SizedBox(height: 15),
                       genderField,
                       SizedBox(height: 15),
@@ -367,7 +367,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     userModel.email = user!.email;
     userModel.uid = user.uid;
     userModel.fullName = fullNameEditingController.text;
-    userModel.ic = ICEditingController.text;
+    userModel.ic = icEditingController.text;
     userModel.gender = genderEditingController.text;
     userModel.region = regionEditingController.text;
     userModel.states = statesEditingController.text;

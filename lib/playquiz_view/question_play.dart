@@ -3,10 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:map_proj/new_api/test_api.dart';
 import 'package:map_proj/new_model/test_model.dart';
 import 'package:map_proj/new_notifier/test_notifier.dart';
-import 'package:map_proj/new_view/question_edit.dart';
 import 'package:provider/provider.dart';
-
-import 'quiz_play_widgets.dart';
 
 class QuestionPlay extends StatefulWidget {
   const QuestionPlay({Key? key, required this.testName}) : super(key: key);
@@ -24,8 +21,6 @@ class _QuestionPlay extends State<QuestionPlay> {
   final _formKey = GlobalKey<FormState>();
 
   late int optionSelected;
-
-  @override
   Future updateTest(TestModel _currentTestModel) async {
     TestNotifier testNotifier =
         Provider.of<TestNotifier>(context, listen: false);
@@ -41,18 +36,18 @@ class _QuestionPlay extends State<QuestionPlay> {
   }
 
   
+  @override
   Widget build(BuildContext context) {
-
     TestNotifier testNotifier =
         Provider.of<TestNotifier>(context, listen: false);
     TestModel _currentTestModel = testNotifier.currentTestModel;
     final testNameEditingController =
         TextEditingController(text: _currentTestModel.quizTitle);
 
-    int questionLength = 0;
-    _currentTestModel.questions?.forEach((element) { 
-      questionLength++;
-    });
+    // int questionLength = 0;
+    // _currentTestModel.questions?.forEach((element) { 
+    //   questionLength++;
+    // });
 
     Widget questionField(TestModel _currentTestModel) {
       return FutureBuilder(
@@ -62,7 +57,7 @@ class _QuestionPlay extends State<QuestionPlay> {
           return const CircularProgressIndicator();
         }
         return ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
           itemCount: _currentTestModel.questions?.length ?? 0,
           itemBuilder: ((context, i) => SizedBox(
@@ -88,10 +83,10 @@ class _QuestionPlay extends State<QuestionPlay> {
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(border:Border.all(
-                                    color: Color.fromARGB(255, 4, 90, 160),
+                                    color: const Color.fromARGB(255, 4, 90, 160),
                                     width: 2, 
                                   ),
-                                  borderRadius: BorderRadius.all(Radius.circular(12))
+                                  borderRadius: const BorderRadius.all(Radius.circular(12))
                                   ),
                                   width:300,
                                   height: 50,
@@ -116,59 +111,59 @@ class _QuestionPlay extends State<QuestionPlay> {
   }
 
 
-    Widget testNameField(TestModel _currentTestModel) {
-      return TextFormField(
-        autofocus: false,
-        // initialValue: _currentTestModel.testName,
-        controller: testNameEditingController,
-        maxLines: null,
-        keyboardType: TextInputType.multiline,
-        style: TextStyle(fontSize: 20),
-        validator: (value) {
-          if (value!.isEmpty) {
-            return ("Please enter a test name");
-          }
-        },
-        textInputAction: TextInputAction.next,
-        onSaved: (value) {
-          testNameEditingController.text = value!;
-        },
-        decoration: const InputDecoration(
-            labelText: 'Test Name',
-            suffixIcon: Align(
-                widthFactor: 1.0, heightFactor: 1.0, child: Icon(Icons.edit))),
-      );
-    }
+    // Widget testNameField(TestModel _currentTestModel) {
+    //   return TextFormField(
+    //     autofocus: false,
+    //     // initialValue: _currentTestModel.testName,
+    //     controller: testNameEditingController,
+    //     maxLines: null,
+    //     keyboardType: TextInputType.multiline,
+    //     style: const TextStyle(fontSize: 20),
+    //     validator: (value) {
+    //       if (value!.isEmpty) {
+    //         return ("Please enter a test name");
+    //       }
+    //     },
+    //     textInputAction: TextInputAction.next,
+    //     onSaved: (value) {
+    //       testNameEditingController.text = value!;
+    //     },
+    //     decoration: const InputDecoration(
+    //         labelText: 'Test Name',
+    //         suffixIcon: Align(
+    //             widthFactor: 1.0, heightFactor: 1.0, child: Icon(Icons.edit))),
+    //   );
+    // }
 
-    final addQuestionButton = Material(
-      elevation: 5,
-      borderRadius: BorderRadius.circular(5),
-      color: Color(0xFF0069FE),
-      child: MaterialButton(
-        padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-        onPressed: () {
-          Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => EditQuestionScreen(index: questionLength, isAdd: true)));
-        },
-        child: Text(
-          "Add New Question",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-      ),
-    );
+    // final addQuestionButton = Material(
+    //   elevation: 5,
+    //   borderRadius: BorderRadius.circular(5),
+    //   color: const Color(0xFF0069FE),
+    //   child: MaterialButton(
+    //     padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+    //     onPressed: () {
+    //       Navigator.push(
+    //                     context,
+    //                     MaterialPageRoute(
+    //                         builder: (context) => EditQuestionScreen(index: questionLength, isAdd: true)));
+    //     },
+    //     child: const Text(
+    //       "Add New Question",
+    //       textAlign: TextAlign.center,
+    //       style: const TextStyle(
+    //           fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
+    //     ),
+    //   ),
+    // );
 
     return Scaffold(
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           FloatingActionButton(
-            backgroundColor: Color.fromARGB(255, 27, 183, 255),
-            child: Icon(Icons.done),
+            backgroundColor: const Color.fromARGB(255, 27, 183, 255),
+            child: const Icon(Icons.done),
             onPressed: () {
               if (_formKey.currentState!.validate()) {
                 _currentTestModel.quizTitle = testNameEditingController.text;
@@ -186,11 +181,11 @@ class _QuestionPlay extends State<QuestionPlay> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Text("${widget.testName} Test"),
-        titleTextStyle: TextStyle(
+        titleTextStyle: const TextStyle(
             color: Colors.blue, fontSize: 18.0, fontWeight: FontWeight.bold),
         elevation: 2,
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: Color(0xFF0069FE),
           ),
@@ -209,7 +204,7 @@ class _QuestionPlay extends State<QuestionPlay> {
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     questionField(_currentTestModel),
                    
                   ],

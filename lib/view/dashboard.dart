@@ -1,15 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:map_proj/new_view/test_category_screen.dart';
+import 'package:map_proj/playquiz_view/category_view.dart';
 import 'package:map_proj/profile_screen.dart';
 import 'package:map_proj/provider/user_provider.dart';
 import 'package:map_proj/view/login_screen.dart';
 import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class DashboardMain extends StatefulWidget {
   const DashboardMain({Key? key, this.index = 0}) : super(key: key);
   // ignore: prefer_typing_uninitialized_variables
-  final index;
+  final int index;
 
   @override
   State<DashboardMain> createState() => _DashboardMainState();
@@ -17,16 +19,19 @@ class DashboardMain extends StatefulWidget {
 
 class _DashboardMainState extends State<DashboardMain> {
   final FirebaseAuth auth = FirebaseAuth.instance;
-  static final List<Widget> _widgetOptions = [
-    const HomepageScreen(),
-    const HealthTestCategoryScreen(),
-    Container(),
-    Container(),
-    const ProfileScreen()
-  ];
+  
 
   @override
   Widget build(BuildContext context) {
+    var userProvider = context.read<UserProvider>();
+    final List<Widget> _widgetOptions = [
+      const HomepageScreen(),
+      // const HealthTestCategoryScreen(),
+      (userProvider.user.role == 'Guest') ? const CategoryScreen() : const HealthTestCategoryScreen(),
+      Container(),
+      Container(),
+      const ProfileScreen()
+    ];
     return Scaffold(
       bottomNavigationBar: bottomNavigator(context),
       endDrawer: const NotificationDrawer(),
@@ -52,7 +57,7 @@ class _DashboardMainState extends State<DashboardMain> {
           //   snackbar(text: 'Profile will be available soon.');
           //   break;
           default:
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => DashboardMain(index: value,),) );
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: ((context) => DashboardMain(index: value))));
         }
       },
       selectedFontSize: 12,
@@ -293,14 +298,17 @@ class _HomepageScreenState extends State<HomepageScreen> {
       onWillPop: (() async => false),
       child: homepageGuestContent,
     );
-    // Widget homepageStaffContent = Container();
+    Widget homepageStaffContent = WillPopScope(
+      onWillPop: (() async => false),
+      child: homepageGuestContent,
+    );
 
     if (provider.user.role == 'member') {
       return homepageMemberContent;
     }
-    // else if (provider.user.role == 'Staff') {
-    //   return homepageStaffContent;
-    // }
+    else if (provider.user.role == 'staff') {
+      return homepageStaffContent;
+    }
     return homepageGuestContent;
   }
 }

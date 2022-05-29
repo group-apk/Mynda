@@ -27,7 +27,7 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
   final emailEditingController = TextEditingController();
   final passwordEditingController = TextEditingController();
   final confirmPasswordEditingController = TextEditingController();
-  final ICEditingController = TextEditingController();
+  final icEditingController = TextEditingController();
   final genderEditingController = TextEditingController();
   final academicEditingController = TextEditingController();
   final regionEditingController = TextEditingController();
@@ -138,9 +138,9 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
         ));
 
     // IC field
-    final ICfield = TextFormField(
+    final icfield = TextFormField(
         autofocus: false,
-        controller: ICEditingController,
+        controller: icEditingController,
         keyboardType: TextInputType.number,
         validator: (value) {
           RegExp regex = RegExp(r'^[0-9]{12}$');
@@ -153,7 +153,7 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
           return null;
         },
         onSaved: (value) {
-          ICEditingController.text = value!;
+          icEditingController.text = value!;
         },
         inputFormatters: [
           LengthLimitingTextInputFormatter(12),
@@ -323,7 +323,7 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
                       SizedBox(height: 15),
                       confirmPasswordField,
                       SizedBox(height: 15),
-                      ICfield,
+                      icfield,
                       SizedBox(height: 15),
                       genderField,
                       SizedBox(height: 15),
@@ -371,7 +371,7 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
     userModel.email = user!.email;
     userModel.uid = user.uid;
     userModel.fullName = fullNameEditingController.text;
-    userModel.ic = ICEditingController.text;
+    userModel.ic = icEditingController.text;
     userModel.gender = genderEditingController.text;
     userModel.region = regionEditingController.text;
     userModel.states = statesEditingController.text;
