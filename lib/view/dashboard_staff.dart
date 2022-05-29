@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../new_view/test_category_screen.dart';
+
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
 
@@ -67,7 +69,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         const Text('Unsure what to do?'),
                         MaterialButton(
                           color: Colors.blue[300],
-                          onPressed: () {},
+                          onPressed: () {
+                             Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HealthTestCategoryScreen()
+                                //CategoryScreen()
+                                ));
+                          },
                           child: const Text(
                             'Take a test!',
                             style: TextStyle(color: Colors.white),

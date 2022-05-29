@@ -4,6 +4,8 @@ import 'package:map_proj/new_notifier/test_notifier.dart';
 import 'package:map_proj/new_view/test_category_screen.dart';
 import 'package:provider/provider.dart';
 
+import '../playquiz_view/category_view.dart';
+
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
 
@@ -92,7 +94,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => HealthTestCategoryScreen()));
+                                builder: (context) =>CategoryScreen()
+                                //CategoryScreen()
+                                ));
                             },
                             child: const Text(
                               'Take a test!',
