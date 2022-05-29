@@ -1,12 +1,8 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:map_proj/provider/user_provider.dart';
+import 'package:mynda/provider/user_provider.dart';
+import 'package:mynda/view/landing.dart';
 import 'package:provider/provider.dart';
-
-import 'landing.dart';
-// import 'package:map_proj/model/user_model.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -21,11 +17,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     var provider = context.read<UserProvider>();
+    final navigator = Navigator.of(context);
 
     signOut() async {
       await auth.signOut();
       provider.logout();
-      Navigator.pushReplacement(context,
+
+      navigator.pushReplacement(
           MaterialPageRoute(builder: (context) => const LandingScreen()));
     }
 
@@ -36,13 +34,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           onPressed: () async {
             await signOut();
           },
-          child: Icon(Icons.logout),
+          child: const Icon(Icons.logout),
         );
       }
       return Container();
     }
 
-    return SafeArea(
+    Widget body = SafeArea(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -50,15 +48,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           const Text('Profile Page'),
           Text('Role: ${provider.user.role}'),
           logoutButton(),
-          // Text('${widget.userModel.email}'),
-          // Text('${widget.userModel.fullName}'),
-          // Text('${widget.userModel.gender}'),
-          // Text('${widget.userModel.ic}'),
-          // Text('${widget.userModel.region}'),
-          // Text('${widget.userModel.states}'),
-          // Text('${widget.userModel.uid}'),
         ],
       ),
     );
+
+    if (provider.user.role != 'Guest') {
+      return WillPopScope(onWillPop: (() async => false), child: body);
+    }
+    return body;
   }
 }

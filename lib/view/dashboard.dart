@@ -1,13 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:map_proj/landing.dart';
-import 'package:map_proj/profile_screen.dart';
-import 'package:map_proj/provider/user_provider.dart';
-import 'package:map_proj/view/login_screen.dart';
+import 'package:mynda/provider/user_provider.dart';
+import 'package:mynda/view/login_screen.dart';
+import 'package:mynda/view/profile_screen.dart';
+import 'package:mynda/view/test/category_view.dart';
+import 'package:mynda/view/test_staff/test_category_screen.dart';
 import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class DashboardMain extends StatefulWidget {
-  const DashboardMain({Key? key}) : super(key: key);
+  const DashboardMain({Key? key, this.index = 0}) : super(key: key);
+  // ignore: prefer_typing_uninitialized_variables
+  final int index;
 
   @override
   State<DashboardMain> createState() => _DashboardMainState();
@@ -15,34 +19,35 @@ class DashboardMain extends StatefulWidget {
 
 class _DashboardMainState extends State<DashboardMain> {
   final FirebaseAuth auth = FirebaseAuth.instance;
-  var currentIndex = 0;
-  static final List<Widget> _widgetOptions = [
-    const HomepageScreen(),
-    Container(),
-    Container(),
-    Container(),
-    const ProfileScreen()
-  ];
 
   @override
   Widget build(BuildContext context) {
-    var provider = context.read<UserProvider>();
-
+    var userProvider = context.read<UserProvider>();
+    final List<Widget> widgetOptions = [
+      const HomepageScreen(),
+      // const HealthTestCategoryScreen(),
+      (userProvider.user.role == 'staff')
+          ? const HealthTestCategoryScreen()
+          : const CategoryScreen(),
+      Container(),
+      Container(),
+      const ProfileScreen()
+    ];
     return Scaffold(
       bottomNavigationBar: bottomNavigator(context),
       endDrawer: const NotificationDrawer(),
-      body: Center(child: _widgetOptions.elementAt(currentIndex)),
+      body: Center(child: widgetOptions.elementAt(widget.index)),
     );
   }
 
   Widget bottomNavigator(BuildContext context) {
     return BottomNavigationBar(
-      currentIndex: currentIndex,
+      currentIndex: widget.index,
       onTap: (value) {
         switch (value) {
-          case 1:
-            snackbar(text: 'Tests will be available soon.');
-            break;
+          // case 1:
+          //   snackbar(text: 'Tests will be available soon.');
+          //   break;
           case 2:
             snackbar(text: 'Articles will be available soon.');
             break;
@@ -53,9 +58,10 @@ class _DashboardMainState extends State<DashboardMain> {
           //   snackbar(text: 'Profile will be available soon.');
           //   break;
           default:
-            setState(() {
-              currentIndex = value;
-            });
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: ((context) => DashboardMain(index: value))));
         }
       },
       selectedFontSize: 12,
@@ -161,8 +167,8 @@ class _HomepageScreenState extends State<HomepageScreen> {
               child: Row(
                 children: [
                   Expanded(
-                    child: greet(),
                     flex: 3,
+                    child: greet(),
                   ),
                   Expanded(
                     child: Builder(builder: (context) {
@@ -213,7 +219,14 @@ class _HomepageScreenState extends State<HomepageScreen> {
                         MaterialButton(
                           color: Colors.blue[300],
                           onPressed: () {
-                            snackbar(text: 'Test will be available soon.');
+                            // snackbar(text: 'Test will be available soon.');
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const DashboardMain(
+                                    index: 1,
+                                  ),
+                                ));
                           },
                           child: const Text(
                             'Take a test!',
@@ -295,14 +308,16 @@ class _HomepageScreenState extends State<HomepageScreen> {
       onWillPop: (() async => false),
       child: homepageGuestContent,
     );
-    // Widget homepageStaffContent = Container();
+    Widget homepageStaffContent = WillPopScope(
+      onWillPop: (() async => false),
+      child: homepageGuestContent,
+    );
 
     if (provider.user.role == 'member') {
       return homepageMemberContent;
+    } else if (provider.user.role == 'staff') {
+      return homepageStaffContent;
     }
-    // else if (provider.user.role == 'Staff') {
-    //   return homepageStaffContent;
-    // }
     return homepageGuestContent;
   }
 }

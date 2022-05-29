@@ -1,8 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:map_proj/view/dashboard.dart';
-import 'package:map_proj/view/dashboard_guest.dart';
-import 'package:map_proj/view/login_screen.dart';
+import 'package:mynda/view/dashboard.dart';
+import 'package:mynda/view/login_screen.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({Key? key}) : super(key: key);
@@ -29,6 +28,7 @@ class _LandingScreenState extends State<LandingScreen> {
             child: Column(
               children: [
                 Expanded(
+                  flex: 3,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -48,7 +48,6 @@ class _LandingScreenState extends State<LandingScreen> {
                           )),
                     ],
                   ),
-                  flex: 3,
                 ),
                 Expanded(
                     child: Column(
