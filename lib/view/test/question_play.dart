@@ -65,7 +65,7 @@ class _QuestionPlay extends State<QuestionPlay> {
                     subtitle: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: currentTestModel.questions![i].option!
-                          .map(
+                          .map<Widget>(
                             (e) => GestureDetector(
                               onTap: () {
                                 setState(() {
