@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:map_proj/view/dashboard.dart';
 import 'package:map_proj/view/login_screen.dart';
@@ -10,9 +11,14 @@ class LandingScreen extends StatefulWidget {
 }
 
 class _LandingScreenState extends State<LandingScreen> {
+  Future<FirebaseApp> _initializeFirebase() async {
+    FirebaseApp firebaseApp = await Firebase.initializeApp();
+    return firebaseApp;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    Widget landingContent = Scaffold(
       body: WillPopScope(
         onWillPop: () async => false,
         child: SafeArea(
@@ -63,8 +69,7 @@ class _LandingScreenState extends State<LandingScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      const DashboardScreen()));
+                                  builder: (context) => const DashboardMain()));
                         },
                       ),
                     ),
@@ -89,6 +94,20 @@ class _LandingScreenState extends State<LandingScreen> {
             ),
           ),
         ),
+      ),
+    );
+
+    return Scaffold(
+      body: FutureBuilder(
+        future: _initializeFirebase(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return landingContent;
+          }
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
       ),
     );
   }

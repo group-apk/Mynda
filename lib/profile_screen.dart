@@ -1,61 +1,69 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:map_proj/model/user_model.dart';
+import 'package:map_proj/provider/user_provider.dart';
+import 'package:provider/provider.dart';
+
+import 'landing.dart';
+// import 'package:map_proj/model/user_model.dart';
 
 class ProfileScreen extends StatefulWidget {
-  final User user;
-  UserModel userModel = UserModel();
-
-  ProfileScreen({Key? key, required this.user}) : super(key: key);
+  const ProfileScreen({Key? key}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await FirebaseFirestore.instance
-          .collection("users")
-          .doc(widget.user.uid)
-          .get()
-          .then((value) {
-        setState(() {
-          widget.userModel = UserModel.fromMap(value.data());
-        });
-      });
-    });
-  }
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            onPressed: () {}, icon: const Icon(Icons.arrow_back_ios_new)),
-        title: const Text('Profile'),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text('${widget.userModel.email}'),
-              Text('${widget.userModel.fullName}'),
-              Text('${widget.userModel.gender}'),
-              Text('${widget.userModel.ic}'),
-              Text('${widget.userModel.region}'),
-              Text('${widget.userModel.states}'),
-              Text('${widget.userModel.uid}'),
-            ],
-          ),
-        ),
+    var provider = context.read<UserProvider>();
+
+    signOut() async {
+      await auth.signOut();
+      provider.logout();
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const LandingScreen()));
+    }
+
+    Widget logoutButton() {
+      if (provider.user.role != 'Guest') {
+        return MaterialButton(
+          color: Colors.blue,
+          onPressed: () async {
+            await signOut();
+          },
+          child: const Icon(Icons.logout),
+        );
+      }
+      return Container();
+    }
+
+    Widget body = SafeArea(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Text('Profile Page'),
+          Text('Role: ${provider.user.role}'),
+          logoutButton(),
+          // Text('${widget.userModel.email}'),
+          // Text('${widget.userModel.fullName}'),
+          // Text('${widget.userModel.gender}'),
+          // Text('${widget.userModel.ic}'),
+          // Text('${widget.userModel.region}'),
+          // Text('${widget.userModel.states}'),
+          // Text('${widget.userModel.uid}'),
+        ],
       ),
     );
+
+    if(provider.user.role != 'Guest'){
+      return WillPopScope(child: body, onWillPop: (() async => false));
+    }
+    return body;
   }
 }

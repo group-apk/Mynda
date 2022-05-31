@@ -1,13 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserModel {
-  String? uid,
-      email,
-      fullName,
-      ic,
-      gender,
-      region,
-      states,
-      role,
-      academic;
+  String? uid, email, fullName, ic, gender, region, states, role, academic;
 
   UserModel(
       {this.uid,
@@ -47,5 +41,21 @@ class UserModel {
       'role': role,
       'academic': academic,
     };
+  }
+
+  factory UserModel.fromDocument(DocumentSnapshot doc) {
+    return UserModel(
+      uid: doc.data().toString().contains('uid') ? doc.get('uid') : '',
+      email: doc.data().toString().contains('email') ? doc.get('email') : '',
+      fullName:
+          doc.data().toString().contains('fullName') ? doc.get('fullName') : '',
+      ic: doc.data().toString().contains('ic') ? doc.get('ic') : '',
+      gender: doc.data().toString().contains('gender') ? doc.get('gender') : '',
+      region: doc.data().toString().contains('region') ? doc.get('region') : '',
+      states: doc.data().toString().contains('states') ? doc.get('states') : '',
+      role: doc.data().toString().contains('role') ? doc.get('role') : '',
+      academic:
+          doc.data().toString().contains('academic') ? doc.get('academic') : '',
+    );
   }
 }

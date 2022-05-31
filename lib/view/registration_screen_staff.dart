@@ -23,15 +23,15 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
   final _formKey = GlobalKey<FormState>();
 
   // editing controller
-  final fullNameEditingController = new TextEditingController();
-  final emailEditingController = new TextEditingController();
-  final passwordEditingController = new TextEditingController();
-  final confirmPasswordEditingController = new TextEditingController();
-  final ICEditingController = new TextEditingController();
-  final genderEditingController = new TextEditingController();
-  final academicEditingController = new TextEditingController();
-  final regionEditingController = new TextEditingController();
-  final statesEditingController = new TextEditingController();
+  final fullNameEditingController = TextEditingController();
+  final emailEditingController = TextEditingController();
+  final passwordEditingController = TextEditingController();
+  final confirmPasswordEditingController = TextEditingController();
+  final icEditingController = TextEditingController();
+  final genderEditingController = TextEditingController();
+  final academicEditingController = TextEditingController();
+  final regionEditingController = TextEditingController();
+  final statesEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
         controller: fullNameEditingController,
         keyboardType: TextInputType.name,
         validator: (value) {
-          RegExp regex = new RegExp(r'^.{3,}$');
+          RegExp regex = RegExp(r'^.{3,}$');
           if (value!.isEmpty) {
             return ("Please Enter Your Full Name");
           }
@@ -94,13 +94,14 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
         controller: passwordEditingController,
         obscureText: true,
         validator: (value) {
-          RegExp regex = new RegExp(r'^.{6,}$');
+          RegExp regex = RegExp(r'^.{6,}$');
           if (value!.isEmpty) {
             return ("Please Enter Your Password");
           }
           if (!regex.hasMatch(value)) {
             return ("Please Enter at least 6 Character for Password");
           }
+          return null;
         },
         onSaved: (value) {
           passwordEditingController.text = value!;
@@ -137,12 +138,12 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
         ));
 
     // IC field
-    final ICfield = TextFormField(
+    final icfield = TextFormField(
         autofocus: false,
-        controller: ICEditingController,
+        controller: icEditingController,
         keyboardType: TextInputType.number,
         validator: (value) {
-          RegExp regex = new RegExp(r'^[0-9]{12}$');
+          RegExp regex = RegExp(r'^[0-9]{12}$');
           if (value!.isEmpty) {
             return ("Please Enter Your IC");
           }
@@ -152,7 +153,7 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
           return null;
         },
         onSaved: (value) {
-          ICEditingController.text = value!;
+          icEditingController.text = value!;
         },
         inputFormatters: [
           LengthLimitingTextInputFormatter(12),
@@ -166,7 +167,7 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
         ));
 
     // gender
-    String? selectedValue = null;
+    String? selectedValue;
     final genderField = DropdownButtonFormField(
       autofocus: false,
       decoration: InputDecoration(
@@ -192,7 +193,7 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
         controller: academicEditingController,
         keyboardType: TextInputType.text,
         validator: (value) {
-          RegExp regex = new RegExp(r'^.{3,}$');
+          RegExp regex = RegExp(r'^.{3,}$');
           if (value!.isEmpty) {
             return ("Please Enter Your Highest Academic Qualification");
           }
@@ -213,7 +214,7 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
         ));
 
     // region
-    String? selectedValue2 = null;
+    String? selectedValue2;
     final regionField = DropdownButtonFormField(
       autofocus: false,
       decoration: InputDecoration(
@@ -322,7 +323,7 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
                       SizedBox(height: 15),
                       confirmPasswordField,
                       SizedBox(height: 15),
-                      ICfield,
+                      icfield,
                       SizedBox(height: 15),
                       genderField,
                       SizedBox(height: 15),
@@ -370,7 +371,7 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
     userModel.email = user!.email;
     userModel.uid = user.uid;
     userModel.fullName = fullNameEditingController.text;
-    userModel.ic = ICEditingController.text;
+    userModel.ic = icEditingController.text;
     userModel.gender = genderEditingController.text;
     userModel.region = regionEditingController.text;
     userModel.states = statesEditingController.text;
@@ -387,7 +388,7 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
         MaterialPageRoute(builder: (context) => LoginScreen()));
   }
 
-  String? selectedValue3 = null;
+  String? selectedValue3;
   Widget stateDropdown({required item}) {
     return DropdownButtonFormField(
       autofocus: false,
