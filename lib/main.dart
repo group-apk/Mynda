@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mynda/provider/dashboard_provider.dart';
 import 'package:mynda/provider/test_notifier.dart';
 import 'package:mynda/provider/user_provider.dart';
 import 'package:mynda/view/landing.dart';
@@ -12,6 +13,9 @@ void main() {
       ),
       ChangeNotifierProvider(
         create: (context) => UserProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => DashboardProvider(),
       ),
     ],
     child: const MyApp(),
