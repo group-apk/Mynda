@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mynda/provider/dashboard_provider.dart';
 import 'package:mynda/provider/user_provider.dart';
 import 'package:mynda/view/login_screen.dart';
 import 'package:mynda/view/profile_screen.dart';
@@ -22,11 +23,12 @@ class _DashboardMainState extends State<DashboardMain> {
 
   @override
   Widget build(BuildContext context) {
-    var userProvider = context.read<UserProvider>();
+    var user = context.read<UserProvider>();
+    var dashboard = context.read<DashboardProvider>();
     final List<Widget> widgetOptions = [
       const HomepageScreen(),
       // const HealthTestCategoryScreen(),
-      (userProvider.user.role == 'staff')
+      (user.user.role == 'staff')
           ? const HealthTestCategoryScreen()
           : const CategoryScreen(),
       Container(),
@@ -36,46 +38,53 @@ class _DashboardMainState extends State<DashboardMain> {
     return Scaffold(
       bottomNavigationBar: bottomNavigator(context),
       endDrawer: const NotificationDrawer(),
-      body: Center(child: widgetOptions.elementAt(widget.index)),
+      body: Consumer<DashboardProvider>(
+        builder: (context, value, child) => Center(
+          child: widgetOptions.elementAt(dashboard.index),
+        ),
+      ),
     );
   }
 
   Widget bottomNavigator(BuildContext context) {
-    return BottomNavigationBar(
-      currentIndex: widget.index,
-      onTap: (value) {
-        switch (value) {
-          // case 1:
-          //   snackbar(text: 'Tests will be available soon.');
-          //   break;
-          case 2:
-            snackbar(text: 'Articles will be available soon.');
-            break;
-          case 3:
-            snackbar(text: 'Appointments will be available soon.');
-            break;
-          // case 4:
-          //   snackbar(text: 'Profile will be available soon.');
-          //   break;
-          default:
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: ((context) => DashboardMain(index: value))));
-        }
-      },
-      selectedFontSize: 12,
-      unselectedFontSize: 12,
-      type: BottomNavigationBarType.fixed,
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.format_list_bulleted), label: "Tests"),
-        BottomNavigationBarItem(icon: Icon(Icons.newspaper), label: "Articles"),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_month), label: "Appointments"),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-      ],
+    var dashboard = context.read<DashboardProvider>();
+    return Consumer<DashboardProvider>(
+      builder: (context, value, child) => BottomNavigationBar(
+        currentIndex: dashboard.index,
+        onTap: (value) {
+          switch (value) {
+            // case 1:
+            //   snackbar(text: 'Tests will be available soon.');
+            //   break;
+            case 2:
+              snackbar(text: 'Articles will be available soon.');
+              break;
+            case 3:
+              snackbar(text: 'Appointments will be available soon.');
+              break;
+            // case 4:
+            //   snackbar(text: 'Profile will be available soon.');
+            //   break;
+            default:
+              setState(() {
+                dashboard.setIndex = value;
+              });
+          }
+        },
+        selectedFontSize: 12,
+        unselectedFontSize: 12,
+        type: BottomNavigationBarType.fixed,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.format_list_bulleted), label: "Tests"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.newspaper), label: "Articles"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_month), label: "Appointments"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+        ],
+      ),
     );
   }
 
@@ -100,7 +109,8 @@ class HomepageScreen extends StatefulWidget {
 class _HomepageScreenState extends State<HomepageScreen> {
   @override
   Widget build(BuildContext context) {
-    var provider = context.read<UserProvider>();
+    var user = context.read<UserProvider>();
+    var dashboard = context.read<DashboardProvider>();
 
     void snackbar(
         {required String text,
@@ -114,17 +124,17 @@ class _HomepageScreenState extends State<HomepageScreen> {
     }
 
     Widget greet() {
-      if (provider.user.role != 'Guest') {
+      if (user.user.role != 'Guest') {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Hi, ${provider.user.fullName}.',
+              'Hi, ${user.user.fullName}.',
               style: const TextStyle(color: Colors.white),
             ),
             Text(
-              'Registered as a ${provider.user.role}!',
+              'Registered as a ${user.user.role}!',
               style: const TextStyle(color: Colors.white),
             ),
           ],
@@ -136,19 +146,19 @@ class _HomepageScreenState extends State<HomepageScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Hi, ${provider.user.role}.',
+            'Hi, ${user.user.role}.',
             style: const TextStyle(color: Colors.white),
           ),
           Text(
-            'Registered as a ${provider.user.role}!',
+            'Registered as a ${user.user.role}!',
             style: const TextStyle(color: Colors.white),
           ),
           MaterialButton(
             color: Colors.blue[100],
             textColor: Colors.blue,
             onPressed: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()));
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: ((context) => const LoginScreen())));
             },
             child: const Text('Login'),
           )
@@ -220,13 +230,9 @@ class _HomepageScreenState extends State<HomepageScreen> {
                           color: Colors.blue[300],
                           onPressed: () {
                             // snackbar(text: 'Test will be available soon.');
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const DashboardMain(
-                                    index: 1,
-                                  ),
-                                ));
+                            setState(() {
+                              dashboard.setIndex = 1;
+                            });
                           },
                           child: const Text(
                             'Take a test!',
@@ -313,9 +319,9 @@ class _HomepageScreenState extends State<HomepageScreen> {
       child: homepageGuestContent,
     );
 
-    if (provider.user.role == 'member') {
+    if (user.user.role == 'member') {
       return homepageMemberContent;
-    } else if (provider.user.role == 'staff') {
+    } else if (user.user.role == 'staff') {
       return homepageStaffContent;
     }
     return homepageGuestContent;
