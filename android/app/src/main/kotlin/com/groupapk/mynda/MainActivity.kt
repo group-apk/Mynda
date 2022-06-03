@@ -1,4 +1,4 @@
-package com.example.map_proj
+package com.groupapk.mynda
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -3,12 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:map_proj/view/login_screen.dart';
-import 'package:map_proj/view/registration_screen_staff.dart';
-// import 'package:map_proj/profile_screen.dart';
-// ignore_for_file: prefer_const_constructors
-// ignore_for_file: avoid_print
-import '../model/user_model.dart';
+import 'package:mynda/model/user_model.dart';
+import 'package:mynda/view/login_screen.dart';
+import 'package:mynda/view/registration_screen_staff.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({Key? key}) : super(key: key);
@@ -34,7 +31,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // full name field
     final fullNameField = TextFormField(
         autofocus: false,
         controller: fullNameEditingController,
@@ -54,13 +50,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         },
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.account_circle),
-          contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+          prefixIcon: const Icon(Icons.account_circle),
+          contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "Full Name",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         ));
 
-    // email field
     final emailField = TextFormField(
         autofocus: false,
         controller: emailEditingController,
@@ -81,13 +76,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         },
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.mail),
-          contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+          prefixIcon: const Icon(Icons.mail),
+          contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "Email",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         ));
 
-    // password field
     final passwordField = TextFormField(
         autofocus: false,
         controller: passwordEditingController,
@@ -107,13 +101,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         },
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.vpn_key),
-          contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+          prefixIcon: const Icon(Icons.vpn_key),
+          contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "Password",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         ));
 
-    // confirm password field
     final confirmPasswordField = TextFormField(
         autofocus: false,
         controller: confirmPasswordEditingController,
@@ -130,13 +123,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         },
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.vpn_key),
-          contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+          prefixIcon: const Icon(Icons.vpn_key),
+          contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "Confirm Password",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         ));
 
-    // IC field
     final icfield = TextFormField(
         autofocus: false,
         controller: icEditingController,
@@ -159,19 +151,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         ],
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.assignment_ind_outlined),
-          contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+          prefixIcon: const Icon(Icons.assignment_ind_outlined),
+          contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "IC",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         ));
 
-    // gender
     String? selectedValue;
     final genderField = DropdownButtonFormField(
       autofocus: false,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.face_retouching_natural),
-        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        prefixIcon: const Icon(Icons.face_retouching_natural),
+        contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
         hintText: "Gender",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
@@ -186,13 +177,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       items: genderItems,
     );
 
-    // region
     String? selectedValue2;
     final regionField = DropdownButtonFormField(
       autofocus: false,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.map),
-        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        prefixIcon: const Icon(Icons.map),
+        contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
         hintText: "Region",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
@@ -207,7 +197,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       items: regionItems,
     );
 
-    // states
     var stateField = stateDropdown(item: null);
     if (regionEditingController.text == "Northern Region") {
       stateField = stateDropdown(item: northStateItems);
@@ -221,18 +210,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       stateField = stateDropdown(item: eastMalaysiaStateItems);
     }
 
-    // sign up button
     final signupButton = Material(
       elevation: 5,
       borderRadius: BorderRadius.circular(30),
-      color: Color(0xFF0069FE),
+      color: const Color(0xFF0069FE),
       child: MaterialButton(
-        padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
         minWidth: MediaQuery.of(context).size.width,
         onPressed: () {
           signUp(emailEditingController.text, passwordEditingController.text);
         },
-        child: Text(
+        child: const Text(
           "Sign Up",
           textAlign: TextAlign.center,
           style: TextStyle(
@@ -247,7 +235,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: Color(0xFF0069FE),
           ),
@@ -270,15 +258,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      // SizedBox(
-                      //   // app logo here
-
-                      //   height: 180,
-                      //   child: Image.asset(
-                      //     "",
-                      //     fit: BoxFit.contain,
-                      //   ),
-                      // ),
                       const Text(
                         "Sign Up as Member",
                         style: TextStyle(
@@ -287,38 +266,38 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 44),
+                      const SizedBox(height: 44),
                       fullNameField,
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       emailField,
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       passwordField,
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       confirmPasswordField,
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       icfield,
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       genderField,
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       regionField,
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       stateField,
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       signupButton,
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text("Are you a staff? "),
+                          const Text("Are you a staff? "),
                           GestureDetector(
                             onTap: () {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          RegistrationScreenStaff()));
+                                          const RegistrationScreenStaff()));
                             },
-                            child: Text(
+                            child: const Text(
                               "Sign Up as staff",
                               style: TextStyle(
                                   color: Color(0xFF0069FE),
@@ -354,12 +333,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   postDetailsToFirestore() async {
-    // calling firestore
-    // calling user model
-    // sending these value
-
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = _auth.currentUser;
+    final navigator = Navigator.of(context);
 
     UserModel userModel = UserModel();
 
@@ -379,8 +355,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         .set(userModel.toMap());
     Fluttertoast.showToast(msg: "Account created successfully! Please Login");
 
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => LoginScreen()));
+    navigator.pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginScreen()));
   }
 
   String? selectedValue3;
@@ -388,8 +364,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     return DropdownButtonFormField(
       autofocus: false,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.location_city),
-        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        prefixIcon: const Icon(Icons.location_city),
+        contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
         hintText: "State",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
@@ -407,67 +383,71 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   List<DropdownMenuItem<String>> get genderItems {
     List<DropdownMenuItem<String>> menuItems = [
-      DropdownMenuItem(child: Text("Male"), value: "Male"),
-      DropdownMenuItem(child: Text("Female"), value: "Female"),
+      const DropdownMenuItem(value: "Male", child: Text("Male")),
+      const DropdownMenuItem(value: "Female", child: Text("Female")),
     ];
     return menuItems;
   }
 
   List<DropdownMenuItem<String>> get regionItems {
     List<DropdownMenuItem<String>> menuItems = [
-      DropdownMenuItem(
-          child: Text("Northern Region"), value: "Northern Region"),
-      DropdownMenuItem(child: Text("Eastern Region"), value: "Eastern Region"),
-      DropdownMenuItem(child: Text("Central Region"), value: "Central Region"),
-      DropdownMenuItem(
-          child: Text("Southern Region"), value: "Southern Region"),
-      DropdownMenuItem(child: Text("East Malaysia"), value: "East Malaysia"),
+      const DropdownMenuItem(
+          value: "Northern Region", child: Text("Northern Region")),
+      const DropdownMenuItem(
+          value: "Eastern Region", child: Text("Eastern Region")),
+      const DropdownMenuItem(
+          value: "Central Region", child: Text("Central Region")),
+      const DropdownMenuItem(
+          value: "Southern Region", child: Text("Southern Region")),
+      const DropdownMenuItem(
+          value: "East Malaysia", child: Text("East Malaysia")),
     ];
     return menuItems;
   }
 
   List<DropdownMenuItem<String>> get northStateItems {
     List<DropdownMenuItem<String>> menuItems = [
-      DropdownMenuItem(child: Text("Perlis"), value: "Perlis"),
-      DropdownMenuItem(child: Text("Kedah"), value: "Kedah"),
-      DropdownMenuItem(child: Text("Pulau Pinang"), value: "Pulau Pinang"),
-      DropdownMenuItem(child: Text("Perak"), value: "Perak"),
+      const DropdownMenuItem(value: "Perlis", child: Text("Perlis")),
+      const DropdownMenuItem(value: "Kedah", child: Text("Kedah")),
+      const DropdownMenuItem(
+          value: "Pulau Pinang", child: Text("Pulau Pinang")),
+      const DropdownMenuItem(value: "Perak", child: Text("Perak")),
     ];
     return menuItems;
   }
 
   List<DropdownMenuItem<String>> get eastStateItems {
     List<DropdownMenuItem<String>> menuItems = [
-      DropdownMenuItem(child: Text("Kelantan"), value: "Kelantan"),
-      DropdownMenuItem(child: Text("Terengganu"), value: "Terengganu"),
-      DropdownMenuItem(child: Text("Pahang"), value: "Pahang"),
+      const DropdownMenuItem(value: "Kelantan", child: Text("Kelantan")),
+      const DropdownMenuItem(value: "Terengganu", child: Text("Terengganu")),
+      const DropdownMenuItem(value: "Pahang", child: Text("Pahang")),
     ];
     return menuItems;
   }
 
   List<DropdownMenuItem<String>> get centralStateItems {
     List<DropdownMenuItem<String>> menuItems = [
-      DropdownMenuItem(child: Text("Selangor"), value: "Selangor"),
-      DropdownMenuItem(
-          child: Text("Wilayah Perkeutuan"), value: "Wilayah Perkeutuan"),
+      const DropdownMenuItem(value: "Selangor", child: Text("Selangor")),
+      const DropdownMenuItem(
+          value: "Wilayah Perkeutuan", child: Text("Wilayah Perkeutuan")),
     ];
     return menuItems;
   }
 
   List<DropdownMenuItem<String>> get southernStateItems {
     List<DropdownMenuItem<String>> menuItems = [
-      DropdownMenuItem(
-          child: Text("Negeri Sembilan"), value: "Negeri Sembilan"),
-      DropdownMenuItem(child: Text("Melaka"), value: "Melaka"),
-      DropdownMenuItem(child: Text("Johor"), value: "Johor"),
+      const DropdownMenuItem(
+          value: "Negeri Sembilan", child: Text("Negeri Sembilan")),
+      const DropdownMenuItem(value: "Melaka", child: Text("Melaka")),
+      const DropdownMenuItem(value: "Johor", child: Text("Johor")),
     ];
     return menuItems;
   }
 
   List<DropdownMenuItem<String>> get eastMalaysiaStateItems {
     List<DropdownMenuItem<String>> menuItems = [
-      DropdownMenuItem(child: Text("Sabah"), value: "Sabah"),
-      DropdownMenuItem(child: Text("Sarawak"), value: "Sarawak"),
+      const DropdownMenuItem(value: "Sabah", child: Text("Sabah")),
+      const DropdownMenuItem(value: "Sarawak", child: Text("Sarawak")),
     ];
     return menuItems;
   }

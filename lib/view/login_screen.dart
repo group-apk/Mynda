@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:map_proj/model/user_model.dart';
-import 'package:map_proj/provider/user_provider.dart';
-import 'package:map_proj/view/dashboard.dart';
-import 'package:map_proj/view/registration_screen.dart';
+import 'package:mynda/model/user_model.dart';
+import 'package:mynda/provider/user_provider.dart';
+import 'package:mynda/view/dashboard.dart';
+import 'package:mynda/view/registration_screen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:map_proj/view/reset_password_screen.dart';
+import 'package:mynda/view/reset_password_screen.dart';
 import 'package:provider/provider.dart';
 
 // ignore_for_file: prefer_const_constructors
@@ -15,7 +15,7 @@ class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {

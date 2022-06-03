@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:map_proj/new_view/test_category_screen.dart';
-import 'package:map_proj/playquiz_view/category_view.dart';
-import 'package:map_proj/profile_screen.dart';
-import 'package:map_proj/provider/user_provider.dart';
-import 'package:map_proj/view/login_screen.dart';
+import 'package:mynda/provider/user_provider.dart';
+import 'package:mynda/view/login_screen.dart';
+import 'package:mynda/view/profile_screen.dart';
+import 'package:mynda/view/test/category_view.dart';
+import 'package:mynda/view/test_staff/test_category_screen.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
@@ -19,15 +19,16 @@ class DashboardMain extends StatefulWidget {
 
 class _DashboardMainState extends State<DashboardMain> {
   final FirebaseAuth auth = FirebaseAuth.instance;
-  
 
   @override
   Widget build(BuildContext context) {
     var userProvider = context.read<UserProvider>();
-    final List<Widget> _widgetOptions = [
+    final List<Widget> widgetOptions = [
       const HomepageScreen(),
       // const HealthTestCategoryScreen(),
-      (userProvider.user.role == 'staff') ? const HealthTestCategoryScreen() : const CategoryScreen(),
+      (userProvider.user.role == 'staff')
+          ? const HealthTestCategoryScreen()
+          : const CategoryScreen(),
       Container(),
       Container(),
       const ProfileScreen()
@@ -35,7 +36,7 @@ class _DashboardMainState extends State<DashboardMain> {
     return Scaffold(
       bottomNavigationBar: bottomNavigator(context),
       endDrawer: const NotificationDrawer(),
-      body: Center(child: _widgetOptions.elementAt(widget.index)),
+      body: Center(child: widgetOptions.elementAt(widget.index)),
     );
   }
 
@@ -57,7 +58,10 @@ class _DashboardMainState extends State<DashboardMain> {
           //   snackbar(text: 'Profile will be available soon.');
           //   break;
           default:
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: ((context) => DashboardMain(index: value))));
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: ((context) => DashboardMain(index: value))));
         }
       },
       selectedFontSize: 12,
@@ -163,8 +167,8 @@ class _HomepageScreenState extends State<HomepageScreen> {
               child: Row(
                 children: [
                   Expanded(
-                    child: greet(),
                     flex: 3,
+                    child: greet(),
                   ),
                   Expanded(
                     child: Builder(builder: (context) {
@@ -216,7 +220,13 @@ class _HomepageScreenState extends State<HomepageScreen> {
                           color: Colors.blue[300],
                           onPressed: () {
                             // snackbar(text: 'Test will be available soon.');
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const DashboardMain(index: 1,),));
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const DashboardMain(
+                                    index: 1,
+                                  ),
+                                ));
                           },
                           child: const Text(
                             'Take a test!',
@@ -305,8 +315,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
 
     if (provider.user.role == 'member') {
       return homepageMemberContent;
-    }
-    else if (provider.user.role == 'staff') {
+    } else if (provider.user.role == 'staff') {
       return homepageStaffContent;
     }
     return homepageGuestContent;

@@ -1,8 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-// ignore_for_file: prefer_const_constructors
-// ignore_for_file: avoid_print
 
 class ResetPassword extends StatefulWidget {
   const ResetPassword({Key? key}) : super(key: key);
@@ -30,7 +28,6 @@ class _ResetPasswordState extends State<ResetPassword> {
           if (value!.isEmpty) {
             return ("Please Enter Your Email");
           }
-          // reg expression for email validation
           if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
               .hasMatch(value)) {
             return ("Please Enter a valid email");
@@ -42,8 +39,8 @@ class _ResetPasswordState extends State<ResetPassword> {
         },
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.mail),
-          contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+          prefixIcon: const Icon(Icons.mail),
+          contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "Email",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         ));
@@ -52,14 +49,14 @@ class _ResetPasswordState extends State<ResetPassword> {
     final resetPasswordButton = Material(
       elevation: 5,
       borderRadius: BorderRadius.circular(3),
-      color: Color(0xFF0069FE),
+      color: const Color(0xFF0069FE),
       child: MaterialButton(
-        padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
         minWidth: MediaQuery.of(context).size.width,
         onPressed: () {
           resetPasswordFunc(emailEditingController.text);
         },
-        child: Text(
+        child: const Text(
           "Reset Password",
           textAlign: TextAlign.center,
           style: TextStyle(
@@ -72,12 +69,12 @@ class _ResetPasswordState extends State<ResetPassword> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.white,
-          title: Text('Reset Password'),
-          titleTextStyle: TextStyle(
+          title: const Text('Reset Password'),
+          titleTextStyle: const TextStyle(
               color: Colors.blue, fontSize: 20.0, fontWeight: FontWeight.bold),
           elevation: 2,
           leading: IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.arrow_back,
               color: Color(0xFF0069FE),
             ),
@@ -107,9 +104,9 @@ class _ResetPasswordState extends State<ResetPassword> {
                           fontSize: 24.0,
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       emailField,
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       resetPasswordButton,
                     ],
                   ),
@@ -135,12 +132,7 @@ class _ResetPasswordState extends State<ResetPassword> {
             .then((value) => {emailPasswordReset()});
       } catch (e) {
         var err = e.toString();
-        // manipulate err
         Fluttertoast.showToast(msg: err);
-        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        //   behavior: SnackBarBehavior.floating,
-        //   content: Text(err),
-        // ));
         Navigator.of(context, rootNavigator: true).pop();
       }
     }
@@ -149,11 +141,6 @@ class _ResetPasswordState extends State<ResetPassword> {
   emailPasswordReset() async {
     var msg = 'Email sent! Please check your email to reset your password.';
     Fluttertoast.showToast(msg: msg);
-    // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    //   behavior: SnackBarBehavior.floating,
-    //   content: Text(msg),
-    // ));
-    // Navigator.of(context).popUntil((route) => route.isFirst);
     for (var i = 0; i < 2; i++) {
       Navigator.of(context, rootNavigator: true).pop();
     }

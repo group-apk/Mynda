@@ -1,29 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:map_proj/landing.dart';
-import 'package:map_proj/new_notifier/test_notifier.dart';
-// import 'package:map_proj/notifier/question_notifier.dart';
-import 'package:map_proj/provider/user_provider.dart';
+import 'package:mynda/provider/test_notifier.dart';
+import 'package:mynda/provider/user_provider.dart';
+import 'package:mynda/view/landing.dart';
 import 'package:provider/provider.dart';
-// ignore_for_file: prefer_const_constructors
 
 void main() {
-  runApp(
-    // ChangeNotifierProvider(
-    //     create: (context) => TestNotifier(),
-    //     child: const MyApp()),
-
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
         create: (context) => TestNotifier(),
-        ),
-        ChangeNotifierProvider(
+      ),
+      ChangeNotifierProvider(
         create: (context) => UserProvider(),
-        ),
-      ],
-      child: const MyApp(),
-    )
-  );
+      ),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 // void main() {
