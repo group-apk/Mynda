@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:map_proj/new_api/test_api.dart';
 import 'package:map_proj/new_notifier/test_notifier.dart';
-import 'package:map_proj/playquiz_view/question_play.dart';
+import 'package:map_proj/playquiz_view/quiz_play2.dart';
 import 'package:provider/provider.dart';
 
 class CategoryScreen extends StatefulWidget {

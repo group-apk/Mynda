@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 class OptionTile extends StatefulWidget {
-  final String option, description, correctAnswer, optionSelected;
+  final String option, description, optionSelected;
+  final int score;
 
   const OptionTile(
-      {Key? key, required this.description, required this.correctAnswer, required this.option, required this.optionSelected}) : super(key:key);
+      {Key? key, required this.description, required this.score, required this.option, required this.optionSelected}) : super(key:key);
 
   @override
   _OptionTileState createState() => _OptionTileState();
@@ -24,15 +25,11 @@ class _OptionTileState extends State<OptionTile> {
             decoration: BoxDecoration(
                 border: Border.all(
                     color: widget.optionSelected == widget.description
-                        ? widget.description == widget.correctAnswer
                             ? Colors.green.withOpacity(0.7)
-                            : Colors.red.withOpacity(0.7)
-                        : Colors.grey,
+                            : Colors.grey,
                     width: 1.5),
                 color: widget.optionSelected == widget.description
-                    ? widget.description == widget.correctAnswer
                     ? Colors.green.withOpacity(0.7)
-                    : Colors.red.withOpacity(0.7)
                     : Colors.white,
               borderRadius: BorderRadius.circular(24)
             ),

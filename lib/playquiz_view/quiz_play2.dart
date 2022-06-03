@@ -1,8 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:map_proj/new_api/test_api.dart';
 import 'package:map_proj/new_model/test_model.dart';
 import 'package:map_proj/new_notifier/test_notifier.dart';
+import 'package:map_proj/playquiz_view/quiz_play_widgets.dart';
+import 'package:map_proj/view/category_quiz.dart';
 import 'package:provider/provider.dart';
 
 class QuestionPlay extends StatefulWidget {
@@ -12,16 +16,22 @@ class QuestionPlay extends StatefulWidget {
   @override
   State<QuestionPlay> createState() => _QuestionPlay();
 }
-int optionmarks = {0,1,2,3} as int;
-int totalcollected = 0;
-int totalMax=0;
-bool answerTap =false;
+
+
 
 
 class _QuestionPlay extends State<QuestionPlay> {
   final _formKey = GlobalKey<FormState>();
 
-  late int optionSelected;
+  String optionSelected="";
+  bool answerTap =false;
+  int scorea=0;
+  int scoreGet=0;
+  int totalScore = 0;
+  String optionChose="";
+  int index=0;
+  //1st :aku nak create dropdownValue as list so each dropdown can display its own dropdownValue(variable utk simpan jawapan yang dia pilih)
+  List<String?> dropdownValue[i]; //code asal: String? dropdownValue;
 
   
   @override
@@ -32,11 +42,6 @@ class _QuestionPlay extends State<QuestionPlay> {
     final testNameEditingController =
         TextEditingController(text: _currentTestModel.quizTitle);
 
-    // int questionLength = 0;
-    // _currentTestModel.questions?.forEach((element) { 
-    //   questionLength++;
-    // });
-
     Widget questionField(TestModel _currentTestModel) {
       return FutureBuilder(
       future: getQuestionFuture(_currentTestModel),
@@ -46,7 +51,7 @@ class _QuestionPlay extends State<QuestionPlay> {
         }
         return ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
+          shrinkWrap: true,
           itemCount: _currentTestModel.questions?.length ?? 0,
           itemBuilder: ((context, i) => SizedBox(
             width:400,
@@ -57,49 +62,39 @@ class _QuestionPlay extends State<QuestionPlay> {
                     TextStyle(fontSize: 20, color: Colors.black.withOpacity(0.8)),
                     
                     ),
-                  subtitle: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children:
-                          _currentTestModel.questions![i].option!
-                              .map((e) => 
-                              GestureDetector(
-                                
-                                onTap:(){
-                                    setState(() {
-                                      answerTap=true;
-                                    //optionSelected = answer[i];
-                                  });
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(border:Border.all(
-                                    color: !answerTap 
-                                      ? Color.fromARGB(255, 1, 255, 115)
-                                      :  Color.fromARGB(255, 4, 90, 160),
-                                    width: 2, 
-                                  ),
-                                  borderRadius: const BorderRadius.all(Radius.circular(12))
-                                  ),
-                                  width:300,
-                                  height: 50,
-                                  padding: const EdgeInsets.all(10),
-                                  child: 
-                                    Text(e,
-                                      textAlign: TextAlign.center,
-                                      style:  TextStyle(fontSize: 20,color: Colors.black.withOpacity(1)),
-                                    ),
-                                ),
-                              ),
-                              ) 
-                              .toList()
-                    ),
-                              
-                ),
-          )
-              ),
+                  subtitle:  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                    child: DropdownButton(
+                      //2nd:aku nak dropdownValue keluar ikut index lpas declared as List (index tu kalau bleh nak ikut index soalan)
+                        value: dropdownValue[i], //code asal: value:dropdownValue,
+                        icon: const Icon(Icons.arrow_downward),
+                        style: const TextStyle(color:  Color.fromARGB(255, 7, 68, 97)),
+                        underline: Container(
+                        height: 2,
+                        color: const Color.fromARGB(255, 27, 183, 255),
+                      ),
+                      
+                        items: _currentTestModel.questions![i].option!.map((e) {
+                          return DropdownMenuItem(
+                            value: e,
+                            child: Text(e),
+                            
+                          );
+                        }).toList(),
+                        onChanged: (val) async {
+                            setState(() => 
+                            //3rd: bila ada perubahan, dia store dalam each index dropdownValue tu (index tu nak guna index soalan)
+                        dropdownValue[i] = val as String); //code asal: dropdownValue= val as String);
+                        } 
+                        //4rd: nak guna for loop untuk loop balik semula dropdownValue[] untuk kira each score by using if(a),else if(b)etc
+                      ),
+                  ),          
+                  ),
+          )),
         );
       },
-    );
-  }
+      );
+    }
 
     return Scaffold(
       floatingActionButton: Row(

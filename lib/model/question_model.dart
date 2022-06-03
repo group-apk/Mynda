@@ -1,6 +1,7 @@
 class QuestionModel{
 
   String? question;
+  late List<String> option;
   String? optiona;
   String? optionb;
   String? optionc;
