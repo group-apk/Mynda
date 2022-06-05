@@ -1,13 +1,9 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:map_proj/new_api/test_api.dart';
 import 'package:map_proj/new_model/question_model.dart';
 import 'package:map_proj/new_model/test_model.dart';
 import 'package:map_proj/new_notifier/test_notifier.dart';
-import 'package:map_proj/playquiz_view/quiz_play_widgets.dart';
-import 'package:map_proj/view/category_quiz.dart';
+import 'package:map_proj/playquiz_view/result_quiz.dart';
 import 'package:provider/provider.dart';
 
 class QuestionPlay extends StatefulWidget {
@@ -32,13 +28,13 @@ class _QuestionPlay extends State<QuestionPlay> {
   // List<String?> dropdownValue = []; //code asal: String? dropdownValue;
   List<String?> dropdownValueAnswer = [];
 
+
   @override
   Widget build(BuildContext context) {
     TestNotifier testNotifier =
         Provider.of<TestNotifier>(context, listen: false);
     TestModel _currentTestModel = testNotifier.currentTestModel;
-    // final testNameEditingController =
-    //     TextEditingController(text: _currentTestModel.quizTitle);
+
 
     Widget questionField(TestModel _currentTestModel) {
       return FutureBuilder(
@@ -48,9 +44,12 @@ class _QuestionPlay extends State<QuestionPlay> {
               return const CircularProgressIndicator();
             }
             if (dropdownValueAnswer.isEmpty) {
-              dropdownValueAnswer = _currentTestModel.questions!
+             
+                dropdownValueAnswer = _currentTestModel.questions!
                   .map((e) => e.option![0] as String)
                   .toList();
+             
+              
             }
 
             return ListView.builder(
@@ -103,7 +102,36 @@ class _QuestionPlay extends State<QuestionPlay> {
           FloatingActionButton(
             backgroundColor: const Color.fromARGB(255, 27, 183, 255),
             child: const Icon(Icons.done),
-            onPressed: () {},
+            onPressed: () {
+              print(dropdownValueAnswer[0]);
+              print(_currentTestModel.questions![0].option![0]);
+              Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ResultScreen(dropdownValueAnswer:dropdownValueAnswer)));
+              /*setState(() {
+                for(var i;i<dropdownValueAnswer.length;i++){
+                  switch(){
+                    case 0:
+                      totalScore=totalScore+0;
+                      break;
+                    case 1:
+                      totalScore=totalScore+1;
+                      break;
+                    case 2:
+                      totalScore=totalScore+2;
+                      break;
+                    case 3:
+                      totalScore=totalScore+3;
+                      break;
+                    case 4:
+                      totalScore=totalScore+4;
+                      break;
+                  }
+                }
+
+              });*/
+            },
           ),
         ],
       ),
