@@ -26,15 +26,13 @@ class _QuestionPlay extends State<QuestionPlay> {
   int index = 0;
   //1st :aku nak create dropdownValue as list so each dropdown can display its own dropdownValue(variable utk simpan jawapan yang dia pilih)
   // List<String?> dropdownValue = []; //code asal: String? dropdownValue;
-  List<String?> dropdownValueAnswer = [];
-
+  List<String> dropdownValueAnswer = [];
 
   @override
   Widget build(BuildContext context) {
     TestNotifier testNotifier =
         Provider.of<TestNotifier>(context, listen: false);
     TestModel _currentTestModel = testNotifier.currentTestModel;
-
 
     Widget questionField(TestModel _currentTestModel) {
       return FutureBuilder(
@@ -44,12 +42,9 @@ class _QuestionPlay extends State<QuestionPlay> {
               return const CircularProgressIndicator();
             }
             if (dropdownValueAnswer.isEmpty) {
-             
-                dropdownValueAnswer = _currentTestModel.questions!
+              dropdownValueAnswer = _currentTestModel.questions!
                   .map((e) => e.option![0] as String)
                   .toList();
-             
-              
             }
 
             return ListView.builder(
@@ -82,7 +77,7 @@ class _QuestionPlay extends State<QuestionPlay> {
                               .toList(),
                           onChanged: (String? value) {
                             setState(() {
-                              dropdownValueAnswer.insert(i, value);
+                              dropdownValueAnswer.insert(i, value as String);
                               dropdownValueAnswer.removeAt(i + 1);
                             });
                           },
@@ -106,9 +101,10 @@ class _QuestionPlay extends State<QuestionPlay> {
               print(dropdownValueAnswer[0]);
               print(_currentTestModel.questions![0].option![0]);
               Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ResultScreen(dropdownValueAnswer:dropdownValueAnswer)));
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ResultScreen(
+                          dropdownValueAnswer: dropdownValueAnswer)));
               /*setState(() {
                 for(var i;i<dropdownValueAnswer.length;i++){
                   switch(){
