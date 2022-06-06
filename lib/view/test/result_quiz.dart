@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:map_proj/playquiz_view/category_view.dart';
-import 'package:map_proj/view/dashboard.dart';
+import 'package:mynda/view/test/category_view.dart';
+import 'package:mynda/view/dashboard.dart';
 
 class ResultScreen extends StatefulWidget {
 //  final List<String> dropdownValueAnswer = []; //simpan list of answer

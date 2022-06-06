@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:map_proj/new_api/test_api.dart';
-import 'package:map_proj/new_model/question_model.dart';
-import 'package:map_proj/new_model/test_model.dart';
-import 'package:map_proj/new_notifier/test_notifier.dart';
-import 'package:map_proj/playquiz_view/result_quiz.dart';
+import 'package:mynda/services/api.dart';
+import 'package:mynda/model/question_model.dart';
+import 'package:mynda/model/test_model.dart';
+import 'package:mynda/provider/test_notifier.dart';
+import 'package:mynda/view/test/result_quiz.dart';
 import 'package:provider/provider.dart';
 
 class QuestionPlay extends StatefulWidget {
