@@ -90,16 +90,43 @@ class _HealthTestCategoryScreenState extends State<HealthTestCategoryScreen> {
                                         builder: (context) => EditTestScreen(
                                             testName: '${e.quizTitle}')));
                               },
-                              child: Card(
-                                elevation: 5,
-                                shadowColor: Colors.blue,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                              child: Container(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              height: 150,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Stack(
                                   children: [
-                                    Text('${e.quizTitle}'),
+                                    Image.network(
+                                      '${e.quizImgurl}',
+                                      fit: BoxFit.cover,
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 250,
+                                    ),
+                                    Container(
+                                      color: Colors.black26,
+                                      child: Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              '${e.quizTitle}',
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                  fontSize: 18,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )
                                   ],
                                 ),
                               ),
+                            ),
                             ))
                         .toList(),
                   ),
