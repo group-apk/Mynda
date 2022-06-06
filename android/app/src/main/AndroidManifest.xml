@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.map_proj">
+    package="com.groupapk.mynda">
    <application
-        android:label="map_proj"
+        android:label="mynda"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
