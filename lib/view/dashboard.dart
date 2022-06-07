@@ -5,6 +5,7 @@ import 'package:mynda/provider/user_provider.dart';
 import 'package:mynda/view/login_screen.dart';
 import 'package:mynda/view/profile_screen.dart';
 import 'package:mynda/view/test/category_view.dart';
+import 'package:mynda/view/test_staff/article_list_screen.dart';
 import 'package:mynda/view/test_staff/test_category_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -31,7 +32,7 @@ class _DashboardMainState extends State<DashboardMain> {
       (user.user.role == 'staff')
           ? const HealthTestCategoryScreen()
           : const CategoryScreen(),
-      Container(),
+      const ArticleListScreen(),
       Container(),
       const ProfileScreen()
     ];
@@ -56,9 +57,9 @@ class _DashboardMainState extends State<DashboardMain> {
             // case 1:
             //   snackbar(text: 'Tests will be available soon.');
             //   break;
-            case 2:
-              snackbar(text: 'Articles will be available soon.');
-              break;
+            // case 2:
+            //   snackbar(text: 'Articles will be available soon.');
+            //   break;
             case 3:
               snackbar(text: 'Appointments will be available soon.');
               break;

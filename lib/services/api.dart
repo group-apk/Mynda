@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../model/article_model.dart';
 import '../model/test_model.dart';
 import '../model/question_model.dart';
+import '../provider/article_notifier.dart';
 import '../provider/test_notifier.dart';
 
 getQuestion(TestModel testModel) async {
@@ -58,6 +60,34 @@ Future<TestModel> uploadNewTest(TestModel test) async {
   await db.doc(test.quizId).update({"quizId": test.quizId});
   return test;
 }
+getArticle(ArticleNotifier articleNotifier) async {
+  QuerySnapshot snapshot =
+      await FirebaseFirestore.instance.collection('Articles').get();
+  List<ArticleModel> articleList = snapshot.docs
+      .map((e) => ArticleModel.fromMap(e.data() as Map<String, dynamic>))
+      .toList();
+
+  articleNotifier.articleList = articleList;
+}
+
+Future getArticleFuture(ArticleNotifier articleNotifier) async {
+  QuerySnapshot snapshot =
+      await FirebaseFirestore.instance.collection('Articles').get();
+  List<ArticleModel> articleList = snapshot.docs
+      .map((e) => ArticleModel.fromMap(e.data() as Map<String, dynamic>))
+      .toList();
+
+  articleNotifier.articleList = articleList;
+}
+
+Future<ArticleModel> uploadNewArticle(ArticleModel article) async {
+  final CollectionReference db =
+      FirebaseFirestore.instance.collection('Articles');
+  article.id =
+      await db.add({'title': article.title, 'author': article.author, 'category':article.category}).then((doc) => doc.id);
+  await db.doc(article.id).update({"id": article.id});
+  return article;
+}
 
 updateExistingTest(TestModel test) async {
   final CollectionReference db =
@@ -106,10 +136,10 @@ deleteExisitingQuestion(TestModel test, int index) async {
 }
 
 Future<TestModel> addNewAnswer(TestModel test, int index) async {
-  test.questions![index].option.add("");
+  test.questions![index].option?.add("");
   var newList = test.questions![index].option;
   final CollectionReference db = FirebaseFirestore.instance.collection('QuizList').doc(test.quizId).collection('Questions');
-  await db.doc(test.questions![index].qid).update({"option": FieldValue.arrayUnion(newList)});
+  await db.doc(test.questions![index].qid).update({"option": FieldValue.arrayUnion(newList!)});
   return test;
 }
 

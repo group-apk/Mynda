@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:mynda/services/api.dart';
 import 'package:mynda/model/question_model.dart';
@@ -104,29 +106,8 @@ class _QuestionPlay extends State<QuestionPlay> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => ResultScreen(
-                          dropdownValueAnswer: dropdownValueAnswer)));
-              /*setState(() {
-                for(var i;i<dropdownValueAnswer.length;i++){
-                  switch(){
-                    case 0:
-                      totalScore=totalScore+0;
-                      break;
-                    case 1:
-                      totalScore=totalScore+1;
-                      break;
-                    case 2:
-                      totalScore=totalScore+2;
-                      break;
-                    case 3:
-                      totalScore=totalScore+3;
-                      break;
-                    case 4:
-                      totalScore=totalScore+4;
-                      break;
-                  }
-                }
+                          dropdownValueAnswer: dropdownValueAnswer, dropdownValueQuestion: _currentTestModel.questions, namaTest:widget.testName)));
 
-              });*/
             },
           ),
         ],

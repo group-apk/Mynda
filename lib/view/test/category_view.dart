@@ -1,32 +1,34 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:mynda/provider/test_notifier.dart';
 import 'package:mynda/services/api.dart';
-import 'package:mynda/view/test/question_play.dart';
+import 'package:mynda/view/test/quiz_play2.dart';
 import 'package:provider/provider.dart';
 
 class CategoryScreen extends StatefulWidget {
   const CategoryScreen({Key? key}) : super(key: key);
 
   @override
-  State<CategoryScreen> createState() => _CategoryScreenState();
+  _CategoryScreenState createState() =>
+      _CategoryScreenState();
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
   int i = 0;
   @override
-  void initState() {
-    TestNotifier testNotifier =
-        Provider.of<TestNotifier>(context, listen: false);
+
+  void initState(){
+    TestNotifier testNotifier = Provider.of<TestNotifier>(context, listen: false);
     getTest(testNotifier);
     super.initState();
   }
 
-  int checkTestName(String name) {
+  int checkTestName(String name){
     int index = 0;
-    TestNotifier testNotifier =
-        Provider.of<TestNotifier>(context, listen: false);
-    for (int i = 0; i < testNotifier.testList.length; i++) {
-      if (name == testNotifier.testList[i].quizTitle) {
+    TestNotifier testNotifier = Provider.of<TestNotifier>(context, listen: false);
+    for(int i = 0; i < testNotifier.testList.length; i++){
+      if(name == testNotifier.testList[i].quizTitle){
         index = i;
       }
     }
@@ -35,8 +37,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    TestNotifier testNotifier =
-        Provider.of<TestNotifier>(context, listen: false);
+    TestNotifier testNotifier = Provider.of<TestNotifier>(context, listen: false);
     var testProvider = context.read<TestNotifier>();
 
     return Scaffold(
@@ -70,8 +71,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   children: testProvider.testList
                       .map((e) => GestureDetector(
                             onTap: () {
-                              testNotifier.currentTestModel = testNotifier
-                                  .testList[checkTestName('${e.quizTitle}')];
+                              testNotifier.currentTestModel = testNotifier.testList[checkTestName('${e.quizTitle}')];
                               // getQuestion(testNotifier.currentTestModel);
                               Navigator.push(
                                   context,
@@ -79,49 +79,50 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                       builder: (context) => QuestionPlay(
                                           testName: '${e.quizTitle}')));
                             },
-                            child: Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8),
-                              height: 150,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Stack(
-                                  children: [
-                                    Image.network(
-                                      '${e.quizImgurl}',
-                                      fit: BoxFit.cover,
-                                      width: MediaQuery.of(context).size.width,
-                                      height: 250,
-                                    ),
-                                    Container(
-                                      color: Colors.black26,
-                                      child: Center(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              '${e.quizTitle}',
-                                              textAlign: TextAlign.center,
-                                              style: const TextStyle(
-                                                  fontSize: 18,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w500),
-                                            ),
-                                          ],
-                                        ),
+                            child:  Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8),
+                                height: 150,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Stack(
+                                    children: [
+                                      Image.network(
+                                        '${e.quizImgurl}',
+                                        fit: BoxFit.cover,
+                                        width: MediaQuery.of(context).size.width,
+                                        height: 250,
+                                       
                                       ),
-                                    )
-                                  ],
+                                      Container(
+                                        color: Colors.black26,
+                                        child: Center(
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                '${e.quizTitle}',
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                    fontSize: 18,
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w500),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
                           ))
                       .toList(),
                 ),
               );
             }),
           ),
+
+
         ),
       ),
     );
