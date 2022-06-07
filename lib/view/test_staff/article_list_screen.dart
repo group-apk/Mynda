@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:mynda/provider/article_notifier.dart';
 import 'package:mynda/services/api.dart';
@@ -10,8 +9,7 @@ class ArticleListScreen extends StatefulWidget {
   const ArticleListScreen({Key? key}) : super(key: key);
 
   @override
-  State<ArticleListScreen> createState() =>
-      _ArticleListScreen();
+  State<ArticleListScreen> createState() => _ArticleListScreen();
 }
 
 class _ArticleListScreen extends State<ArticleListScreen> {
@@ -47,8 +45,10 @@ class _ArticleListScreen extends State<ArticleListScreen> {
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const AddArticleScreen()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const AddArticleScreen()));
           },
         ),
         backgroundColor: Colors.white,
@@ -81,59 +81,63 @@ class _ArticleListScreen extends State<ArticleListScreen> {
                     children: articleNotifier.articleList
                         .map((e) => InkWell(
                               onTap: () {
-                                articleNotifier.currentArticleModel = articleNotifier
-                                    .articleList[checkArticleTitle(e.title)];
+                                articleNotifier.currentArticleModel =
+                                    articleNotifier.articleList[
+                                        checkArticleTitle(e.title as String)];
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => EditTestScreen(
-                                            testName: e.title)));
+                                            testName: e.title as String)));
                               },
                               child: Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8),
-                              height: 150,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Stack(
-                                  children: [
-                                    Image.asset(
-                                      "assets/dashboard.png",
-                                      fit: BoxFit.cover,
-                                      width: MediaQuery.of(context).size.width,
-                                      height: 250,
-                                    ),
-                                    Container(
-                                      color: Colors.black26,
-                                      child: Center(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              e.author,
-                                              textAlign: TextAlign.center,
-                                              style: const TextStyle(
-                                                  fontSize: 18,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w500),
-                                            ),
-                                            Text(
-                                              '${e.category}',
-                                              textAlign: TextAlign.center,
-                                              style: const TextStyle(
-                                                  fontSize: 18,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w500),
-                                            ),
-                                          ],
-                                        ),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
+                                height: 150,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Stack(
+                                    children: [
+                                      Image.asset(
+                                        "assets/dashboard.png",
+                                        fit: BoxFit.cover,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        height: 250,
                                       ),
-                                    )
-                                  ],
+                                      Container(
+                                        color: Colors.black26,
+                                        child: Center(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                e.author as String,
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                    fontSize: 18,
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              ),
+                                              Text(
+                                                '${e.category}',
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                    fontSize: 18,
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
                             ))
                         .toList(),
                   ),

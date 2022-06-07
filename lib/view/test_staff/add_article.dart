@@ -16,9 +16,8 @@ class AddArticleScreen extends StatefulWidget {
 }
 
 class _AddArticleScreenState extends State<AddArticleScreen> {
-
-  GlobalKey<FormState> globalFormKey =GlobalKey<FormState>();
-  late final  ArticleModel _currentArticleModel = ArticleModel(
+  GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
+  late final ArticleModel _currentArticleModel = ArticleModel(
     "",
     "",
     "",
@@ -34,10 +33,10 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
 
-    _currentArticleModel.category.add("");
+    _currentArticleModel.category!.add("");
   }
 
   @override
@@ -51,8 +50,7 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
     );
   }
 
-
-    Widget _uiWidget() {
+  Widget _uiWidget() {
     return new Form(
       key: globalFormKey,
       child: SingleChildScrollView(
@@ -79,7 +77,7 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                   (onSavedVal) => {
                     _currentArticleModel.title = onSavedVal,
                   },
-                  initialValue: _currentArticleModel.title,
+                  initialValue: _currentArticleModel.title as String,
                   obscureText: false,
                   borderFocusColor: Theme.of(context).primaryColor,
                   prefixIconColor: Theme.of(context).primaryColor,
@@ -110,7 +108,7 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                   (onSavedVal) => {
                     _currentArticleModel.author = onSavedVal,
                   },
-                  initialValue: _currentArticleModel.author,
+                  initialValue: _currentArticleModel.author as String,
                   obscureText: false,
                   borderFocusColor: Theme.of(context).primaryColor,
                   prefixIconColor: Theme.of(context).primaryColor,
@@ -141,7 +139,7 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                   new Center(
                     child: FormHelper.submitButton(
                       "Create Article",
-                      btnColor:Colors.blue,
+                      btnColor: Colors.blue,
                       borderColor: Colors.blue,
                       () async {
                         if (validateAndSave()) {
@@ -167,7 +165,7 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
     return ListView.separated(
       shrinkWrap: true,
       physics: const ScrollPhysics(),
-      itemCount: _currentArticleModel.category.length,
+      itemCount: _currentArticleModel.category!.length,
       itemBuilder: (context, index) {
         return Column(
           children: <Widget>[
@@ -184,8 +182,7 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
     );
   }
 
-
-    Widget categoryUI(index) {
+  Widget categoryUI(index) {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Row(
@@ -204,9 +201,9 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                 return null;
               },
               (onSavedVal) => {
-                _currentArticleModel.category[index] = onSavedVal,
+                _currentArticleModel.category![index] = onSavedVal,
               },
-              initialValue:_currentArticleModel.category[index],
+              initialValue: _currentArticleModel.category![index],
               obscureText: false,
               borderFocusColor: Theme.of(context).primaryColor,
               prefixIconColor: Theme.of(context).primaryColor,
@@ -232,7 +229,7 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                 },
               ),
             ),
-            visible: index ==_currentArticleModel.category.length - 1,
+            visible: index == _currentArticleModel.category!.length - 1,
           ),
           Visibility(
             child: SizedBox(
@@ -256,27 +253,25 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
 
   void addCategoryControl() {
     setState(() {
-      if(_currentArticleModel.category.length>=3)
-      {
+      if (_currentArticleModel.category!.length >= 3) {
         Fluttertoast.showToast(
-        msg: "Maximum No. of Category is 3",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0
-    );
+            msg: "Maximum No. of Category is 3",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
         return;
       }
-      _currentArticleModel.category.add("");
+      _currentArticleModel.category!.add("");
     });
   }
 
   void removeCategoryControl(index) {
     setState(() {
-      if (_currentArticleModel.category.length > 1) {
-        _currentArticleModel.category.removeAt(index);
+      if (_currentArticleModel.category!.length > 1) {
+        _currentArticleModel.category!.removeAt(index);
       }
     });
   }
@@ -290,6 +285,3 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
     return false;
   }
 }
-
-
-
