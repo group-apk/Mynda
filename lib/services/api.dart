@@ -1,7 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:mynda/model/question_model.dart';
 import 'package:mynda/model/test_model.dart';
+import 'package:mynda/model/user_model.dart';
 import 'package:mynda/provider/test_notifier.dart';
+import 'package:mynda/provider/user_provider.dart';
+import 'package:provider/provider.dart';
+
+Future updateProfile(BuildContext context, UserModel userModel) async {
+  final user = context.read<UserProvider>();
+  if (userModel.uid != null) {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userModel.uid)
+        .set(userModel.toMap())
+        .then((value) {
+      user.setUpdate = userModel;
+    });
+  }
+}
 
 getQuestion(TestModel testModel) async {
   if (testModel.quizId != null) {

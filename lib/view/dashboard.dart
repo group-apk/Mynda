@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mynda/provider/dashboard_provider.dart';
 import 'package:mynda/provider/user_provider.dart';
 import 'package:mynda/view/login_screen.dart';
-import 'package:mynda/view/profile_screen.dart';
+import 'package:mynda/view/profile/profile_screen.dart';
 import 'package:mynda/view/test/category_view.dart';
 import 'package:mynda/view/test_staff/test_category_screen.dart';
 import 'package:provider/provider.dart';

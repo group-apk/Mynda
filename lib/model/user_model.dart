@@ -3,6 +3,27 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class UserModel {
   String? uid, email, fullName, ic, gender, region, states, role, academic;
 
+  @override
+  toString() {
+    List<String?> array = [
+      (uid!.isNotEmpty) ? uid : '',
+      (email!.isNotEmpty) ? email : '',
+      (fullName!.isNotEmpty) ? fullName : '',
+      (ic!.isNotEmpty) ? ic : '',
+      (gender!.isNotEmpty) ? gender : '',
+      (region!.isNotEmpty) ? region : '',
+      (states!.isNotEmpty) ? states : '',
+      (role!.isNotEmpty) ? role : '',
+    ];
+
+    String answer = '';
+    for (var element in array) {
+      answer += element as String;
+      answer += '\n';
+    }
+    return answer;
+  }
+
   UserModel(
       {this.uid,
       this.email,

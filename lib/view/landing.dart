@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:mynda/provider/dashboard_provider.dart';
 import 'package:mynda/view/dashboard.dart';
 import 'package:mynda/view/login_screen.dart';
+import 'package:provider/provider.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({Key? key}) : super(key: key);
@@ -18,6 +20,7 @@ class _LandingScreenState extends State<LandingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final dashboard = context.read<DashboardProvider>();
     Widget landingContent = Scaffold(
       body: WillPopScope(
         onWillPop: () async => false,
@@ -66,6 +69,7 @@ class _LandingScreenState extends State<LandingScreen> {
                           style: TextStyle(fontSize: 30),
                         ),
                         onPressed: () {
+                          dashboard.setIndex = 0;
                           Navigator.push(
                               context,
                               MaterialPageRoute(
