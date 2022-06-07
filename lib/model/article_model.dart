@@ -1,6 +1,6 @@
 class ArticleModel {
   String? author, id, title;
-  //late List<String> body;
+  List<String>? body;
   List<String>? category;
 
   ArticleModel.fromMap(Map<String, dynamic> data) {
@@ -8,17 +8,17 @@ class ArticleModel {
     title = data['title'];
     id = data['id'];
     category = data['category'].map<String>((e) => '$e').toList();
-    print(data['category']);
+    body = data['body'].map<String>((e) => '$e').toList();
   }
 
-  ArticleModel(this.id, this.title, this.author, this.category);
+  ArticleModel(this.id, this.title, this.author, this.category,this.body);
 
   Map<String, dynamic> toMap() {
     return {
       'author': author,
       'id': id,
       'title': title,
-      //'body':body,
+      'body':body,
       'category': category,
     };
   }

@@ -22,7 +22,7 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
     "",
     "",
     new List<String>.empty(growable: true),
-    //new List<String>.empty(growable: true),
+    new List<String>.empty(growable: true),
   );
 
   Future uploadArticle(ArticleModel currentArticleModel) async {
@@ -37,6 +37,7 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
     super.initState();
 
     _currentArticleModel.category!.add("");
+    _currentArticleModel.body!.add("");
   }
 
   @override
@@ -136,6 +137,16 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                     ),
                   ),
                   categoryContainerUI(),
+                  const Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Text(
+                      "Body(s)",
+                      textAlign: TextAlign.left,
+                      style:
+                          TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  bodyContainerUI(),
                   new Center(
                     child: FormHelper.submitButton(
                       "Create Article",
@@ -173,6 +184,26 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
               Flexible(
                 fit: FlexFit.loose,
                 child: categoryUI(index),
+              ),
+            ]),
+          ],
+        );
+      },
+      separatorBuilder: (context, index) => const Divider(),
+    );
+  }
+  Widget bodyContainerUI() {
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: const ScrollPhysics(),
+      itemCount: _currentArticleModel.body!.length,
+      itemBuilder: (context, index) {
+        return Column(
+          children: <Widget>[
+            Row(children: <Widget>[
+              Flexible(
+                fit: FlexFit.loose,
+                child: bodyUI(index),
               ),
             ]),
           ],
@@ -250,6 +281,74 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
       ),
     );
   }
+  Widget bodyUI(index) {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Row(
+        children: [
+          Flexible(
+            flex: 1,
+            child: FormHelper.inputFieldWidget(
+              context,
+              "Body_$index",
+              "",
+              (onValidateVal) {
+                if (onValidateVal.isEmpty) {
+                  return 'Body ${index + 1} can\'t be empty.';
+                }
+
+                return null;
+              },
+              (onSavedVal) => {
+                _currentArticleModel.body![index] = onSavedVal,
+              },
+              initialValue: _currentArticleModel.body![index],
+              obscureText: false,
+              borderFocusColor: Theme.of(context).primaryColor,
+              prefixIconColor: Theme.of(context).primaryColor,
+              borderColor: Theme.of(context).primaryColor,
+              borderRadius: 2,
+              paddingLeft: 0,
+              paddingRight: 0,
+              showPrefixIcon: false,
+              fontSize: 13,
+              onChange: (val) {},
+            ),
+          ),
+          Visibility(
+            child: SizedBox(
+              width: 35,
+              child: IconButton(
+                icon: const Icon(
+                  Icons.add_circle,
+                  color: Colors.green,
+                ),
+                onPressed: () {
+                  addBodyControl();
+                },
+              ),
+            ),
+            visible: index == _currentArticleModel.body!.length - 1,
+          ),
+          Visibility(
+            child: SizedBox(
+              width: 35,
+              child: IconButton(
+                icon: const Icon(
+                  Icons.remove_circle,
+                  color: Colors.redAccent,
+                ),
+                onPressed: () {
+                  removeBodyControl(index);
+                },
+              ),
+            ),
+            visible: index > 0,
+          )
+        ],
+      ),
+    );
+  }
 
   void addCategoryControl() {
     setState(() {
@@ -268,10 +367,35 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
     });
   }
 
+  void addBodyControl() {
+    setState(() {
+      if (_currentArticleModel.body!.length >= 3) {
+        Fluttertoast.showToast(
+            msg: "Maximum No. of Body is 3",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        return;
+      }
+      _currentArticleModel.body!.add("");
+    });
+  }
+
   void removeCategoryControl(index) {
     setState(() {
       if (_currentArticleModel.category!.length > 1) {
         _currentArticleModel.category!.removeAt(index);
+      }
+    });
+  }
+
+  void removeBodyControl(index) {
+    setState(() {
+      if (_currentArticleModel.body!.length > 1) {
+        _currentArticleModel.body!.removeAt(index);
       }
     });
   }

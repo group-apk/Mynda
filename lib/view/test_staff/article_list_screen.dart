@@ -4,6 +4,7 @@ import 'package:mynda/services/api.dart';
 import 'package:mynda/view/test_staff/question_manager.dart';
 import 'package:provider/provider.dart';
 import 'add_article.dart';
+import 'article_edit.dart';
 
 class ArticleListScreen extends StatefulWidget {
   const ArticleListScreen({Key? key}) : super(key: key);
@@ -87,8 +88,8 @@ class _ArticleListScreen extends State<ArticleListScreen> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => EditTestScreen(
-                                            testName: e.title as String)));
+                                        builder: (context) => EditArticleScreen(
+                                            title: e.title as String)));
                               },
                               child: Container(
                                 padding:
@@ -99,7 +100,7 @@ class _ArticleListScreen extends State<ArticleListScreen> {
                                   child: Stack(
                                     children: [
                                       Image.asset(
-                                        "assets/dashboard.png",
+                                        "assets/07.jpg",
                                         fit: BoxFit.cover,
                                         width:
                                             MediaQuery.of(context).size.width,

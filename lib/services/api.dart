@@ -84,7 +84,7 @@ Future<ArticleModel> uploadNewArticle(ArticleModel article) async {
   final CollectionReference db =
       FirebaseFirestore.instance.collection('Articles');
   article.id =
-      await db.add({'title': article.title, 'author': article.author, 'category':article.category}).then((doc) => doc.id);
+      await db.add({'title': article.title, 'author': article.author, 'category':article.category,'body':article.body}).then((doc) => doc.id);
   await db.doc(article.id).update({"id": article.id});
   return article;
 }
