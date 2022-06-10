@@ -2,10 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mynda/provider/dashboard_provider.dart';
 import 'package:mynda/provider/user_provider.dart';
+import 'package:mynda/view/article/article_view_screen.dart';
+import 'package:mynda/view/article_staff/article_list_screen.dart';
 import 'package:mynda/view/login_screen.dart';
 import 'package:mynda/view/profile_screen.dart';
 import 'package:mynda/view/test/category_view.dart';
-import 'package:mynda/view/test_staff/article_list_screen.dart';
 import 'package:mynda/view/test_staff/test_category_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -32,7 +33,9 @@ class _DashboardMainState extends State<DashboardMain> {
       (user.user.role == 'staff')
           ? const HealthTestCategoryScreen()
           : const CategoryScreen(),
-      const ArticleListScreen(),
+      (user.user.role == 'staff')
+          ? const ArticleListScreen()
+          : const HealthArticleListScreen(),
       Container(),
       const ProfileScreen()
     ];

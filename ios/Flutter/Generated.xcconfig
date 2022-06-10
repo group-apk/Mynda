@@ -1,6 +1,6 @@
 // This is a generated file; do not edit or check into version control.
-FLUTTER_ROOT=D:\Development\flutter
-FLUTTER_APPLICATION_PATH=C:\Users\zulhu\Documents\GitHub\mynda
+FLUTTER_ROOT=D:\flutter\flutter_windows_2.8.1-stable\flutter
+FLUTTER_APPLICATION_PATH=D:\GitHub files\MAP Proj\mynda
 COCOAPODS_PARALLEL_CODE_SIGN=true
 FLUTTER_TARGET=lib\main.dart
 FLUTTER_BUILD_DIR=build
