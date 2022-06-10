@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mynda/model/test_model.dart';
+import '../model/test_model.dart';
 
 class TestNotifier with ChangeNotifier {
   List<TestModel> _testList = [];

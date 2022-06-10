@@ -1,6 +1,8 @@
+import 'package:mynda/model/question_model.dart';
+
 class TestModel {
   String? quizId, quizTitle, quizImgurl;
-  List? questions = [];
+  List<QuestionModel>? questions = [];
 
   TestModel.fromMap(Map<String, dynamic> data) {
     quizId = data['quizId'];
