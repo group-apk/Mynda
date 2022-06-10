@@ -1,3 +1,5 @@
+import 'package:mynda/model/question_model.dart';
+
 class TestModel {
   String? quizId, quizTitle, quizImgurl;
   List? questions = [];

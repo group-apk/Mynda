@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mynda/provider/dashboard_provider.dart';
 import 'package:mynda/provider/user_provider.dart';
+import 'package:mynda/view/article/article_view_screen.dart';
+import 'package:mynda/view/article_staff/article_list_screen.dart';
 import 'package:mynda/view/login_screen.dart';
 import 'package:mynda/view/profile_screen.dart';
 import 'package:mynda/view/test/category_view.dart';
@@ -31,7 +33,9 @@ class _DashboardMainState extends State<DashboardMain> {
       (user.user.role == 'staff')
           ? const HealthTestCategoryScreen()
           : const CategoryScreen(),
-      Container(),
+      (user.user.role == 'staff')
+          ? const ArticleListScreen()
+          : const HealthArticleListScreen(),
       Container(),
       const ProfileScreen()
     ];
@@ -56,9 +60,9 @@ class _DashboardMainState extends State<DashboardMain> {
             // case 1:
             //   snackbar(text: 'Tests will be available soon.');
             //   break;
-            case 2:
-              snackbar(text: 'Articles will be available soon.');
-              break;
+            // case 2:
+            //   snackbar(text: 'Articles will be available soon.');
+            //   break;
             case 3:
               snackbar(text: 'Appointments will be available soon.');
               break;
