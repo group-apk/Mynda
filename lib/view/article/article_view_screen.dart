@@ -65,7 +65,8 @@ class _HealthArticleListScreenState extends State<HealthArticleListScreen> {
                     primary: false,
                     crossAxisSpacing: 20,
                     mainAxisSpacing: 20,
-                    crossAxisCount: 2,
+                    crossAxisCount: 1,
+                    childAspectRatio: (1 / 0.4),
                     children: articleNotifier.articleList
                         .map((e) => InkWell(
                               onTap: () {
@@ -85,12 +86,11 @@ class _HealthArticleListScreenState extends State<HealthArticleListScreen> {
                                   borderRadius: BorderRadius.circular(8),
                                   child: Stack(
                                     children: [
-                                      Image.asset(
-                                        "assets/07.jpg",
-                                        fit: BoxFit.cover,
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        height: 250,
+                                      Image.network(
+                                        '${e.imgurl}',
+                                      fit: BoxFit.cover,
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 250,
                                       ),
                                       Container(
                                         color: Colors.black26,
@@ -100,7 +100,7 @@ class _HealthArticleListScreenState extends State<HealthArticleListScreen> {
                                                 MainAxisAlignment.center,
                                             children: [
                                               Text(
-                                                e.author as String,
+                                                e.title as String,
                                                 textAlign: TextAlign.center,
                                                 style: const TextStyle(
                                                     fontSize: 18,
@@ -109,7 +109,7 @@ class _HealthArticleListScreenState extends State<HealthArticleListScreen> {
                                                         FontWeight.w500),
                                               ),
                                               Text(
-                                                '${e.category}',
+                                                'by ${e.author}',
                                                 textAlign: TextAlign.center,
                                                 style: const TextStyle(
                                                     fontSize: 18,

@@ -60,6 +60,7 @@ Future<TestModel> uploadNewTest(TestModel test) async {
   await db.doc(test.quizId).update({"quizId": test.quizId});
   return test;
 }
+
 getArticle(ArticleNotifier articleNotifier) async {
   QuerySnapshot snapshot =
       await FirebaseFirestore.instance.collection('Articles').get();
@@ -84,9 +85,14 @@ Future<ArticleModel> uploadNewArticle(ArticleModel article) async {
   final CollectionReference db =
       FirebaseFirestore.instance.collection('Articles');
   article.id =
-      await db.add({'title': article.title, 'author': article.author, 'category':article.category,'body':article.body}).then((doc) => doc.id);
+      await db.add({'title': article.title, 'author': article.author, 'category':article.category,'imgurl': article.imgurl,'body':article.body, 'createdAt': Timestamp.now(), 'likes': 0}).then((doc) => doc.id);
   await db.doc(article.id).update({"id": article.id});
   return article;
+}
+
+updateArticleLikes(ArticleModel article) async{
+  final CollectionReference db = FirebaseFirestore.instance.collection('Articles');
+  await db.doc(article.id).update({"likes": article.likes});
 }
 
 updateExistingTest(TestModel test) async {
