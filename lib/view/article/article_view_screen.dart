@@ -3,6 +3,7 @@ import 'package:mynda/provider/article_notifier.dart';
 import 'package:mynda/services/api.dart';
 import 'package:mynda/view/article/read_article.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_randomcolor/flutter_randomcolor.dart';
 
 class HealthArticleListScreen extends StatefulWidget {
   const HealthArticleListScreen({Key? key}) : super(key: key);
@@ -12,6 +13,8 @@ class HealthArticleListScreen extends StatefulWidget {
 }
 
 class _HealthArticleListScreenState extends State<HealthArticleListScreen> {
+
+  var options = Options(format: Format.hex, colorType: ColorType.blue);
 
   @override
   void initState() {
@@ -86,9 +89,11 @@ class _HealthArticleListScreenState extends State<HealthArticleListScreen> {
                                   borderRadius: BorderRadius.circular(8),
                                   child: Stack(
                                     children: [
+                                      //Container(
                                       Image.network(
-                                        '${e.imgurl}',
+                                       '${e.imgurl}',
                                       fit: BoxFit.cover,
+                                      //color: RandomColor.getColor(options),
                                       width: MediaQuery.of(context).size.width,
                                       height: 250,
                                       ),

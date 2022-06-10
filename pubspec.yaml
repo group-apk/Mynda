@@ -35,7 +35,6 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  random_color: ^1.0.5
   #Firebase auth and firebase core
   firebase_core: ^1.0.2
   firebase_auth: ^3.3.0
@@ -45,6 +44,7 @@ dependencies:
   dropdown_formfield: ^0.1.4
   snippet_coder_utils: ^1.0.12
   like_button: ^2.0.4
+  flutter_randomcolor: ^1.0.12
 dev_dependencies:
   flutter_test:
     sdk: flutter

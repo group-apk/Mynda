@@ -1,7 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:mynda/provider/article_notifier.dart';
 import 'package:mynda/services/api.dart';
-import 'package:mynda/view/test_staff/question_manager.dart';
+import 'package:flutter_randomcolor/flutter_randomcolor.dart';
 import 'package:provider/provider.dart';
 import 'add_article.dart';
 import 'article_edit.dart';
@@ -15,6 +17,12 @@ class ArticleListScreen extends StatefulWidget {
 
 class _ArticleListScreen extends State<ArticleListScreen> {
   int i = 0;
+  //var options = Options(format: Format.hex, colorType: ColorType.blue);
+  var options = Options(
+      format: Format.hsl,
+      count: 100,
+      colorType: ColorType.blue,
+      luminosity: Luminosity.light);
 
   @override
   void initState() {
@@ -78,7 +86,8 @@ class _ArticleListScreen extends State<ArticleListScreen> {
                     primary: false,
                     crossAxisSpacing: 20,
                     mainAxisSpacing: 20,
-                    crossAxisCount: 2,
+                    crossAxisCount: 1,
+                    childAspectRatio: (1 / 0.4),
                     children: articleNotifier.articleList
                         .map((e) => InkWell(
                               onTap: () {
@@ -99,12 +108,11 @@ class _ArticleListScreen extends State<ArticleListScreen> {
                                   borderRadius: BorderRadius.circular(8),
                                   child: Stack(
                                     children: [
-                                      Image.asset(
-                                        "assets/07.jpg",
-                                        fit: BoxFit.cover,
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        height: 250,
+                                      Container(
+                                      color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
+                                      //color: RandomColor.getColor(options),
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 250,
                                       ),
                                       Container(
                                         color: Colors.black26,
@@ -114,7 +122,7 @@ class _ArticleListScreen extends State<ArticleListScreen> {
                                                 MainAxisAlignment.center,
                                             children: [
                                               Text(
-                                                e.author as String,
+                                                e.title as String,
                                                 textAlign: TextAlign.center,
                                                 style: const TextStyle(
                                                     fontSize: 18,
@@ -123,7 +131,7 @@ class _ArticleListScreen extends State<ArticleListScreen> {
                                                         FontWeight.w500),
                                               ),
                                               Text(
-                                                '${e.category}',
+                                                'by ${e.author}',
                                                 textAlign: TextAlign.center,
                                                 style: const TextStyle(
                                                     fontSize: 18,
