@@ -1,5 +1,6 @@
 // ignore_for_file: unnecessary_new, sort_child_properties_last
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mynda/model/article_model.dart';
@@ -21,8 +22,11 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
     "",
     "",
     "",
+    "",
+    0,
     new List<String>.empty(growable: true),
     new List<String>.empty(growable: true),
+    Timestamp.now(),
   );
 
   Future uploadArticle(ArticleModel currentArticleModel) async {
