@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_new, sort_child_properties_last
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -24,14 +22,13 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
     "",
     "",
     0,
-    new List<String>.empty(growable: true),
-    new List<String>.empty(growable: true),
+    List<String>.empty(growable: true),
+    List<String>.empty(growable: true),
     Timestamp.now(),
   );
 
   Future uploadArticle(ArticleModel currentArticleModel) async {
-    ArticleNotifier articleNotifier =
-        Provider.of<ArticleNotifier>(context, listen: false);
+    ArticleNotifier articleNotifier = Provider.of<ArticleNotifier>(context, listen: false);
     currentArticleModel = await uploadNewArticle(currentArticleModel);
     getArticle(articleNotifier);
   }
@@ -56,7 +53,7 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
   }
 
   Widget _uiWidget() {
-    return new Form(
+    return Form(
       key: globalFormKey,
       child: SingleChildScrollView(
         child: Padding(
@@ -136,8 +133,7 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                     child: Text(
                       "Category(s)",
                       textAlign: TextAlign.left,
-                      style:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                     ),
                   ),
                   categoryContainerUI(),
@@ -146,12 +142,11 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                     child: Text(
                       "Body(s)",
                       textAlign: TextAlign.left,
-                      style:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                     ),
                   ),
                   bodyContainerUI(),
-                  new Center(
+                  Center(
                     child: FormHelper.submitButton(
                       "Create Article",
                       btnColor: Colors.blue,
@@ -159,8 +154,7 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                       () async {
                         if (validateAndSave()) {
                           uploadArticle(_currentArticleModel).then((value) {
-                            Fluttertoast.showToast(
-                                msg: "Successfully create article");
+                            Fluttertoast.showToast(msg: "Successfully create article");
                             Navigator.of(context).pop();
                           });
                         }
@@ -196,6 +190,7 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
       separatorBuilder: (context, index) => const Divider(),
     );
   }
+
   Widget bodyContainerUI() {
     return ListView.separated(
       shrinkWrap: true,
@@ -252,6 +247,7 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
             ),
           ),
           Visibility(
+            visible: index == _currentArticleModel.category!.length - 1,
             child: SizedBox(
               width: 35,
               child: IconButton(
@@ -264,9 +260,9 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                 },
               ),
             ),
-            visible: index == _currentArticleModel.category!.length - 1,
           ),
           Visibility(
+            visible: index > 0,
             child: SizedBox(
               width: 35,
               child: IconButton(
@@ -279,12 +275,12 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                 },
               ),
             ),
-            visible: index > 0,
           )
         ],
       ),
     );
   }
+
   Widget bodyUI(index) {
     return Padding(
       padding: const EdgeInsets.all(10),
@@ -320,6 +316,7 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
             ),
           ),
           Visibility(
+            visible: index == _currentArticleModel.body!.length - 1,
             child: SizedBox(
               width: 35,
               child: IconButton(
@@ -332,9 +329,9 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                 },
               ),
             ),
-            visible: index == _currentArticleModel.body!.length - 1,
           ),
           Visibility(
+            visible: index > 0,
             child: SizedBox(
               width: 35,
               child: IconButton(
@@ -347,7 +344,6 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                 },
               ),
             ),
-            visible: index > 0,
           )
         ],
       ),

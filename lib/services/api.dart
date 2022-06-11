@@ -68,6 +68,25 @@ Future getArticleFuture(ArticleNotifier articleNotifier) async {
   articleNotifier.articleList = articleList;
 }
 
+Future<ArticleModel> updateCurrentArticle(ArticleModel article) async {
+  final CollectionReference db = FirebaseFirestore.instance.collection('Articles');
+  await db.doc(article.id).update({
+    'title': article.title,
+    'author': article.author,
+    'category': article.category,
+    'imgurl': article.imgurl,
+    'body': article.body,
+    'createdAt': article.createdAt,
+    'likes': article.likes
+  });
+  return article;
+}
+
+Future deleteCurrentArticle(ArticleModel article) async {
+  final CollectionReference db = FirebaseFirestore.instance.collection('Articles');
+  await db.doc(article.id).delete();
+}
+
 Future<ArticleModel> uploadNewArticle(ArticleModel article) async {
   final CollectionReference db = FirebaseFirestore.instance.collection('Articles');
   article.id = await db.add({

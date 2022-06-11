@@ -47,6 +47,8 @@ dependencies:
   snippet_coder_utils: ^1.0.12
   like_button: ^2.0.4
   flutter_randomcolor: ^1.0.12
+  intl:
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

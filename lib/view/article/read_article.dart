@@ -16,14 +16,13 @@ class ArticleReadingScreen extends StatefulWidget {
 class _ArticleReadingScreenState extends State<ArticleReadingScreen> {
   String categories = "";
   Future<bool> onLikeButtonTapped(bool isLiked) async {
-    ArticleNotifier articleNotifier =
-        Provider.of<ArticleNotifier>(context, listen: false);
+    ArticleNotifier articleNotifier = Provider.of<ArticleNotifier>(context, listen: false);
     ArticleModel currentArticleModel = articleNotifier.currentArticleModel;
-    if (isLiked == false){
+    if (isLiked == false) {
       currentArticleModel.likes = currentArticleModel.likes! + 1;
       updateArticleLikes(currentArticleModel);
       getArticle(articleNotifier);
-    }else{
+    } else {
       currentArticleModel.likes = currentArticleModel.likes! - 1;
       updateArticleLikes(currentArticleModel);
       getArticle(articleNotifier);
@@ -33,8 +32,7 @@ class _ArticleReadingScreenState extends State<ArticleReadingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ArticleNotifier articleNotifier =
-        Provider.of<ArticleNotifier>(context, listen: false);
+    ArticleNotifier articleNotifier = Provider.of<ArticleNotifier>(context, listen: false);
     ArticleModel currentArticleModel = articleNotifier.currentArticleModel;
     for (int i = 0; i < currentArticleModel.category!.length; i++) {
       if (i == currentArticleModel.category!.length - 1) {
@@ -44,8 +42,7 @@ class _ArticleReadingScreenState extends State<ArticleReadingScreen> {
         categories += ", ";
       }
     }
-    var date = DateFormat('dd MMMM yyyy, hh:mm a')
-        .format(currentArticleModel.createdAt!.toDate());
+    var date = DateFormat('dd MMMM yyyy, hh:mm a').format(currentArticleModel.createdAt!.toDate());
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -72,14 +69,9 @@ class _ArticleReadingScreenState extends State<ArticleReadingScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text("${currentArticleModel.title}",
-                      style: TextStyle(
-                          fontSize: 35,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black.withOpacity(0.8))),
-                  Text("by ${currentArticleModel.author} ($date)",
-                      style: const TextStyle(color: Colors.grey, fontSize: 18)),
-                  Text("Categories: $categories",
-                      style: const TextStyle(color: Colors.grey, fontSize: 18)),
+                      style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold, color: Colors.black.withOpacity(0.8))),
+                  Text("by ${currentArticleModel.author} ($date)", style: const TextStyle(color: Colors.grey, fontSize: 18)),
+                  Text("Categories: $categories", style: const TextStyle(color: Colors.grey, fontSize: 18)),
                   const SizedBox(height: 12),
                   Image.network(
                     '${currentArticleModel.imgurl}',
@@ -91,8 +83,7 @@ class _ArticleReadingScreenState extends State<ArticleReadingScreen> {
                   for (int i = 0; i < currentArticleModel.body!.length; i++)
                     Padding(
                       padding: const EdgeInsets.all(5),
-                      child: Text("\t ${currentArticleModel.body![i]}",
-                          style: const TextStyle(fontSize: 18)),
+                      child: Text("\t ${currentArticleModel.body![i]}", style: const TextStyle(fontSize: 18)),
                     ),
                   const SizedBox(height: 12),
                   LikeButton(

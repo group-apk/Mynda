@@ -30,12 +30,9 @@ class _DashboardMainState extends State<DashboardMain> {
     var dashboard = context.read<DashboardProvider>();
     final List<Widget> widgetOptions = [
       const HomepageScreen(),
-      // const HealthTestCategoryScreen(),
       (user.user.role == 'staff') ? const HealthTestCategoryScreen() : const CategoryScreen(),
-      Container(),
-      const AppointmentScreen(),
       (user.user.role == 'staff') ? const ArticleListScreen() : const HealthArticleListScreen(),
-      Container(),
+      const AppointmentScreen(),
       const ProfileScreen()
     ];
     return Scaffold(
