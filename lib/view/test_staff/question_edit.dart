@@ -122,7 +122,7 @@ class _EditQuestionScreenState extends State<EditQuestionScreen> {
                           : IconButton(
                               onPressed: () {
                                 currentTestModel.questions![widget.index].option
-                                    .removeAt(i);
+                                    ?.removeAt(i);
                                 deleteExistingAnswer(
                                     currentTestModel, widget.index);
                                 Fluttertoast.showToast(msg: "Answer deleted");

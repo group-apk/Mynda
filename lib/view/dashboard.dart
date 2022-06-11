@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:mynda/provider/dashboard_provider.dart';
 import 'package:mynda/provider/user_provider.dart';
 import 'package:mynda/view/appointment/appointment.dart';
+import 'package:mynda/view/article/article_view_screen.dart';
+import 'package:mynda/view/article_staff/article_list_screen.dart';
 import 'package:mynda/view/login_screen.dart';
 import 'package:mynda/view/profile/profile_screen.dart';
 import 'package:mynda/view/test/category_view.dart';
@@ -29,11 +31,11 @@ class _DashboardMainState extends State<DashboardMain> {
     final List<Widget> widgetOptions = [
       const HomepageScreen(),
       // const HealthTestCategoryScreen(),
-      (user.user.role == 'staff')
-          ? const HealthTestCategoryScreen()
-          : const CategoryScreen(),
+      (user.user.role == 'staff') ? const HealthTestCategoryScreen() : const CategoryScreen(),
       Container(),
       const AppointmentScreen(),
+      (user.user.role == 'staff') ? const ArticleListScreen() : const HealthArticleListScreen(),
+      Container(),
       const ProfileScreen()
     ];
     return Scaffold(
@@ -57,9 +59,9 @@ class _DashboardMainState extends State<DashboardMain> {
             // case 1:
             //   snackbar(text: 'Tests will be available soon.');
             //   break;
-            case 2:
-              snackbar(text: 'Articles will be available soon.');
-              break;
+            // case 2:
+            //   snackbar(text: 'Articles will be available soon.');
+            //   break;
             // case 3:
             //   snackbar(text: 'Appointments will be available soon.');
             //   break;
@@ -77,20 +79,16 @@ class _DashboardMainState extends State<DashboardMain> {
         type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.format_list_bulleted), label: "Tests"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.newspaper), label: "Articles"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_month), label: "Appointments"),
+          BottomNavigationBarItem(icon: Icon(Icons.format_list_bulleted), label: "Tests"),
+          BottomNavigationBarItem(icon: Icon(Icons.newspaper), label: "Articles"),
+          BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: "Appointments"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],
       ),
     );
   }
 
-  void snackbar(
-      {required String text, Duration duration = const Duration(seconds: 1)}) {
+  void snackbar({required String text, Duration duration = const Duration(seconds: 1)}) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       duration: duration,
@@ -113,9 +111,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
     var user = context.read<UserProvider>();
     var dashboard = context.read<DashboardProvider>();
 
-    void snackbar(
-        {required String text,
-        Duration duration = const Duration(seconds: 1)}) {
+    void snackbar({required String text, Duration duration = const Duration(seconds: 1)}) {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         duration: duration,
@@ -158,8 +154,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
             color: Colors.blue[100],
             textColor: Colors.blue,
             onPressed: () {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: ((context) => const LoginScreen())));
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: ((context) => const LoginScreen())));
             },
             child: const Text('Login'),
           )
@@ -266,9 +261,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                               child: MaterialButton(
                                   color: Colors.blue[300],
                                   onPressed: () {
-                                    snackbar(
-                                        text:
-                                            'Articles will be available soon.');
+                                    snackbar(text: 'Articles will be available soon.');
                                   },
                                   shape: const CircleBorder(),
                                   child: const Icon(
@@ -281,8 +274,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                               elevation: 5,
                               margin: EdgeInsets.symmetric(vertical: 8.0),
                               child: SizedBox(
-                                child: Center(
-                                    child: Text('Articles will be here soon!')),
+                                child: Center(child: Text('Articles will be here soon!')),
                               ),
                             ),
                           ),
@@ -290,9 +282,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                               child: MaterialButton(
                                   color: Colors.blue[300],
                                   onPressed: () {
-                                    snackbar(
-                                        text:
-                                            'Articles will be available soon.');
+                                    snackbar(text: 'Articles will be available soon.');
                                   },
                                   shape: const CircleBorder(),
                                   child: const Icon(
@@ -349,8 +339,7 @@ class _NotificationDrawerState extends State<NotificationDrawer> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const [
-                  Text(
-                      'Get notified on the latest articles and your appointments!'),
+                  Text('Get notified on the latest articles and your appointments!'),
                   Text('Register now to unlock this feature!'),
                 ],
               ),

@@ -1,13 +1,10 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
 
 class OptionTile extends StatefulWidget {
-  final String option, description, optionSelected;
-  final int score;
+  final String option, description, correctAnswer, optionSelected;
 
   const OptionTile(
-      {Key? key, required this.description, required this.score, required this.option, required this.optionSelected}) : super(key:key);
+      {required this.description, required this.correctAnswer, required this.option, required this.optionSelected});
 
   @override
   _OptionTileState createState() => _OptionTileState();
@@ -17,7 +14,7 @@ class _OptionTileState extends State<OptionTile> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Row(
         children: [
           Container(
@@ -27,11 +24,15 @@ class _OptionTileState extends State<OptionTile> {
             decoration: BoxDecoration(
                 border: Border.all(
                     color: widget.optionSelected == widget.description
+                        ? widget.description == widget.correctAnswer
                             ? Colors.green.withOpacity(0.7)
-                            : Colors.grey,
+                            : Colors.red.withOpacity(0.7)
+                        : Colors.grey,
                     width: 1.5),
                 color: widget.optionSelected == widget.description
+                    ? widget.description == widget.correctAnswer
                     ? Colors.green.withOpacity(0.7)
+                    : Colors.red.withOpacity(0.7)
                     : Colors.white,
               borderRadius: BorderRadius.circular(24)
             ),
@@ -61,7 +62,7 @@ class NoOfQuestionTile extends StatefulWidget {
   final String text;
   final int number;
 
-  const NoOfQuestionTile({Key? key,required this.text, required this.number}) : super(key:key);
+  const NoOfQuestionTile({required this.text, required this.number});
 
   @override
   _NoOfQuestionTileState createState() => _NoOfQuestionTileState();
@@ -71,12 +72,12 @@ class _NoOfQuestionTileState extends State<NoOfQuestionTile> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 3),
+      margin: EdgeInsets.symmetric(horizontal: 3),
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 6),
-            decoration: const BoxDecoration(
+            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 6),
+            decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(14),
                 bottomLeft: Radius.circular(14)
@@ -85,12 +86,12 @@ class _NoOfQuestionTileState extends State<NoOfQuestionTile> {
             ),
             child: Text(
               "${widget.number}",
-              style: const TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.white),
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            decoration: const BoxDecoration(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
                 topRight: Radius.circular(14),
                 bottomRight: Radius.circular(14),
@@ -99,7 +100,7 @@ class _NoOfQuestionTileState extends State<NoOfQuestionTile> {
             ),
             child: Text(
               widget.text,
-              style: const TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.white),
             ),
           )
         ],
