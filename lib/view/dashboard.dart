@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mynda/provider/dashboard_provider.dart';
 import 'package:mynda/provider/user_provider.dart';
+import 'package:mynda/view/appointment/appointment.dart';
 import 'package:mynda/view/login_screen.dart';
 import 'package:mynda/view/profile/profile_screen.dart';
 import 'package:mynda/view/test/category_view.dart';
@@ -32,7 +33,7 @@ class _DashboardMainState extends State<DashboardMain> {
           ? const HealthTestCategoryScreen()
           : const CategoryScreen(),
       Container(),
-      Container(),
+      const AppointmentScreen(),
       const ProfileScreen()
     ];
     return Scaffold(
@@ -59,9 +60,9 @@ class _DashboardMainState extends State<DashboardMain> {
             case 2:
               snackbar(text: 'Articles will be available soon.');
               break;
-            case 3:
-              snackbar(text: 'Appointments will be available soon.');
-              break;
+            // case 3:
+            //   snackbar(text: 'Appointments will be available soon.');
+            //   break;
             // case 4:
             //   snackbar(text: 'Profile will be available soon.');
             //   break;

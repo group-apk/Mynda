@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mynda/model/user_model.dart';
+import 'package:mynda/provider/dashboard_provider.dart';
 import 'package:mynda/provider/user_provider.dart';
 import 'package:mynda/view/dashboard.dart';
 import 'package:mynda/view/registration_screen.dart';
@@ -34,7 +35,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var provider = context.read<UserProvider>();
+    final provider = context.read<UserProvider>();
+    final dashboard = context.read<DashboardProvider>();
+    final navigator = Navigator.of(context);
 
     void signIn(String email, String password) async {
       if (_formKey.currentState!.validate()) {
@@ -54,7 +57,8 @@ class _LoginScreenState extends State<LoginScreen> {
               print(UserProvider().user.role);
             });
             Fluttertoast.showToast(msg: "Login Successful");
-            Navigator.pushReplacement(context,
+            dashboard.setIndex = 0;
+            navigator.pushReplacement(
                 MaterialPageRoute(builder: (context) => DashboardMain()));
           });
         } on FirebaseAuthException catch (error) {

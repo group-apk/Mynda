@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:mynda/model/user_model.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:mynda/provider/dashboard_provider.dart';
 import 'package:mynda/provider/user_provider.dart';
 import 'package:mynda/view/landing.dart';
 import 'package:mynda/view/login_screen.dart';
@@ -19,179 +20,239 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var user = context.read<UserProvider>();
+    final user = context.read<UserProvider>();
+    final dashboard = context.read<DashboardProvider>();
     final navigator = Navigator.of(context);
 
+    Map<String, String> userMap = {
+      'Name': '${user.user.fullName}',
+      'IC': '${user.user.ic}',
+      'Gender': '${user.user.gender}',
+      'Role': (user.user.role == 'staff')
+          ? 'Staff'
+          : (user.user.role == 'member')
+              ? 'Member'
+              : 'Guest',
+      'Email': '${user.user.email}',
+      'Academic': '${user.user.academic}',
+      'Region': '${user.user.region}',
+      'State': '${user.user.states}',
+    };
+
     signOut() async {
-      await auth.signOut();
-      user.logout();
-
-      navigator.pushReplacement(
-          MaterialPageRoute(builder: (context) => const LandingScreen()));
+      await auth.signOut().then((value) {
+        user.logout();
+        navigator.pushReplacement(MaterialPageRoute(builder: (context) => const LandingScreen()));
+      });
     }
 
-    Widget logoutButton() {
-      if (user.user.role != 'Guest') {
-        return Center(
-          child: MaterialButton(
-            color: Colors.blue,
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10))),
-            onPressed: () async {
-              await signOut();
-            },
-            child: const Text('LOGOUT'),
-          ),
-        );
-      }
-
-      return Center(
+    Widget button({required String title, required void Function()? onPressed}) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5),
         child: MaterialButton(
+          highlightElevation: 0,
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           color: Colors.blue,
+          textColor: Colors.white,
           shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10))),
-          onPressed: () {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const LoginScreen(),
-                ));
-          },
-          child: const Text('LOGIN'),
+            borderRadius: BorderRadius.all(
+              Radius.circular(5),
+            ),
+          ),
+          onPressed: onPressed,
+          child: Text(
+            title,
+            style: GoogleFonts.robotoCondensed(
+              color: Colors.white,
+            ),
+          ),
         ),
-      );
-    }
-
-    Widget updateButton() {
-      if (user.user.role != 'Guest') {
-        return Center(
-          child: MaterialButton(
-            color: Colors.blue,
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10))),
-            onPressed: () {
-              user.setTemp = user.user;
-              navigator.push(
-                MaterialPageRoute(
-                  builder: (context) => const EditProfileScreen(),
-                ),
-              );
-            },
-            child: const Text('UPDATE'),
-          ),
-        );
-      }
-      return Container();
-    }
-
-    Widget textTile({required String attribute, required String value}) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Expanded(child: Text(attribute)),
-          Expanded(
-            child: Text(value),
-          ),
-        ],
       );
     }
 
     Widget body = SafeArea(
-      child: Card(
-        elevation: 10,
-        margin: const EdgeInsets.all(15),
-        child: Column(
-          children: [
-            Expanded(
-              child: Container(
-                color: Colors.blue,
-                child: const Center(
-                  child: Text(
-                    'Profile Page',
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 9,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Card(
+            color: Colors.blue[50],
+            margin: const EdgeInsets.symmetric(horizontal: 15),
+            elevation: 5,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Expanded(
-                      flex: 3,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(bottom: 30),
-                            child: Card(
-                              shape: CircleBorder(),
-                              elevation: 3,
-                              child: Padding(
-                                padding: EdgeInsets.all(15),
-                                child: Icon(
-                                  Icons.person,
-                                  size: 30,
-                                ),
-                              ),
-                            ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Card(
+                      color: Colors.blue,
+                      margin: const EdgeInsets.only(bottom: 5),
+                      elevation: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        child: Text(
+                          'PROFILE',
+                          textScaleFactor: 2,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.robotoCondensed(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
-                          Padding(
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Card(
+                      margin: EdgeInsets.zero,
+                      color: Colors.blue,
+                      child: Card(
+                        child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 30),
-                            child: (user.user.role != 'Guest')
-                                ? Consumer<UserProvider>(
-                                    builder: (context, value, child) => Column(
-                                      children: [
-                                        textTile(
-                                            attribute: 'Full Name:',
-                                            value: '${user.user.fullName}'),
-                                        textTile(
-                                            attribute: 'IC:',
-                                            value: '${user.user.ic}'),
-                                        textTile(
-                                            attribute: 'Gender:',
-                                            value: '${user.user.gender}'),
-                                        textTile(
-                                            attribute: 'Role:',
-                                            value: '${user.user.role}'),
-                                        textTile(
-                                            attribute: 'Email:',
-                                            value: '${user.user.email}'),
-                                        (user.user.role == 'member')
-                                            ? Container()
-                                            : textTile(
-                                                attribute: 'Academic:',
-                                                value: '${user.user.academic}'),
-                                        textTile(
-                                            attribute: 'Region:',
-                                            value: '${user.user.region}'),
-                                        textTile(
-                                            attribute: 'State:',
-                                            value: '${user.user.states}'),
-                                      ],
+                            child: IntrinsicHeight(
+                              child: Consumer<UserProvider>(builder: (context, user, child) {
+                                userMap = {
+                                  'Name': '${user.user.fullName}',
+                                  'IC': '${user.user.ic}',
+                                  'Gender': '${user.user.gender}',
+                                  'Role': (user.user.role == 'staff')
+                                      ? 'Staff'
+                                      : (user.user.role == 'member')
+                                          ? 'Member'
+                                          : 'Guest',
+                                  'Email': '${user.user.email}',
+                                  'Academic': '${user.user.academic}',
+                                  'Region': '${user.user.region}',
+                                  'State': '${user.user.states}',
+                                };
+
+                                return Row(
+                                  children: [
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                        child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: (userMap['Role'] != 'Guest')
+                                                ? userMap.entries.map<Widget>((e) {
+                                                    // (e.key == ['Role'] && e.value != 'staff') ?
+                                                    return (e.key == 'Academic' && userMap['Role'] != 'staff')
+                                                        ? Container()
+                                                        : Text(
+                                                            e.key,
+                                                            style: GoogleFonts.robotoCondensed(),
+                                                          );
+                                                    // return Text(e.value);
+                                                  }).toList()
+                                                : [
+                                                    Text(
+                                                      'Role',
+                                                      style: GoogleFonts.robotoCondensed(),
+                                                    ),
+                                                  ]),
+                                      ),
                                     ),
-                                  )
-                                : textTile(
-                                    attribute: 'Role:',
-                                    value: '${user.user.role}'),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 15.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                updateButton(),
-                                logoutButton(),
-                              ],
-                            ),
-                          ),
-                        ],
-                      )),
+                                    const Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(vertical: 10),
+                                        child: VerticalDivider(
+                                          thickness: 2,
+                                          color: Colors.black26,
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 4,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                        child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: (userMap['Role'] != 'Guest')
+                                                ? userMap.entries.map<Widget>((e) {
+                                                    return (e.key == 'Academic' && userMap['Role'] != 'staff')
+                                                        ? Container()
+                                                        : Text(
+                                                            e.value,
+                                                            style: GoogleFonts.robotoCondensed(),
+                                                          );
+                                                  }).toList()
+                                                : [
+                                                    Text(
+                                                      userMap['Role'].toString(),
+                                                      style: GoogleFonts.robotoCondensed(),
+                                                    ),
+                                                  ]),
+                                      ),
+                                    )
+                                  ],
+                                );
+                              }),
+                            )),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10, left: 10.0, top: 10),
+                    child: Card(
+                      margin: EdgeInsets.zero,
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: (user.user.role != 'Guest')
+                              ? [
+                                  button(
+                                      title: 'UPDATE',
+                                      onPressed: () async {
+                                        showDialog(barrierDismissible: false, context: context, builder: (context) => const EditProfileScreen());
+
+                                        // navigator.push(
+                                        //   MaterialPageRoute(
+                                        //     builder: (context) =>
+                                        //         const EditProfileScreen(),
+                                        //   ),
+                                        // );
+                                      }),
+                                  button(
+                                    title: 'LOGOUT',
+                                    onPressed: () async {
+                                      dashboard.setIndex = 0;
+                                      await signOut();
+                                    },
+                                  ),
+                                ]
+                              : [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Login to unlock more features!',
+                                      textAlign: TextAlign.center,
+                                      style: GoogleFonts.robotoCondensed(),
+                                    ),
+                                  ),
+                                  button(
+                                    title: 'LOGIN',
+                                    onPressed: () {
+                                      navigator.pushReplacement(
+                                        MaterialPageRoute(
+                                          builder: (context) => const LoginScreen(),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
 
