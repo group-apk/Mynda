@@ -16,6 +16,8 @@ class _AddTestScreenState extends State<AddTestScreen> {
   final _formKey = GlobalKey<FormState>();
   final TestModel _currentTestModel = TestModel();
   final testNameEditiingController = TextEditingController();
+  final imageLinkEditingController = TextEditingController();
+  // File? file;
 
   Future uploadTest(TestModel currentTestModel) async {
     TestNotifier testNotifier =
@@ -23,6 +25,16 @@ class _AddTestScreenState extends State<AddTestScreen> {
     currentTestModel = await uploadNewTest(currentTestModel);
     getTest(testNotifier);
   }
+
+  // Future selectFile() async{
+  //   final result = await FilePicker.platform.pickFiles(allowMultiple: false, type: FileType.image);
+
+  //   if (result != null){
+  //     file = File(result.files.single.path);
+  //   }else{
+  //     return;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -36,12 +48,41 @@ class _AddTestScreenState extends State<AddTestScreen> {
         }
         return null;
       },
-      textInputAction: TextInputAction.done,
+      textInputAction: TextInputAction.next,
       onSaved: (value) {
         testNameEditiingController.text = value!;
       },
       decoration: const InputDecoration(labelText: 'Test Name'),
     );
+
+    final imageLinkField = TextFormField(
+      autofocus: false,
+      controller: imageLinkEditingController,
+      keyboardType: TextInputType.text,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return ("Please enter an image link");
+        }
+        if(!RegExp(r'(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-?=%.]+')
+              .hasMatch(value)){
+          return ("Not a valid image link");
+        }
+        return null;
+      },
+      textInputAction: TextInputAction.done,
+      onSaved: (value) {
+        imageLinkEditingController.text = value!;
+      },
+      decoration: const InputDecoration(labelText: 'Image link address'),
+    );
+
+  // final selectFileButton = ElevatedButton.icon(
+  //     onPressed: () {
+  //       selectFile();
+  //     },
+  //     icon: const Icon(Icons.attach_file, size: 30.0,),
+  //     label: const Text("Upload image", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),),
+  //     );
 
     final saveButton = Material(
       elevation: 5,
@@ -52,9 +93,10 @@ class _AddTestScreenState extends State<AddTestScreen> {
         onPressed: () {
           if (_formKey.currentState!.validate()) {
             _currentTestModel.quizTitle = testNameEditiingController.text;
+            _currentTestModel.quizImgurl = imageLinkEditingController.text;
             uploadTest(_currentTestModel).then((value) {
               Fluttertoast.showToast(
-                  msg: testNameEditiingController.text + " test created");
+                  msg: "${testNameEditiingController.text} test created");
               Navigator.of(context).pop();
             });
           }
@@ -109,6 +151,9 @@ class _AddTestScreenState extends State<AddTestScreen> {
                   ),
                   const SizedBox(height: 44),
                   testNameField,
+                  const SizedBox(height: 30),
+                  // selectFileButton,
+                  imageLinkField,
                   const SizedBox(height: 30),
                   saveButton,
                 ],

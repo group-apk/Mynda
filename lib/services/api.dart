@@ -71,7 +71,7 @@ Future<TestModel> uploadNewTest(TestModel test) async {
   final CollectionReference db =
       FirebaseFirestore.instance.collection('QuizList');
   test.quizId =
-      await db.add({'quizTitle': test.quizTitle}).then((doc) => doc.id);
+      await db.add({'quizTitle': test.quizTitle, 'quizImgurl': test.quizImgurl}).then((doc) => doc.id);
   await db.doc(test.quizId).update({"quizId": test.quizId});
   return test;
 }
@@ -120,4 +120,17 @@ deleteExisitingQuestion(TestModel test, int index) async {
       .doc(test.quizId)
       .collection('Questions');
   await db.doc(test.questions![index].qid).delete();
+}
+
+Future<TestModel> addNewAnswer(TestModel test, int index) async {
+  test.questions![index].option.add("");
+  var newList = test.questions![index].option;
+  final CollectionReference db = FirebaseFirestore.instance.collection('QuizList').doc(test.quizId).collection('Questions');
+  await db.doc(test.questions![index].qid).update({"option": FieldValue.arrayUnion(newList)});
+  return test;
+}
+
+deleteExistingAnswer(TestModel test, int index) async{
+  final CollectionReference db = FirebaseFirestore.instance.collection('QuizList').doc(test.quizId).collection('Questions');
+  await db.doc(test.questions![index].qid).update({"option": test.questions![index].option});
 }

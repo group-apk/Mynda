@@ -6,10 +6,15 @@ import 'package:mynda/services/api.dart';
 import 'package:provider/provider.dart';
 
 class EditQuestionScreen extends StatefulWidget {
-  const EditQuestionScreen({Key? key, required this.index, required this.isAdd})
+  const EditQuestionScreen(
+      {Key? key,
+      required this.index,
+      required this.isAdd,
+      required this.addAns})
       : super(key: key);
   final int index;
   final bool isAdd;
+  final bool addAns;
   @override
   State<EditQuestionScreen> createState() => _EditQuestionScreenState();
 }
@@ -65,6 +70,33 @@ class _EditQuestionScreenState extends State<EditQuestionScreen> {
       );
     }
 
+    final addAnswerButton = Material(
+      elevation: 5,
+      borderRadius: BorderRadius.circular(5),
+      color: const Color(0xFF0069FE),
+      child: MaterialButton(
+        padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+        onPressed: () {
+          if (_formKey.currentState!.validate()) {
+            addNewAnswer(currentTestModel, widget.index);
+            Fluttertoast.showToast(msg: "New answer field added");
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: ((context) => EditQuestionScreen(
+                      index: widget.index,
+                      isAdd: widget.isAdd,
+                      addAns: true,
+                    ))));
+          }
+        },
+        child: const Text(
+          "Add New Answer",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+
     Widget testAnswersField(TestModel currentTestModel) {
       return FutureBuilder(
         future: getQuestionFuture(currentTestModel),
@@ -82,21 +114,37 @@ class _EditQuestionScreenState extends State<EditQuestionScreen> {
                     // key: _answerKey,
                     autofocus: false,
                     decoration: InputDecoration(
-                        labelText: 'Answer ${i + 1}',
-                        suffixIcon: widget.isAdd
-                            ? IconButton(
-                                onPressed: answerEditingController[i].clear,
-                                icon: const Icon(Icons.clear))
-                            : IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.delete),
-                              )),
+                      labelText: 'Answer ${i + 1}',
+                      suffixIcon: widget.isAdd
+                          ? IconButton(
+                              onPressed: answerEditingController[i].clear,
+                              icon: const Icon(Icons.clear))
+                          : IconButton(
+                              onPressed: () {
+                                currentTestModel.questions![widget.index].option
+                                    .removeAt(i);
+                                deleteExistingAnswer(
+                                    currentTestModel, widget.index);
+                                Fluttertoast.showToast(msg: "Answer deleted");
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: ((context) =>
+                                            EditQuestionScreen(
+                                              index: widget.index,
+                                              isAdd: widget.isAdd,
+                                              addAns: false,
+                                            ))));
+                              },
+                              icon: const Icon(Icons.delete),
+                            ),
+                      hintText: "Input an answer here",
+                    ),
                     controller: answerEditingController[i],
                     maxLines: null,
                     keyboardType: TextInputType.multiline,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return ("Please enter an answer");
+                        return ("Please enter an answer and press save icon");
                       }
                       return null;
                     },
@@ -111,6 +159,31 @@ class _EditQuestionScreenState extends State<EditQuestionScreen> {
       );
     }
 
+    Widget cancelButton = TextButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: const Text("Cancel"));
+
+    Widget continueButton = TextButton(
+        onPressed: () {
+          deleteQuestion(currentTestModel).then((value) {
+            Fluttertoast.showToast(msg: "Question deleted");
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+          });
+        },
+        child: const Text("Yes"));
+
+    AlertDialog alert = AlertDialog(
+      title: const Text("Delete Confirmation"),
+      content: const Text("Are you sure you want to delete this question?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
     // print(_currentTestModel.questions![widget.index].qid);
     return Scaffold(
       floatingActionButton: Row(
@@ -123,10 +196,11 @@ class _EditQuestionScreenState extends State<EditQuestionScreen> {
                 backgroundColor: Colors.red,
                 child: const Icon(Icons.delete),
                 onPressed: () {
-                  deleteQuestion(currentTestModel).then((value) {
-                    Fluttertoast.showToast(msg: "Question deleted");
-                    Navigator.of(context).pop();
-                  });
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return alert;
+                      });
                 }),
           ),
           Padding(
@@ -145,7 +219,15 @@ class _EditQuestionScreenState extends State<EditQuestionScreen> {
                   }
                   updateQuestion(currentTestModel).then((value) {
                     Fluttertoast.showToast(msg: "Question updated");
-                    Navigator.of(context).pop();
+                    // Navigator.of(context).pop();
+                    widget.isAdd
+                        ? Navigator.of(context).pop()
+                        : Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                                builder: ((context) => EditQuestionScreen(
+                                    index: widget.index,
+                                    isAdd: widget.isAdd,
+                                    addAns: false))));
                   });
                 }
               },
@@ -195,7 +277,21 @@ class _EditQuestionScreenState extends State<EditQuestionScreen> {
                     const SizedBox(height: 10),
                     testQuestionField(currentTestModel),
                     const SizedBox(height: 20),
+                    widget.isAdd
+                        ? const Text(
+                            "*You can add more answer later",
+                            style: TextStyle(fontSize: 14.0, color: Colors.red),
+                          )
+                        : widget.addAns
+                            ? const Text(
+                                "*You can add more answer after you save",
+                                style: TextStyle(
+                                    fontSize: 14.0, color: Colors.red),
+                              )
+                            : addAnswerButton,
+                    const SizedBox(height: 15),
                     testAnswersField(currentTestModel),
+                    const SizedBox(height: 30),
                   ],
                 ),
               ),

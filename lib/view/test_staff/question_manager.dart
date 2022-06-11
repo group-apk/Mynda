@@ -4,6 +4,7 @@ import 'package:mynda/model/test_model.dart';
 import 'package:mynda/provider/test_notifier.dart';
 import 'package:mynda/services/api.dart';
 import 'package:mynda/view/test_staff/question_edit.dart';
+import 'package:mynda/view/test_staff/test_category_screen.dart';
 import 'package:provider/provider.dart';
 
 class EditTestScreen extends StatefulWidget {
@@ -51,7 +52,8 @@ class _EditTestScreenState extends State<EditTestScreen> {
                 MaterialPageRoute(
                     builder: (context) => EditQuestionScreen(
                         index: currentTestModel.questions!.length - 1,
-                        isAdd: true)));
+                        isAdd: true,
+                        addAns: false)));
           }
         },
         child: const Text(
@@ -93,6 +95,7 @@ class _EditTestScreenState extends State<EditTestScreen> {
                                             EditQuestionScreen(
                                               index: i,
                                               isAdd: false,
+                                              addAns: false,
                                             )));
                               },
                             )),
@@ -132,6 +135,32 @@ class _EditTestScreenState extends State<EditTestScreen> {
       );
     }
 
+    Widget cancelButton =
+        TextButton(onPressed: () {Navigator.of(context).pop();}, child: const Text("Cancel"));
+
+    Widget continueButton = TextButton(
+        onPressed: () {
+          if (_formKey.currentState!.validate()) {
+            testNotifier.deleteTest(currentTestModel);
+            deleteTest(currentTestModel).then((value) {
+              Fluttertoast.showToast(msg: "Test deleted");
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            });
+          }
+        },
+        child: const Text("Yes"));
+
+    AlertDialog alert = AlertDialog(
+      title: const Text("Delete Confirmation"),
+      content: Text(
+          "Are you sure you want to delete ${testNameEditingController.text} test?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
     // print('id: ${_currentTestModel.quizId}');
     return Scaffold(
       floatingActionButton: Row(
@@ -144,13 +173,11 @@ class _EditTestScreenState extends State<EditTestScreen> {
                 backgroundColor: Colors.red,
                 child: const Icon(Icons.delete),
                 onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    testNotifier.deleteTest(currentTestModel);
-                    deleteTest(currentTestModel).then((value) {
-                      Fluttertoast.showToast(msg: "Test deleted");
-                      Navigator.of(context).pop();
-                    });
-                  }
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return alert;
+                      });
                 }),
           ),
           Padding(
