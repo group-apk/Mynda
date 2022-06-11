@@ -302,6 +302,7 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
               (onSavedVal) => {
                 _currentArticleModel.body![index] = onSavedVal,
               },
+              isMultiline: true,
               initialValue: _currentArticleModel.body![index],
               obscureText: false,
               borderFocusColor: Theme.of(context).primaryColor,

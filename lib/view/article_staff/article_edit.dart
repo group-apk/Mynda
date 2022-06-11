@@ -313,6 +313,7 @@ class _EditArticleScreenState extends State<EditArticleScreen> {
               (onSavedVal) => {
                 currentArticleModel.body![index] = onSavedVal,
               },
+              isMultiline: true,
               initialValue: currentArticleModel.body![index],
               obscureText: false,
               borderFocusColor: Theme.of(context).primaryColor,
