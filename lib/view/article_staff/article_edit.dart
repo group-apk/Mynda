@@ -116,6 +116,33 @@ class _EditArticleScreenState extends State<EditArticleScreen> {
                   onChange: (val) {},
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 5),
+                child: FormHelper.inputFieldWidgetWithLabel(
+                  context,
+                  "imgurl",
+                  "Image URL (optional)",
+                  "",
+                  (onValidateVal) {
+                    return null;
+                  },
+                  (onSavedVal) => {
+                    currentArticleModel.imgurl = onSavedVal,
+                  },
+                  initialValue: currentArticleModel.imgurl as String,
+                  obscureText: false,
+                  borderFocusColor: Theme.of(context).primaryColor,
+                  prefixIconColor: Theme.of(context).primaryColor,
+                  borderColor: Theme.of(context).primaryColor,
+                  borderRadius: 2,
+                  paddingLeft: 0,
+                  paddingRight: 0,
+                  showPrefixIcon: false,
+                  fontSize: 13,
+                  labelFontSize: 13,
+                  onChange: (val) {},
+                ),
+              ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,

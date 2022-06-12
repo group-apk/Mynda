@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mynda/provider/appointment_provider.dart';
 import 'package:mynda/provider/dashboard_provider.dart';
 import 'package:mynda/provider/test_notifier.dart';
 import 'package:mynda/provider/user_provider.dart';
@@ -20,6 +21,9 @@ void main() {
       ),
       ChangeNotifierProvider(
         create: (context) => DashboardProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => AppointmentProvider(),
       ),
     ],
     child: const MyApp(),

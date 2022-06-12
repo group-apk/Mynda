@@ -32,10 +32,12 @@ class _DashboardMainState extends State<DashboardMain> {
       const HomepageScreen(),
       (user.user.role == 'staff') ? const HealthTestCategoryScreen() : const CategoryScreen(),
       (user.user.role == 'staff') ? const ArticleListScreen() : const HealthArticleListScreen(),
-      const AppointmentScreen(),
+      (user.user.role == 'staff') ? const AppointmentScreen() : Container(),
+      // const AppointmentScreen(),
       const ProfileScreen()
     ];
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       bottomNavigationBar: bottomNavigator(context),
       endDrawer: const NotificationDrawer(),
       body: Consumer<DashboardProvider>(

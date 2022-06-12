@@ -75,9 +75,10 @@ class _ArticleReadingScreenState extends State<ArticleReadingScreen> {
                   const SizedBox(height: 12),
                   Image.network(
                     '${currentArticleModel.imgurl}',
-                    fit: BoxFit.cover,
-                    width: MediaQuery.of(context).size.width,
-                    height: 250,
+                    // fit: BoxFit.cover,
+                    fit: BoxFit.fitWidth,
+                    // width: MediaQuery.of(context).size.width > 250 ? 250 : MediaQuery.of(context).size.width,
+                    // height: (MediaQuery.of(context).size.height > 250) ? 250 : MediaQuery.of(context).size.height,
                   ),
                   const SizedBox(height: 12),
                   for (int i = 0; i < currentArticleModel.body!.length; i++)

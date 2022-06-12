@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mynda/model/appointment_model.dart';
+import 'package:mynda/model/guest_model.dart';
+import 'package:mynda/provider/appointment_provider.dart';
+import 'package:mynda/provider/user_provider.dart';
+import 'package:mynda/services/api.dart';
+import 'package:provider/provider.dart';
 
 class AddGuestScreen extends StatefulWidget {
   const AddGuestScreen({Key? key}) : super(key: key);
@@ -13,19 +17,43 @@ class AddGuestScreen extends StatefulWidget {
 class _AddGuestScreenState extends State<AddGuestScreen> {
   DateTime selectedDate = DateTime.now();
 
+  List<String> keys = [
+    'Guest Name',
+    'Title',
+    'Category',
+    'Description',
+    'Date',
+  ];
+
+  List<TextEditingController> textControllers = [
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+  ];
+
+  Map<String, TextEditingController> textControllerMap = {
+    'Guest Name': TextEditingController(),
+    'Title': TextEditingController(),
+    'Category': TextEditingController(),
+    'Description': TextEditingController(),
+    'Date': TextEditingController()
+  };
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    textControllerMap['Date'] = TextEditingController(
+        text:
+            '${(selectedDate.day < 10) ? '0${selectedDate.day}' : selectedDate.day}/${(selectedDate.month < 10) ? '0${selectedDate.month}' : selectedDate.month}/${selectedDate.year}');
+  }
+
   @override
   Widget build(BuildContext context) {
     final navigator = Navigator.of(context);
+    final userProvider = Provider.of<UserProvider>(context);
     final formKey = GlobalKey<FormState>();
-    Map<String, TextEditingController> textControllerMap = {
-      'Guest Name': TextEditingController(),
-      'Title': TextEditingController(),
-      'Category': TextEditingController(),
-      'Description': TextEditingController(),
-      'Date': TextEditingController(
-          text:
-              '${(selectedDate.day < 10) ? '0${selectedDate.day}' : selectedDate.day}/${(selectedDate.month < 10) ? '0${selectedDate.month}' : selectedDate.month}/${selectedDate.year}'),
-    };
 
     Widget body = SafeArea(
       child: Column(
@@ -107,34 +135,14 @@ class _AddGuestScreenState extends State<AddGuestScreen> {
                                                 final DateTime? picked = await showDatePicker(
                                                   context: context,
                                                   initialDate: selectedDate, // Refer step 1
-                                                  firstDate: selectedDate,
-                                                  lastDate: selectedDate.add(const Duration(days: 365)),
+                                                  firstDate: DateTime.now(),
+                                                  lastDate: DateTime.now().add(const Duration(days: 365)),
                                                 );
                                                 if (picked != null && picked != selectedDate) {
                                                   setState(() {
                                                     selectedDate = picked;
                                                   });
                                                 }
-                                                // showDialog(
-                                                //     context: context,
-                                                //     builder: (context) =>
-                                                //         DatePickerDialog(
-                                                //             initialDate:
-                                                //                 selectedDate,
-                                                //             firstDate:
-                                                //                 DateTime(2021),
-                                                //             lastDate: DateTime(
-                                                //                 2023)));
-
-                                                // navigator
-                                                //     .push(MaterialPageRoute(
-                                                //   builder: (context) =>
-                                                //       DatePickerDialog(
-                                                //     initialDate: DateTime.now(),
-                                                //     firstDate: DateTime(2021),
-                                                //     lastDate: DateTime(2023),
-                                                //   ),
-                                                // ));
                                               },
                                               child: Row(
                                                 // mainAxisAlignment: MainAxisAlignment.s,
@@ -149,7 +157,6 @@ class _AddGuestScreenState extends State<AddGuestScreen> {
                                               ),
                                             ),
                                           );
-                                          break;
                                       }
 
                                       return Padding(
@@ -166,6 +173,8 @@ class _AddGuestScreenState extends State<AddGuestScreen> {
                                             if (value!.isEmpty) {
                                               return '${textControllerMap.keys.elementAt(index)} must be filled!';
                                             }
+                                            textControllerMap.update(
+                                                textControllerMap.keys.elementAt(index), (val) => TextEditingController(text: value));
                                             return null;
                                           },
                                           decoration: InputDecoration(
@@ -179,44 +188,7 @@ class _AddGuestScreenState extends State<AddGuestScreen> {
                                       );
                                     },
                                   )
-                                ]
-                                    //     textControllerMap.entries.map<Widget>((e) {
-                                    //   EdgeInsetsGeometry padding =
-                                    //       const EdgeInsets.symmetric(
-                                    //           horizontal: 20, vertical: 15);
-
-                                    //   // if (e.key == 'Description') {
-                                    //   //   padding = const EdgeInsets.symmetric(
-                                    //   //       horizontal: 20, vertical: 40);
-                                    //   // }
-                                    //   return Padding(
-                                    //     padding: const EdgeInsets.symmetric(
-                                    //       horizontal: 20,
-                                    //       vertical: 10,
-                                    //     ),
-                                    //     child: TextFormField(
-                                    //       textAlignVertical: TextAlignVertical.top,
-                                    //       maxLines: null,
-                                    //       textAlign: TextAlign.center,
-                                    //       controller: e.value,
-                                    //       validator: (String? value) {
-                                    //         if (value!.isEmpty) {
-                                    //           return '${e.key} must be filled!';
-                                    //         }
-                                    //         return null;
-                                    //       },
-                                    //       decoration: InputDecoration(
-                                    //         contentPadding: padding,
-                                    //         hintText: e.key,
-                                    //         border: OutlineInputBorder(
-                                    //           borderRadius:
-                                    //               BorderRadius.circular(10),
-                                    //         ),
-                                    //       ),
-                                    //     ),
-                                    //   );
-                                    // }).toList(),
-                                    ),
+                                ]),
                               ),
                             ),
                           ),
@@ -246,6 +218,8 @@ class _AddGuestScreenState extends State<AddGuestScreen> {
                                     ),
                                     onPressed: () {
                                       if (formKey.currentState!.validate()) {
+                                        Guest guest = Guest(staffUID: userProvider.user.uid, name: textControllerMap['Guest Name']!.text);
+                                        addGuest(userProvider, guest: guest);
                                         navigator.pop();
                                       }
                                     },
@@ -295,6 +269,10 @@ class _AddGuestScreenState extends State<AddGuestScreen> {
       ),
     );
 
-    return body;
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      resizeToAvoidBottomInset: false,
+      body: body,
+    );
   }
 }

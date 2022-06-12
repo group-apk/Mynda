@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mynda/provider/appointment_provider.dart';
+import 'package:mynda/provider/user_provider.dart';
+import 'package:mynda/services/api.dart';
 import 'package:mynda/view/appointment/add_guest_appointment.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class AppointmentScreen extends StatefulWidget {
@@ -14,11 +18,13 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
   @override
   Widget build(BuildContext context) {
     // final navigator = Navigator.of(context);
+    final appointmentProvider = context.read<AppointmentProvider>();
+    final userProvider = context.read<UserProvider>();
 
-    Widget body = SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Column(
+    Widget body = Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Card(
@@ -88,29 +94,51 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              MaterialButton(
-                                highlightElevation: 0,
-                                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                color: Colors.blue,
-                                textColor: Colors.white,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(5),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 5),
+                                child: MaterialButton(
+                                  highlightElevation: 0,
+                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                  color: Colors.blue,
+                                  textColor: Colors.white,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(5),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    getAppointments(userProvider, appointmentProvider);
+                                    showDialog(context: context, builder: (context) => const AddGuestScreen());
+                                  },
+                                  child: Text(
+                                    'NEW GUEST APPOINTMENT',
+                                    style: GoogleFonts.robotoCondensed(
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
-                                onPressed: () {
-                                  showDialog(context: context, builder: (context) => const AddGuestScreen());
-                                  // navigator.push(
-                                  //   MaterialPageRoute(
-                                  //     builder: (context) =>
-                                  //         const AddGuestScreen(),
-                                  //   ),
-                                  // );
-                                },
-                                child: Text(
-                                  'NEW GUEST APPOINTMENT',
-                                  style: GoogleFonts.robotoCondensed(
-                                    color: Colors.white,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 5),
+                                child: MaterialButton(
+                                  highlightElevation: 0,
+                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                  color: Colors.blue,
+                                  textColor: Colors.white,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(5),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    getGuests(userProvider, appointmentProvider);
+                                    showDialog(context: context, builder: (context) => const AddGuestScreen());
+                                  },
+                                  child: Text(
+                                    'VIEW GUESTS',
+                                    style: GoogleFonts.robotoCondensed(
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -128,8 +156,6 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
       ),
     );
 
-    return Scaffold(
-      body: body,
-    );
+    return body;
   }
 }

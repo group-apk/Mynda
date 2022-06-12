@@ -1,13 +1,47 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:mynda/model/appointment_model.dart';
+import 'package:mynda/model/guest_model.dart';
 import 'package:mynda/model/question_model.dart';
 import 'package:mynda/model/test_model.dart';
 import 'package:mynda/model/user_model.dart';
+import 'package:mynda/provider/appointment_provider.dart';
 import 'package:mynda/provider/test_notifier.dart';
 import 'package:mynda/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:mynda/model/article_model.dart';
 import 'package:mynda/provider/article_notifier.dart';
+
+Future getGuests(UserProvider userProvider, AppointmentProvider appointmentProvider) async {
+  await FirebaseFirestore.instance.collection('guests').get().then((snapshot) {
+    List<Guest> latestGuests = snapshot.docs.map((e) => Guest.fromMap(e.data())).toList();
+    latestGuests.removeWhere((element) => element.staffUID != userProvider.user.uid);
+    // print(latestAppointments.toString());
+    (latestGuests.isNotEmpty) ? appointmentProvider.setGuests(latestGuests) : null;
+    (latestGuests.isNotEmpty) ? print(appointmentProvider.getGuests[0].name) : null;
+  });
+}
+
+Future addGuest(UserProvider userProvider, {required Guest guest}) async {
+  await FirebaseFirestore.instance.collection('guests').add(guest.toMap()).then((doc) async {
+    guest.memberUID = doc.id;
+    await FirebaseFirestore.instance.collection('guests').doc(doc.id).update(guest.toMap());
+    print('Success added guest');
+    print(guest.memberUID);
+    print(guest.name);
+    print(guest.staffUID);
+  });
+}
+
+Future getAppointments(UserProvider userProvider, AppointmentProvider appointmentProvider) async {
+  await FirebaseFirestore.instance.collection('Appointments').get().then((snapshot) {
+    List<AppointmentModel> latestAppointments = snapshot.docs.map((e) => AppointmentModel.fromMap(e.data())).toList();
+    latestAppointments.removeWhere((element) => element.staffUID != userProvider.user.uid);
+    // print(latestAppointments.toString());
+    (latestAppointments.isNotEmpty) ? appointmentProvider.setAppointments(latestAppointments) : null;
+    (latestAppointments.isNotEmpty) ? print(appointmentProvider.getAppointmentList[0].id) : null;
+  });
+}
 
 Future updateProfile(BuildContext context, UserModel userModel) async {
   final user = context.read<UserProvider>();
