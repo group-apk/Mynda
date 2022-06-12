@@ -1,8 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mynda/model/appointment_model.dart';
 import 'package:mynda/model/guest_model.dart';
-import 'package:mynda/provider/appointment_provider.dart';
 import 'package:mynda/provider/user_provider.dart';
 import 'package:mynda/services/api.dart';
 import 'package:provider/provider.dart';
@@ -219,8 +219,22 @@ class _AddGuestScreenState extends State<AddGuestScreen> {
                                     onPressed: () {
                                       if (formKey.currentState!.validate()) {
                                         Guest guest = Guest(staffUID: userProvider.user.uid, name: textControllerMap['Guest Name']!.text);
-                                        addGuest(userProvider, guest: guest);
-                                        navigator.pop();
+                                        addGuest(guest: guest).then((value) => guest).then((value) {
+                                          AppointmentModel article = AppointmentModel(
+                                            staffUID: userProvider.user.uid,
+                                            memberUID: guest.memberUID,
+                                            id: '',
+                                            type: 'guest',
+                                            isApproved: false,
+                                            category: [textControllerMap['Category']!.text],
+                                            description: [textControllerMap['Description']!.text],
+                                            createdAt: Timestamp.now(),
+                                            appointmentAt: Timestamp.fromDate(selectedDate),
+                                          );
+                                          addAppointment(appointmentModel: article).then((value) {
+                                            navigator.pop();
+                                          });
+                                        });
                                       }
                                     },
                                     child: Text(

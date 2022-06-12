@@ -41,28 +41,16 @@ class _DashboardMainState extends State<DashboardMain> {
       // const AppointmentScreen(),
       const ProfileScreen()
     ];
-    return FutureBuilder(
-        future: getArticleFuture(articleProvider).then((value) {
-          articleProvider.currentArticleModel = articleProvider.articleList[articleProvider.dashboardArticle];
-        }),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Container(
-              color: Colors.white,
-            );
-          }
-
-          return Scaffold(
-            resizeToAvoidBottomInset: false,
-            bottomNavigationBar: bottomNavigator(context),
-            endDrawer: const NotificationDrawer(),
-            body: Consumer<DashboardProvider>(
-              builder: (context, value, child) => Center(
-                child: widgetOptions.elementAt(dashboard.index),
-              ),
-            ),
-          );
-        });
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      bottomNavigationBar: bottomNavigator(context),
+      endDrawer: const NotificationDrawer(),
+      body: Consumer<DashboardProvider>(
+        builder: (context, value, child) => Center(
+          child: widgetOptions.elementAt(dashboard.index),
+        ),
+      ),
+    );
   }
 
   Widget bottomNavigator(BuildContext context) {
@@ -180,242 +168,243 @@ class _HomepageScreenState extends State<HomepageScreen> {
       );
     }
 
-    Widget homepageGuestContent = SafeArea(
-      child: Column(
-        children: [
-          Expanded(
-              child: Container(
-            color: Colors.blue[300],
-            child: Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 3,
-                    child: greet(),
-                  ),
-                  Expanded(
-                    child: Builder(builder: (context) {
-                      return MaterialButton(
-                        shape: const CircleBorder(),
-                        color: Colors.blue[100],
-                        onPressed: () {
-                          Scaffold.of(context).openEndDrawer();
-                        },
-                        child: const Icon(
-                          Icons.notifications,
-                          color: Colors.white,
+    Widget homepageGuestContent = FutureBuilder(
+        future: getArticleFuture(articleProvider).then((value) {
+          articleProvider.currentArticleModel = articleProvider.articleList[articleProvider.dashboardArticle];
+        }),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          }
+          return SafeArea(
+            child: Column(
+              children: [
+                Expanded(
+                    child: Container(
+                  color: Colors.blue[300],
+                  child: Padding(
+                    padding: const EdgeInsets.all(32.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: greet(),
                         ),
-                      );
-                    }),
-                    // child: Container(),
-                  ),
-                ],
-              ),
-            ),
-          )),
-          Expanded(
-              child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: Card(
-              margin: const EdgeInsets.symmetric(horizontal: 8.0),
-              elevation: 5,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SizedBox(
-                          height: 200,
-                          child: Image.asset(
-                            "assets/dashboard.png",
-                            fit: BoxFit.contain,
-                          )),
+                        Expanded(
+                          child: Builder(builder: (context) {
+                            return MaterialButton(
+                              shape: const CircleBorder(),
+                              color: Colors.blue[100],
+                              onPressed: () {
+                                Scaffold.of(context).openEndDrawer();
+                              },
+                              child: const Icon(
+                                Icons.notifications,
+                                color: Colors.white,
+                              ),
+                            );
+                          }),
+                          // child: Container(),
+                        ),
+                      ],
                     ),
                   ),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                )),
+                Expanded(
+                    child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: Card(
+                    margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                    elevation: 5,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const Text('Unsure what to do?'),
-                        MaterialButton(
-                          color: Colors.blue[300],
-                          onPressed: () {
-                            // snackbar(text: 'Test will be available soon.');
-                            setState(() {
-                              dashboard.setIndex = 1;
-                            });
-                          },
-                          child: const Text(
-                            'Take a test!',
-                            style: TextStyle(color: Colors.white),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
+                                height: 200,
+                                child: Image.asset(
+                                  "assets/dashboard.png",
+                                  fit: BoxFit.contain,
+                                )),
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text('Unsure what to do?'),
+                              MaterialButton(
+                                color: Colors.blue[300],
+                                onPressed: () {
+                                  // snackbar(text: 'Test will be available soon.');
+                                  setState(() {
+                                    dashboard.setIndex = 1;
+                                  });
+                                },
+                                child: const Text(
+                                  'Take a test!',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
                   ),
-                ],
-              ),
-            ),
-          )),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-              child: Card(
-                margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                elevation: 5,
-                child: Column(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
-                      child: Text('Articles:'),
-                    ),
-                    Expanded(
-                      child: Row(
+                )),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                    child: Card(
+                      margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                      elevation: 5,
+                      child: Column(
                         children: [
-                          Expanded(
-                              child: MaterialButton(
-                                  color: Colors.blue[300],
-                                  onPressed: () {
-                                    // snackbar(text: 'Articles will be available soon.');
-                                    if (articleProvider.dashboardArticle == 0) {
-                                      articleProvider.dashboardArticle = articleProvider.articleList.length - 1;
-                                    } else {
-                                      articleProvider.dashboardArticle = articleProvider.dashboardArticle - 1;
-                                    }
-                                    articleProvider.currentArticleModel = articleProvider.articleList[articleProvider.dashboardArticle];
-                                  },
-                                  shape: const CircleBorder(),
-                                  child: const Icon(
-                                    Icons.arrow_back_ios,
-                                    size: 16,
-                                  ))),
-                          Expanded(
-                            flex: 6,
-                            child: Card(
-                              elevation: 5,
-                              margin: const EdgeInsets.symmetric(vertical: 8.0),
-                              child: SizedBox(
-                                child: Consumer<ArticleNotifier>(
-                                    builder: (context, value, child) => Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            // Text(articleProvider.currentArticleModel.title as String),
-                                            // Text('by: ${articleProvider.currentArticleModel.author as String}'),
-                                            InkWell(
-                                              onTap: () {
-                                                Navigator.push(context, MaterialPageRoute(builder: (context) => const ArticleReadingScreen()));
-                                              },
-                                              child: Container(
-                                                padding: const EdgeInsets.symmetric(horizontal: 8),
-                                                height: 150,
-                                                child: ClipRRect(
-                                                  borderRadius: BorderRadius.circular(8),
-                                                  child: Stack(
-                                                    children: [
-                                                      //Container(
-                                                      Image.network(
-                                                        '${articleProvider.currentArticleModel.imgurl}',
-                                                        fit: BoxFit.cover,
-                                                        //color: RandomColor.getColor(options),
-                                                        width: MediaQuery.of(context).size.width,
-                                                        height: 250,
-                                                      ),
-                                                      Container(
-                                                        color: Colors.black26,
-                                                        child: Center(
-                                                          child: Column(
-                                                            mainAxisAlignment: MainAxisAlignment.center,
-                                                            children: [
-                                                              Text(
-                                                                articleProvider.currentArticleModel.title as String,
-                                                                textAlign: TextAlign.center,
-                                                                style:
-                                                                    const TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w500),
-                                                              ),
-                                                              Text(
-                                                                'by ${articleProvider.currentArticleModel.author}',
-                                                                textAlign: TextAlign.center,
-                                                                style:
-                                                                    const TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w500),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        )),
-                              ),
-                            ),
+                          const Padding(
+                            padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
+                            child: Text('Articles:'),
                           ),
                           Expanded(
-                              child: MaterialButton(
-                                  color: Colors.blue[300],
-                                  onPressed: () {
-                                    // snackbar(text: 'Articles will be available soon.');
-                                    if (articleProvider.dashboardArticle == articleProvider.articleList.length - 1) {
-                                      articleProvider.dashboardArticle = 0;
-                                    } else {
-                                      articleProvider.dashboardArticle = articleProvider.dashboardArticle + 1;
-                                    }
-                                    articleProvider.currentArticleModel = articleProvider.articleList[articleProvider.dashboardArticle];
-                                  },
-                                  shape: const CircleBorder(),
-                                  child: const Icon(
-                                    Icons.arrow_forward_ios,
-                                    size: 16,
-                                  ))),
-                          // Expanded(
-                          //     child: MaterialButton(
-                          //         color: Colors.blue[300],
-                          //         onPressed: () {
-                          //           snackbar(text: 'Articles will be available soon.');
-                          //         },
-                          //         shape: const CircleBorder(),
-                          //         child: const Icon(
-                          //           Icons.arrow_back_ios,
-                          //           size: 16,
-                          //         ))),
-                          // const Expanded(
-                          //   flex: 6,
-                          //   child: Card(
-                          //     elevation: 5,
-                          //     margin: EdgeInsets.symmetric(vertical: 8.0),
-                          //     child: SizedBox(
-                          //       child: Center(child: Text('Articles will be here soon!')),
-                          //     ),
-                          //   ),
-                          // ),
-                          // Expanded(
-                          //     child: MaterialButton(
-                          //         color: Colors.blue[300],
-                          //         onPressed: () {
-                          //           snackbar(text: 'Articles will be available soon.');
-                          //         },
-                          //         shape: const CircleBorder(),
-                          //         child: const Icon(
-                          //           Icons.arrow_forward_ios,
-                          //           size: 16,
-                          //         ))),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                    child: MaterialButton(
+                                        color: Colors.blue[300],
+                                        onPressed: () {
+                                          // snackbar(text: 'Articles will be available soon.');
+                                          if (articleProvider.dashboardArticle == 0) {
+                                            articleProvider.dashboardArticle = articleProvider.articleList.length - 1;
+                                          } else {
+                                            articleProvider.dashboardArticle = articleProvider.dashboardArticle - 1;
+                                          }
+                                          articleProvider.currentArticleModel = articleProvider.articleList[articleProvider.dashboardArticle];
+                                        },
+                                        shape: const CircleBorder(),
+                                        child: const Icon(
+                                          Icons.arrow_back_ios,
+                                          size: 16,
+                                        ))),
+                                Expanded(
+                                  flex: 6,
+                                  child: Card(
+                                    elevation: 5,
+                                    margin: const EdgeInsets.symmetric(vertical: 8.0),
+                                    child: SizedBox(
+                                      child: Consumer<ArticleNotifier>(
+                                          builder: (context, value, child) => InkWell(
+                                                onTap: () {
+                                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const ArticleReadingScreen()));
+                                                },
+                                                child: Container(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                                                  height: 150,
+                                                  child: ClipRRect(
+                                                    borderRadius: BorderRadius.circular(8),
+                                                    child: Stack(
+                                                      children: [
+                                                        //Container(
+                                                        Image.network(
+                                                          '${articleProvider.currentArticleModel.imgurl}',
+                                                          fit: BoxFit.cover,
+                                                          //color: RandomColor.getColor(options),
+                                                          width: MediaQuery.of(context).size.width,
+                                                          height: 250,
+                                                        ),
+                                                        Container(
+                                                          color: Colors.black26,
+                                                          child: Center(
+                                                            child: Column(
+                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              children: [
+                                                                Text(
+                                                                  articleProvider.currentArticleModel.title as String,
+                                                                  textAlign: TextAlign.center,
+                                                                  style:
+                                                                      const TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w500),
+                                                                ),
+                                                                Text(
+                                                                  'by ${articleProvider.currentArticleModel.author}',
+                                                                  textAlign: TextAlign.center,
+                                                                  style:
+                                                                      const TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w500),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              )),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                    child: MaterialButton(
+                                        color: Colors.blue[300],
+                                        onPressed: () {
+                                          // snackbar(text: 'Articles will be available soon.');
+                                          if (articleProvider.dashboardArticle == articleProvider.articleList.length - 1) {
+                                            articleProvider.dashboardArticle = 0;
+                                          } else {
+                                            articleProvider.dashboardArticle = articleProvider.dashboardArticle + 1;
+                                          }
+                                          articleProvider.currentArticleModel = articleProvider.articleList[articleProvider.dashboardArticle];
+                                        },
+                                        shape: const CircleBorder(),
+                                        child: const Icon(
+                                          Icons.arrow_forward_ios,
+                                          size: 16,
+                                        ))),
+                                // Expanded(
+                                //     child: MaterialButton(
+                                //         color: Colors.blue[300],
+                                //         onPressed: () {
+                                //           snackbar(text: 'Articles will be available soon.');
+                                //         },
+                                //         shape: const CircleBorder(),
+                                //         child: const Icon(
+                                //           Icons.arrow_back_ios,
+                                //           size: 16,
+                                //         ))),
+                                // const Expanded(
+                                //   flex: 6,
+                                //   child: Card(
+                                //     elevation: 5,
+                                //     margin: EdgeInsets.symmetric(vertical: 8.0),
+                                //     child: SizedBox(
+                                //       child: Center(child: Text('Articles will be here soon!')),
+                                //     ),
+                                //   ),
+                                // ),
+                                // Expanded(
+                                //     child: MaterialButton(
+                                //         color: Colors.blue[300],
+                                //         onPressed: () {
+                                //           snackbar(text: 'Articles will be available soon.');
+                                //         },
+                                //         shape: const CircleBorder(),
+                                //         child: const Icon(
+                                //           Icons.arrow_forward_ios,
+                                //           size: 16,
+                                //         ))),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
-          ),
-        ],
-      ),
-    );
+          );
+        });
 
     Widget homepageMemberContent = WillPopScope(
       onWillPop: (() async => false),

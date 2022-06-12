@@ -12,6 +12,18 @@ import 'package:provider/provider.dart';
 import 'package:mynda/model/article_model.dart';
 import 'package:mynda/provider/article_notifier.dart';
 
+Future<AppointmentModel> addAppointment({required AppointmentModel appointmentModel}) async {
+  await FirebaseFirestore.instance.collection('Appointments').add(appointmentModel.toMap()).then((doc) async {
+    appointmentModel.id = doc.id;
+    await FirebaseFirestore.instance.collection('Appointments').doc(doc.id).update(appointmentModel.toMap());
+    print('Success added appointment');
+    print(appointmentModel.memberUID);
+    print(appointmentModel.id);
+    print(appointmentModel.staffUID);
+  });
+  return appointmentModel;
+}
+
 Future getGuests(UserProvider userProvider, AppointmentProvider appointmentProvider) async {
   await FirebaseFirestore.instance.collection('guests').get().then((snapshot) {
     List<Guest> latestGuests = snapshot.docs.map((e) => Guest.fromMap(e.data())).toList();
@@ -22,7 +34,7 @@ Future getGuests(UserProvider userProvider, AppointmentProvider appointmentProvi
   });
 }
 
-Future addGuest(UserProvider userProvider, {required Guest guest}) async {
+Future<Guest> addGuest({required Guest guest}) async {
   await FirebaseFirestore.instance.collection('guests').add(guest.toMap()).then((doc) async {
     guest.memberUID = doc.id;
     await FirebaseFirestore.instance.collection('guests').doc(doc.id).update(guest.toMap());
@@ -31,6 +43,7 @@ Future addGuest(UserProvider userProvider, {required Guest guest}) async {
     print(guest.name);
     print(guest.staffUID);
   });
+  return guest;
 }
 
 Future getAppointments(UserProvider userProvider, AppointmentProvider appointmentProvider) async {
