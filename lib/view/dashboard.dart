@@ -1,9 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mynda/provider/article_notifier.dart';
 import 'package:mynda/provider/dashboard_provider.dart';
 import 'package:mynda/provider/user_provider.dart';
+import 'package:mynda/services/api.dart';
 import 'package:mynda/view/appointment/appointment.dart';
 import 'package:mynda/view/article/article_view_screen.dart';
+import 'package:mynda/view/article/read_article.dart';
 import 'package:mynda/view/article_staff/article_list_screen.dart';
 import 'package:mynda/view/login_screen.dart';
 import 'package:mynda/view/profile/profile_screen.dart';
@@ -26,8 +29,10 @@ class _DashboardMainState extends State<DashboardMain> {
 
   @override
   Widget build(BuildContext context) {
-    var user = context.read<UserProvider>();
-    var dashboard = context.read<DashboardProvider>();
+    final user = context.read<UserProvider>();
+    final dashboard = context.read<DashboardProvider>();
+    final articleProvider = context.read<ArticleNotifier>();
+
     final List<Widget> widgetOptions = [
       const HomepageScreen(),
       (user.user.role == 'staff') ? const HealthTestCategoryScreen() : const CategoryScreen(),
@@ -36,20 +41,33 @@ class _DashboardMainState extends State<DashboardMain> {
       // const AppointmentScreen(),
       const ProfileScreen()
     ];
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      bottomNavigationBar: bottomNavigator(context),
-      endDrawer: const NotificationDrawer(),
-      body: Consumer<DashboardProvider>(
-        builder: (context, value, child) => Center(
-          child: widgetOptions.elementAt(dashboard.index),
-        ),
-      ),
-    );
+    return FutureBuilder(
+        future: getArticleFuture(articleProvider).then((value) {
+          articleProvider.currentArticleModel = articleProvider.articleList[articleProvider.dashboardArticle];
+        }),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Container(
+              color: Colors.white,
+            );
+          }
+
+          return Scaffold(
+            resizeToAvoidBottomInset: false,
+            bottomNavigationBar: bottomNavigator(context),
+            endDrawer: const NotificationDrawer(),
+            body: Consumer<DashboardProvider>(
+              builder: (context, value, child) => Center(
+                child: widgetOptions.elementAt(dashboard.index),
+              ),
+            ),
+          );
+        });
   }
 
   Widget bottomNavigator(BuildContext context) {
     var dashboard = context.read<DashboardProvider>();
+
     return Consumer<DashboardProvider>(
       builder: (context, value, child) => BottomNavigationBar(
         currentIndex: dashboard.index,
@@ -107,8 +125,9 @@ class HomepageScreen extends StatefulWidget {
 class _HomepageScreenState extends State<HomepageScreen> {
   @override
   Widget build(BuildContext context) {
-    var user = context.read<UserProvider>();
-    var dashboard = context.read<DashboardProvider>();
+    final user = context.read<UserProvider>();
+    final dashboard = context.read<DashboardProvider>();
+    final articleProvider = context.read<ArticleNotifier>();
 
     void snackbar({required String text, Duration duration = const Duration(seconds: 1)}) {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -260,20 +279,80 @@ class _HomepageScreenState extends State<HomepageScreen> {
                               child: MaterialButton(
                                   color: Colors.blue[300],
                                   onPressed: () {
-                                    snackbar(text: 'Articles will be available soon.');
+                                    // snackbar(text: 'Articles will be available soon.');
+                                    if (articleProvider.dashboardArticle == 0) {
+                                      articleProvider.dashboardArticle = articleProvider.articleList.length - 1;
+                                    } else {
+                                      articleProvider.dashboardArticle = articleProvider.dashboardArticle - 1;
+                                    }
+                                    articleProvider.currentArticleModel = articleProvider.articleList[articleProvider.dashboardArticle];
                                   },
                                   shape: const CircleBorder(),
                                   child: const Icon(
                                     Icons.arrow_back_ios,
                                     size: 16,
                                   ))),
-                          const Expanded(
+                          Expanded(
                             flex: 6,
                             child: Card(
                               elevation: 5,
-                              margin: EdgeInsets.symmetric(vertical: 8.0),
+                              margin: const EdgeInsets.symmetric(vertical: 8.0),
                               child: SizedBox(
-                                child: Center(child: Text('Articles will be here soon!')),
+                                child: Consumer<ArticleNotifier>(
+                                    builder: (context, value, child) => Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            // Text(articleProvider.currentArticleModel.title as String),
+                                            // Text('by: ${articleProvider.currentArticleModel.author as String}'),
+                                            InkWell(
+                                              onTap: () {
+                                                Navigator.push(context, MaterialPageRoute(builder: (context) => const ArticleReadingScreen()));
+                                              },
+                                              child: Container(
+                                                padding: const EdgeInsets.symmetric(horizontal: 8),
+                                                height: 150,
+                                                child: ClipRRect(
+                                                  borderRadius: BorderRadius.circular(8),
+                                                  child: Stack(
+                                                    children: [
+                                                      //Container(
+                                                      Image.network(
+                                                        '${articleProvider.currentArticleModel.imgurl}',
+                                                        fit: BoxFit.cover,
+                                                        //color: RandomColor.getColor(options),
+                                                        width: MediaQuery.of(context).size.width,
+                                                        height: 250,
+                                                      ),
+                                                      Container(
+                                                        color: Colors.black26,
+                                                        child: Center(
+                                                          child: Column(
+                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                            children: [
+                                                              Text(
+                                                                articleProvider.currentArticleModel.title as String,
+                                                                textAlign: TextAlign.center,
+                                                                style:
+                                                                    const TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w500),
+                                                              ),
+                                                              Text(
+                                                                'by ${articleProvider.currentArticleModel.author}',
+                                                                textAlign: TextAlign.center,
+                                                                style:
+                                                                    const TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w500),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        )),
                               ),
                             ),
                           ),
@@ -281,13 +360,51 @@ class _HomepageScreenState extends State<HomepageScreen> {
                               child: MaterialButton(
                                   color: Colors.blue[300],
                                   onPressed: () {
-                                    snackbar(text: 'Articles will be available soon.');
+                                    // snackbar(text: 'Articles will be available soon.');
+                                    if (articleProvider.dashboardArticle == articleProvider.articleList.length - 1) {
+                                      articleProvider.dashboardArticle = 0;
+                                    } else {
+                                      articleProvider.dashboardArticle = articleProvider.dashboardArticle + 1;
+                                    }
+                                    articleProvider.currentArticleModel = articleProvider.articleList[articleProvider.dashboardArticle];
                                   },
                                   shape: const CircleBorder(),
                                   child: const Icon(
                                     Icons.arrow_forward_ios,
                                     size: 16,
                                   ))),
+                          // Expanded(
+                          //     child: MaterialButton(
+                          //         color: Colors.blue[300],
+                          //         onPressed: () {
+                          //           snackbar(text: 'Articles will be available soon.');
+                          //         },
+                          //         shape: const CircleBorder(),
+                          //         child: const Icon(
+                          //           Icons.arrow_back_ios,
+                          //           size: 16,
+                          //         ))),
+                          // const Expanded(
+                          //   flex: 6,
+                          //   child: Card(
+                          //     elevation: 5,
+                          //     margin: EdgeInsets.symmetric(vertical: 8.0),
+                          //     child: SizedBox(
+                          //       child: Center(child: Text('Articles will be here soon!')),
+                          //     ),
+                          //   ),
+                          // ),
+                          // Expanded(
+                          //     child: MaterialButton(
+                          //         color: Colors.blue[300],
+                          //         onPressed: () {
+                          //           snackbar(text: 'Articles will be available soon.');
+                          //         },
+                          //         shape: const CircleBorder(),
+                          //         child: const Icon(
+                          //           Icons.arrow_forward_ios,
+                          //           size: 16,
+                          //         ))),
                         ],
                       ),
                     ),
