@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mynda/provider/article_notifier.dart';
 import 'package:mynda/services/api.dart';
@@ -89,11 +90,11 @@ class _HealthArticleListScreenState extends State<HealthArticleListScreen> {
                                   borderRadius: BorderRadius.circular(8),
                                   child: Stack(
                                     children: [
-                                      //Container(
-                                      Image.network(
-                                       '${e.imgurl}',
-                                      fit: BoxFit.cover,
-                                      //color: RandomColor.getColor(options),
+                                      Container(
+                                        color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
+                                      // Image.network(
+                                      //  '${e.imgurl}',
+                                      // fit: BoxFit.cover,
                                       width: MediaQuery.of(context).size.width,
                                       height: 250,
                                       ),
