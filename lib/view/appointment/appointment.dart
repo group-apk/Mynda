@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mynda/model/appointment_model.dart';
 import 'package:mynda/provider/appointment_provider.dart';
 import 'package:mynda/provider/user_provider.dart';
 import 'package:mynda/services/api.dart';
@@ -15,6 +16,28 @@ class AppointmentScreen extends StatefulWidget {
 }
 
 class _AppointmentScreenState extends State<AppointmentScreen> {
+  DateTime _selectedCalendarDate = DateTime.now();
+  DateTime _focusedCalendarDate = DateTime.now();
+
+  late Map<DateTime, List<AppointmentModel>> mySelectedEvents;
+
+  @override
+  void initState() {
+    _selectedCalendarDate = _focusedCalendarDate;
+    mySelectedEvents = {
+      DateTime(2022, 6, 16): [
+        AppointmentModel(
+          description: ['wuu'],
+        )
+      ],
+    };
+    super.initState();
+  }
+
+  List<AppointmentModel> _listOfDayEvents(DateTime dateTime) {
+    return mySelectedEvents[dateTime] ?? [];
+  }
+
   @override
   Widget build(BuildContext context) {
     // final navigator = Navigator.of(context);
@@ -66,7 +89,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                           child: TableCalendar(
                             firstDay: DateTime.utc(2010, 10, 16),
                             lastDay: DateTime.utc(2030, 3, 14),
-                            focusedDay: DateTime.now(),
+                            focusedDay: _focusedCalendarDate,
                             headerStyle: HeaderStyle(
                               titleTextStyle: GoogleFonts.robotoCondensed(),
                               formatButtonTextStyle: GoogleFonts.robotoCondensed(),
@@ -80,10 +103,40 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                               disabledTextStyle: GoogleFonts.robotoCondensed(),
                               selectedTextStyle: GoogleFonts.robotoCondensed(),
                             ),
-                            calendarFormat: CalendarFormat.month,
+                            calendarFormat: CalendarFormat.week,
+                            selectedDayPredicate: (currentSelectedDate) {
+                              // as per the documentation 'selectedDayPredicate' needs to determine current selected day.
+                              return (isSameDay(_selectedCalendarDate, currentSelectedDate));
+                            },
+                            onDaySelected: (selectedDay, focusedDay) {
+                              // as per the documentation
+                              if (!isSameDay(_selectedCalendarDate, selectedDay)) {
+                                setState(() {
+                                  _selectedCalendarDate = selectedDay;
+                                  _focusedCalendarDate = focusedDay;
+                                });
+                              }
+                            },
+                            eventLoader: _listOfDayEvents,
                           ),
                         ),
                       ),
+                    ),
+                    Column(
+                      children: _listOfDayEvents(_selectedCalendarDate)
+                          .map(
+                            (myEvents) => ListTile(
+                              leading: const Icon(
+                                Icons.done,
+                              ),
+                              title: Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: Text('Event Title:   ${myEvents.category![0]}'),
+                              ),
+                              subtitle: Text('Description:   ${myEvents.description![0]}'),
+                            ),
+                          )
+                          .toList(),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 10, left: 10.0, top: 10),

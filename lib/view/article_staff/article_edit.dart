@@ -190,10 +190,29 @@ class _EditArticleScreenState extends State<EditArticleScreen> {
                         textColor: Colors.white,
                         shape: const CircleBorder(),
                         onPressed: () {
-                          deleteArticle(currentArticleModel).then((value) {
-                            Fluttertoast.showToast(msg: "Successfully deleted article");
-                            Navigator.of(context).pop();
-                          });
+                          showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                    content: const Text('Are you sure you want to delete this article?'),
+                                    actions: [
+                                      TextButton(
+                                        child: const Text('Cancel'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: const Text('Confirm'),
+                                        onPressed: () {
+                                          deleteArticle(currentArticleModel).then((value) {
+                                            Fluttertoast.showToast(msg: "Successfully deleted article");
+                                            Navigator.of(context).pop();
+                                            Navigator.of(context).pop();
+                                          });
+                                        },
+                                      ),
+                                    ],
+                                  ));
                         },
                         child: const Icon(Icons.delete),
                       ),
