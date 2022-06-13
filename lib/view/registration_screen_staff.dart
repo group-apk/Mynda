@@ -10,8 +10,7 @@ class RegistrationScreenStaff extends StatefulWidget {
   const RegistrationScreenStaff({Key? key}) : super(key: key);
 
   @override
-  State<RegistrationScreenStaff> createState() =>
-      _RegistrationScreenStaffState();
+  State<RegistrationScreenStaff> createState() => _RegistrationScreenStaffState();
 }
 
 class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
@@ -68,8 +67,7 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
             return ("Please Enter Your Email");
           }
           // reg expression for email validation
-          if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
-              .hasMatch(value)) {
+          if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(value)) {
             return ("Please Enter a valid email");
           }
           return null;
@@ -117,8 +115,7 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
         controller: confirmPasswordEditingController,
         obscureText: true,
         validator: (value) {
-          if (confirmPasswordEditingController.text !=
-              passwordEditingController.text) {
+          if (confirmPasswordEditingController.text != passwordEditingController.text) {
             return "Password don't match";
           }
           return null;
@@ -259,8 +256,7 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
         child: const Text(
           "Sign Up",
           textAlign: TextAlign.center,
-          style: const TextStyle(
-              fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -345,10 +341,7 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
 
   void signUp(String email, String password) async {
     if (_formKey.currentState!.validate()) {
-      await _auth
-          .createUserWithEmailAndPassword(email: email, password: password)
-          .then((value) => {postDetailsToFirestore()})
-          .catchError((e) {
+      await _auth.createUserWithEmailAndPassword(email: email, password: password).then((value) => {postDetailsToFirestore()}).catchError((e) {
         Fluttertoast.showToast(msg: e!.message);
       });
     }
@@ -361,6 +354,7 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
 
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = _auth.currentUser;
+    final navigator = Navigator.of(context);
 
     UserModel userModel = UserModel();
 
@@ -375,14 +369,10 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
     userModel.role = "staff";
     userModel.academic = academicEditingController.text;
 
-    await firebaseFirestore
-        .collection("users")
-        .doc(user.uid)
-        .set(userModel.toMap());
+    await firebaseFirestore.collection("users").doc(user.uid).set(userModel.toMap());
     Fluttertoast.showToast(msg: "Account created successfully! Please Login");
 
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+    navigator.pushReplacement(MaterialPageRoute(builder: (context) => const LoginScreen()));
   }
 
   String? selectedValue3;
@@ -417,16 +407,11 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
 
   List<DropdownMenuItem<String>> get regionItems {
     List<DropdownMenuItem<String>> menuItems = [
-      const DropdownMenuItem(
-          value: "Northern Region", child: Text("Northern Region")),
-      const DropdownMenuItem(
-          value: "Eastern Region", child: const Text("Eastern Region")),
-      const DropdownMenuItem(
-          value: "Central Region", child: Text("Central Region")),
-      const DropdownMenuItem(
-          value: "Southern Region", child: Text("Southern Region")),
-      const DropdownMenuItem(
-          value: "East Malaysia", child: const Text("East Malaysia")),
+      const DropdownMenuItem(value: "Northern Region", child: Text("Northern Region")),
+      const DropdownMenuItem(value: "Eastern Region", child: Text("Eastern Region")),
+      const DropdownMenuItem(value: "Central Region", child: Text("Central Region")),
+      const DropdownMenuItem(value: "Southern Region", child: Text("Southern Region")),
+      const DropdownMenuItem(value: "East Malaysia", child: Text("East Malaysia")),
     ];
     return menuItems;
   }
@@ -435,8 +420,7 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
     List<DropdownMenuItem<String>> menuItems = [
       const DropdownMenuItem(value: "Perlis", child: Text("Perlis")),
       const DropdownMenuItem(value: "Kedah", child: Text("Kedah")),
-      const DropdownMenuItem(
-          value: "Pulau Pinang", child: Text("Pulau Pinang")),
+      const DropdownMenuItem(value: "Pulau Pinang", child: Text("Pulau Pinang")),
       const DropdownMenuItem(value: "Perak", child: Text("Perak")),
     ];
     return menuItems;
@@ -446,7 +430,7 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
     List<DropdownMenuItem<String>> menuItems = [
       const DropdownMenuItem(value: "Kelantan", child: Text("Kelantan")),
       const DropdownMenuItem(value: "Terengganu", child: Text("Terengganu")),
-      const DropdownMenuItem(value: "Pahang", child: const Text("Pahang")),
+      const DropdownMenuItem(value: "Pahang", child: Text("Pahang")),
     ];
     return menuItems;
   }
@@ -454,16 +438,14 @@ class _RegistrationScreenStaffState extends State<RegistrationScreenStaff> {
   List<DropdownMenuItem<String>> get centralStateItems {
     List<DropdownMenuItem<String>> menuItems = [
       const DropdownMenuItem(value: "Selangor", child: Text("Selangor")),
-      const DropdownMenuItem(
-          value: "Wilayah Perkeutuan", child: Text("Wilayah Perkeutuan")),
+      const DropdownMenuItem(value: "Wilayah Perkeutuan", child: Text("Wilayah Perkeutuan")),
     ];
     return menuItems;
   }
 
   List<DropdownMenuItem<String>> get southernStateItems {
     List<DropdownMenuItem<String>> menuItems = [
-      const DropdownMenuItem(
-          value: "Negeri Sembilan", child: Text("Negeri Sembilan")),
+      const DropdownMenuItem(value: "Negeri Sembilan", child: Text("Negeri Sembilan")),
       const DropdownMenuItem(value: "Melaka", child: Text("Melaka")),
       const DropdownMenuItem(value: "Johor", child: Text("Johor")),
     ];

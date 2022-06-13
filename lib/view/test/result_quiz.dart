@@ -9,59 +9,46 @@ import '../../model/question_model.dart';
 class ResultScreen extends StatefulWidget {
 //  final List<String> dropdownValueAnswer = []; //simpan list of answer
   //List<QuestionModel> dropdownValueQuestion=[]; //simpan list of question utk dapatkan option
-  const ResultScreen({Key? key, required this.dropdownValueAnswer,required this.dropdownValueQuestion, required this.namaTest})
-      : super(key: key);
+  const ResultScreen({Key? key, required this.dropdownValueAnswer, required this.dropdownValueQuestion, required this.namaTest}) : super(key: key);
   final List<String> dropdownValueAnswer;
   final List<QuestionModel>? dropdownValueQuestion;
   final String namaTest;
   @override
-  _ResultScreenState createState() => _ResultScreenState();
+  State<ResultScreen> createState() => _ResultScreenState();
 }
 
 class _ResultScreenState extends State<ResultScreen> {
   int score = 0;
-  String result="";
-
+  String result = "";
 
   void calcScore() {
-    for(int i=0;i<widget.dropdownValueQuestion!.length;i++)
-    {
-      for(int j=0;j<widget.dropdownValueQuestion![i].option!.length;j++){
-        if(widget.dropdownValueAnswer[i]==widget.dropdownValueQuestion![i].option![j])
-        {
-          score=score+j;
+    for (int i = 0; i < widget.dropdownValueQuestion!.length; i++) {
+      for (int j = 0; j < widget.dropdownValueQuestion![i].option!.length; j++) {
+        if (widget.dropdownValueAnswer[i] == widget.dropdownValueQuestion![i].option![j]) {
+          score = score + j;
         }
       }
     }
-
   }
 
-
-  void resultText()
-  {
-    if(score<=0)
-    {
-      result="No";
+  void resultText() {
+    if (score <= 0) {
+      result = "No";
     }
-    if(score>=1 && score<=4)
-    {
-      result="Minimal";
+    if (score >= 1 && score <= 4) {
+      result = "Minimal";
     }
-    if(score>=5 && score<=9)
-    {
-      result="Mild";
+    if (score >= 5 && score <= 9) {
+      result = "Mild";
     }
-    if(score>=10 && score<=14)
-    {
-      result="Moderate";
+    if (score >= 10 && score <= 14) {
+      result = "Moderate";
     }
-    if(score>=15 && score<=19)
-    {
-      result="Moderately Severe";
+    if (score >= 15 && score <= 19) {
+      result = "Moderately Severe";
     }
-    if(score>=20 && score<=27)
-    {
-      result="Severe";
+    if (score >= 20 && score <= 27) {
+      result = "Severe";
     }
   }
 
@@ -75,7 +62,7 @@ class _ResultScreenState extends State<ResultScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-           SizedBox(
+          SizedBox(
             width: double.infinity,
             child: Text(
               "$result Symptom",

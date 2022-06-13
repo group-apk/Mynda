@@ -4,7 +4,6 @@ import 'package:mynda/model/test_model.dart';
 import 'package:mynda/provider/test_notifier.dart';
 import 'package:mynda/services/api.dart';
 import 'package:mynda/view/test_staff/question_edit.dart';
-import 'package:mynda/view/test_staff/test_category_screen.dart';
 import 'package:provider/provider.dart';
 
 class EditTestScreen extends StatefulWidget {
@@ -20,11 +19,9 @@ class _EditTestScreenState extends State<EditTestScreen> {
 
   @override
   Widget build(BuildContext context) {
-    TestNotifier testNotifier =
-        Provider.of<TestNotifier>(context, listen: false);
+    TestNotifier testNotifier = Provider.of<TestNotifier>(context, listen: false);
     TestModel currentTestModel = testNotifier.currentTestModel;
-    final testNameEditingController =
-        TextEditingController(text: currentTestModel.quizTitle);
+    final testNameEditingController = TextEditingController(text: currentTestModel.quizTitle);
 
     Future updateTest(TestModel currentTestModel) async {
       updateExistingTest(currentTestModel);
@@ -45,22 +42,17 @@ class _EditTestScreenState extends State<EditTestScreen> {
         onPressed: () {
           // print(_currentTestModel.questions!.length);
           if (_formKey.currentState!.validate()) {
-            addNewQuestion(currentTestModel, currentTestModel.questions!.length)
-                .then((value) => currentTestModel = value);
+            addNewQuestion(currentTestModel, currentTestModel.questions!.length).then((value) => currentTestModel = value);
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => EditQuestionScreen(
-                        index: currentTestModel.questions!.length - 1,
-                        isAdd: true,
-                        addAns: false)));
+                    builder: (context) => EditQuestionScreen(index: currentTestModel.questions!.length - 1, isAdd: true, addAns: false)));
           }
         },
         child: const Text(
           "Add New Question",
           textAlign: TextAlign.center,
-          style: TextStyle(
-              fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -83,16 +75,14 @@ class _EditTestScreenState extends State<EditTestScreen> {
                         itemCount: currentTestModel.questions?.length ?? 0,
                         itemBuilder: ((context, i) => ListTile(
                               title: Text('Question ${i + 1}'),
-                              subtitle: Text(
-                                  '${currentTestModel.questions![i].question}'),
+                              subtitle: Text('${currentTestModel.questions![i].question}'),
                               trailing: const Icon(Icons.edit),
                               onTap: () {
                                 // print(_currentTestModel.questions![i].qid);
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            EditQuestionScreen(
+                                        builder: (context) => EditQuestionScreen(
                                               index: i,
                                               isAdd: false,
                                               addAns: false,
@@ -128,15 +118,15 @@ class _EditTestScreenState extends State<EditTestScreen> {
         onSaved: (value) {
           testNameEditingController.text = value!;
         },
-        decoration: const InputDecoration(
-            labelText: 'Test Name',
-            suffixIcon: Align(
-                widthFactor: 1.0, heightFactor: 1.0, child: Icon(Icons.edit))),
+        decoration: const InputDecoration(labelText: 'Test Name', suffixIcon: Align(widthFactor: 1.0, heightFactor: 1.0, child: Icon(Icons.edit))),
       );
     }
 
-    Widget cancelButton =
-        TextButton(onPressed: () {Navigator.of(context).pop();}, child: const Text("Cancel"));
+    Widget cancelButton = TextButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: const Text("Cancel"));
 
     Widget continueButton = TextButton(
         onPressed: () {
@@ -153,8 +143,7 @@ class _EditTestScreenState extends State<EditTestScreen> {
 
     AlertDialog alert = AlertDialog(
       title: const Text("Delete Confirmation"),
-      content: Text(
-          "Are you sure you want to delete ${testNameEditingController.text} test?"),
+      content: Text("Are you sure you want to delete ${testNameEditingController.text} test?"),
       actions: [
         cancelButton,
         continueButton,
@@ -192,9 +181,8 @@ class _EditTestScreenState extends State<EditTestScreen> {
                   updateTest(currentTestModel).then((value) {
                     Fluttertoast.showToast(msg: "Test name updated");
                     // Navigator.of(context).pop();
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: ((context) => EditTestScreen(
-                            testName: testNameEditingController.text))));
+                    Navigator.of(context)
+                        .pushReplacement(MaterialPageRoute(builder: ((context) => EditTestScreen(testName: testNameEditingController.text))));
                   });
                 }
               },
@@ -206,8 +194,7 @@ class _EditTestScreenState extends State<EditTestScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: const Text('Test Edit'),
-        titleTextStyle: const TextStyle(
-            color: Colors.blue, fontSize: 18.0, fontWeight: FontWeight.bold),
+        titleTextStyle: const TextStyle(color: Colors.blue, fontSize: 18.0, fontWeight: FontWeight.bold),
         elevation: 2,
         leading: IconButton(
           icon: const Icon(
@@ -232,10 +219,7 @@ class _EditTestScreenState extends State<EditTestScreen> {
                     Text(
                       "Edit ${widget.testName} Test",
                       // "Edit Test",
-                      style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 22.0,
-                          fontWeight: FontWeight.bold),
+                      style: const TextStyle(color: Colors.black, fontSize: 22.0, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 10),
                     testNameField(currentTestModel),
@@ -244,10 +228,7 @@ class _EditTestScreenState extends State<EditTestScreen> {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         "List of questions in this test",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 22.0,
-                            fontWeight: FontWeight.bold),
+                        style: TextStyle(color: Colors.black, fontSize: 22.0, fontWeight: FontWeight.bold),
                       ),
                     ),
                     const SizedBox(height: 10),

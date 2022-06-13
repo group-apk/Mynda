@@ -460,7 +460,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                                             userMapFiltered[e.key]!.text = val!;
                                                             userMapFiltered.update(e.key, (value) => TextEditingController(text: val));
                                                             regionListener.value = userMapFiltered[e.key]!.text;
-                                                            print(regionListener.value);
+                                                            // print(regionListener.value);
 
                                                             String state = northState[0].value.toString();
                                                             switch (userMapFiltered['Region']!.text) {

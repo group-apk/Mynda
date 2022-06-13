@@ -32,49 +32,43 @@ class _QuestionPlay extends State<QuestionPlay> {
 
   @override
   Widget build(BuildContext context) {
-    TestNotifier testNotifier =
-        Provider.of<TestNotifier>(context, listen: false);
-    TestModel _currentTestModel = testNotifier.currentTestModel;
+    TestNotifier testNotifier = Provider.of<TestNotifier>(context, listen: false);
+    TestModel currentTestModel = testNotifier.currentTestModel;
 
-    Widget questionField(TestModel _currentTestModel) {
+    Widget questionField(TestModel currentTestModel) {
       return FutureBuilder(
-          future: getQuestionFuture(_currentTestModel),
+          future: getQuestionFuture(currentTestModel),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();
             }
             if (dropdownValueAnswer.isEmpty) {
-              dropdownValueAnswer = _currentTestModel.questions!
-                  .map((e) => e.option![0] as String)
-                  .toList();
+              dropdownValueAnswer = currentTestModel.questions!.map((e) => e.option![0] as String).toList();
             }
 
             return ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: _currentTestModel.questions?.length ?? 0,
+                itemCount: currentTestModel.questions?.length ?? 0,
                 itemBuilder: ((context, i) {
-                  List<QuestionModel>? dropdownValueQuestion =
-                      _currentTestModel.questions;
+                  List<QuestionModel>? dropdownValueQuestion = currentTestModel.questions;
 
                   return SizedBox(
                     width: 400,
                     child: ListTile(
                       title: Text(
                         '\nQ${i + 1} ${dropdownValueQuestion![i].question}\n',
-                        style: TextStyle(
-                            fontSize: 20, color: Colors.black.withOpacity(0.8)),
+                        style: TextStyle(fontSize: 20, color: Colors.black.withOpacity(0.8)),
                       ),
                       subtitle: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 5, vertical: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                         child: DropdownButton(
                           value: dropdownValueAnswer[i],
                           items: dropdownValueQuestion[i]
                               .option!
                               .map((e) => DropdownMenuItem(
-                                    child: Text(e as String),
-                                    value: e,
+                                    value: e as String,
+                                    child: Text(e),
                                   ))
                               .toList(),
                           onChanged: (String? value) {
@@ -101,13 +95,12 @@ class _QuestionPlay extends State<QuestionPlay> {
             child: const Icon(Icons.done),
             onPressed: () {
               print(dropdownValueAnswer[0]);
-              print(_currentTestModel.questions![0].option![0]);
+              print(currentTestModel.questions![0].option![0]);
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => ResultScreen(
-                          dropdownValueAnswer: dropdownValueAnswer, dropdownValueQuestion: _currentTestModel.questions, namaTest:widget.testName)));
-
+                          dropdownValueAnswer: dropdownValueAnswer, dropdownValueQuestion: currentTestModel.questions, namaTest: widget.testName)));
             },
           ),
         ],
@@ -116,8 +109,7 @@ class _QuestionPlay extends State<QuestionPlay> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Text("${widget.testName} Test"),
-        titleTextStyle: const TextStyle(
-            color: Colors.blue, fontSize: 18.0, fontWeight: FontWeight.bold),
+        titleTextStyle: const TextStyle(color: Colors.blue, fontSize: 18.0, fontWeight: FontWeight.bold),
         elevation: 2,
         leading: IconButton(
           icon: const Icon(
@@ -140,7 +132,7 @@ class _QuestionPlay extends State<QuestionPlay> {
                 child: Column(
                   children: <Widget>[
                     const SizedBox(height: 5),
-                    questionField(_currentTestModel),
+                    questionField(currentTestModel),
                   ],
                 ),
               ),
