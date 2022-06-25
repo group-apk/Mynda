@@ -48,6 +48,7 @@ dependencies:
   like_button: ^2.0.4
   flutter_randomcolor: ^1.0.12
   intl:
+  firebase_messaging: ^11.4.2
   
 dev_dependencies:
   flutter_test:
