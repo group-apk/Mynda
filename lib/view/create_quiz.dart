@@ -5,15 +5,14 @@ import '../widgets/widget.dart';
 import 'package:random_string/random_string.dart';
 
 class CreateQuiz extends StatefulWidget {
-
+  const CreateQuiz({Key? key}) : super(key: key);
 
   @override
-  _CreateQuizState createState() => _CreateQuizState();
+  State<CreateQuiz> createState() => _CreateQuizState();
 }
 
 class _CreateQuizState extends State<CreateQuiz> {
-
-  DatabaseService databaseService = new DatabaseService(uid: '');
+  DatabaseService databaseService = DatabaseService(uid: '');
   final _formKey = GlobalKey<FormState>();
 
   late String quizImgUrl, quizTitle, quizDesc;
@@ -21,44 +20,33 @@ class _CreateQuizState extends State<CreateQuiz> {
   bool isLoading = false;
   late String quizId;
 
-
-  createQuiz(){
-
+  createQuiz() {
     quizId = randomAlphaNumeric(16);
-    if(_formKey.currentState!.validate()){
-
+    if (_formKey.currentState!.validate()) {
       setState(() {
         isLoading = true;
       });
 
-      Map<String, String> quizData = {
-        "quizImgUrl" : quizImgUrl,
-        "quizTitle" : quizTitle,
-        "quizDesc" : quizDesc
-      };
+      Map<String, String> quizData = {"quizImgUrl": quizImgUrl, "quizTitle": quizTitle, "quizDesc": quizDesc};
 
-      databaseService.addQuizData(quizData, quizId).then((value){
+      databaseService.addQuizData(quizData, quizId).then((value) {
         setState(() {
           isLoading = false;
         });
-        Navigator.pushReplacement(context, MaterialPageRoute(
-            builder: (context) =>  AddQuestion(quizId)
-        ));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AddQuestion(quizId)));
       });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        leading: BackButton(
+        leading: const BackButton(
           color: Colors.black54,
         ),
-        title: AppLogo(),
-        brightness: Brightness.light,
+        title: const AppLogo(),
         elevation: 0.0,
         backgroundColor: Colors.transparent,
         //brightness: Brightness.li,
@@ -66,39 +54,37 @@ class _CreateQuizState extends State<CreateQuiz> {
       body: Form(
         key: _formKey,
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [
-            TextFormField(
-              validator: (val) => val!.isEmpty ? "Enter Quiz Image Url" : null,
-              decoration: InputDecoration(
-                hintText: "Quiz Image Url (Optional)"
+              TextFormField(
+                validator: (val) => val!.isEmpty ? "Enter Quiz Image Url" : null,
+                decoration: const InputDecoration(hintText: "Quiz Image Url (Optional)"),
+                onChanged: (val) {
+                  quizImgUrl = val;
+                },
               ),
-              onChanged: (val){
-                quizImgUrl = val;
-              },
-            ),
-            SizedBox(height: 5,),
-            TextFormField(
-              validator: (val) => val!.isEmpty ? "Enter Quiz Title" : null,
-              decoration: InputDecoration(
-                hintText: "Quiz Title"
+              const SizedBox(
+                height: 5,
               ),
-              onChanged: (val){
-                quizTitle = val;
-              },
-            ),
-            SizedBox(height: 5,),
-            TextFormField(
-              validator: (val) => val!.isEmpty ? "Enter Quiz Description" : null,
-              decoration: InputDecoration(
-                  hintText: "Quiz Description"
+              TextFormField(
+                validator: (val) => val!.isEmpty ? "Enter Quiz Title" : null,
+                decoration: const InputDecoration(hintText: "Quiz Title"),
+                onChanged: (val) {
+                  quizTitle = val;
+                },
               ),
-              onChanged: (val){
-               quizDesc = val;
-              },
-            ),
-              Spacer(),
+              const SizedBox(
+                height: 5,
+              ),
+              TextFormField(
+                validator: (val) => val!.isEmpty ? "Enter Quiz Description" : null,
+                decoration: const InputDecoration(hintText: "Quiz Description"),
+                onChanged: (val) {
+                  quizDesc = val;
+                },
+              ),
+              const Spacer(),
               GestureDetector(
                 onTap: () {
                   createQuiz();
@@ -106,23 +92,20 @@ class _CreateQuizState extends State<CreateQuiz> {
                 child: Container(
                   alignment: Alignment.center,
                   width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 24, vertical: 20),
-                  decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(30)),
-                  child: Text(
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                  decoration: BoxDecoration(color: Colors.blue, borderRadius: BorderRadius.circular(30)),
+                  child: const Text(
                     "Create Quiz",
-                    style: TextStyle(
-                        fontSize: 16, color: Colors.white),
+                    style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 60,
               ),
-          ],)
-          ,),
+            ],
+          ),
+        ),
       ),
     );
   }

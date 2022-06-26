@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 
 class ArticleModel {
   String? author, id, title, imgurl;
@@ -19,7 +18,7 @@ class ArticleModel {
     createdAt = data['createdAt'];
   }
 
-  ArticleModel(this.id, this.title, this.author, this.imgurl, this.likes, this.category,this.body, this.createdAt);
+  ArticleModel(this.id, this.title, this.author, this.imgurl, this.likes, this.category, this.body, this.createdAt);
 
   Map<String, dynamic> toMap() {
     return {
@@ -28,7 +27,7 @@ class ArticleModel {
       'title': title,
       'imgurl': imgurl,
       'likes': likes,
-      'body':body,
+      'body': body,
       'category': category,
       'createdAt': createdAt,
     };

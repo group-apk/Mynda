@@ -7,44 +7,31 @@ class DatabaseService {
 
   Future<void> addData(userData) async {
     FirebaseFirestore.instance.collection("users").add(userData).catchError((e) {
-      print(e);
+      // print(e);
     });
   }
 
   getData() async {
-    return await FirebaseFirestore.instance.collection("users").snapshots();
+    return FirebaseFirestore.instance.collection("users").snapshots();
   }
 
-  Future<void> addQuizData( quizData, String quizId) async {
-    await FirebaseFirestore.instance
-        .collection("QuizList")
-        .doc(quizId)
-        .set(quizData)
-        .catchError((e) {
-      print(e);
+  Future<void> addQuizData(quizData, String quizId) async {
+    await FirebaseFirestore.instance.collection("QuizList").doc(quizId).set(quizData).catchError((e) {
+      // print(e);
     });
   }
 
   Future<void> addQuestionData(quizData, String quizId) async {
-    await FirebaseFirestore.instance
-        .collection("QuizList")
-        .doc(quizId)
-        .collection("Questions")
-        .add(quizData)
-        .catchError((e) {
-      print(e);
+    await FirebaseFirestore.instance.collection("QuizList").doc(quizId).collection("Questions").add(quizData).catchError((e) {
+      // print(e);
     });
   }
 
   getQuizData() async {
-    return await FirebaseFirestore.instance.collection("Quiz").snapshots();
+    return FirebaseFirestore.instance.collection("Quiz").snapshots();
   }
 
-  getQuestionData(String quizId) async{
-    return await FirebaseFirestore.instance
-        .collection("QuizList")
-        .doc(quizId)
-        .collection("Questions")
-        .get();
+  getQuestionData(String quizId) async {
+    return await FirebaseFirestore.instance.collection("QuizList").doc(quizId).collection("Questions").get();
   }
 }

@@ -31,7 +31,6 @@ class _DashboardMainState extends State<DashboardMain> {
   Widget build(BuildContext context) {
     final user = context.read<UserProvider>();
     final dashboard = context.read<DashboardProvider>();
-    final articleProvider = context.read<ArticleNotifier>();
 
     final List<Widget> widgetOptions = [
       const HomepageScreen(),
@@ -116,15 +115,6 @@ class _HomepageScreenState extends State<HomepageScreen> {
     final user = context.read<UserProvider>();
     final dashboard = context.read<DashboardProvider>();
     final articleProvider = context.read<ArticleNotifier>();
-
-    void snackbar({required String text, Duration duration = const Duration(seconds: 1)}) {
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        duration: duration,
-        behavior: SnackBarBehavior.floating,
-        content: Text(text),
-      ));
-    }
 
     Widget greet() {
       if (user.user.role != 'Guest') {

@@ -20,10 +20,10 @@ Future<AppointmentModel> addAppointment({required AppointmentModel appointmentMo
   await FirebaseFirestore.instance.collection('Appointments').add(appointmentModel.toMap()).then((doc) async {
     appointmentModel.id = doc.id;
     await FirebaseFirestore.instance.collection('Appointments').doc(doc.id).update(appointmentModel.toMap());
-    print('Success added appointment');
-    print(appointmentModel.memberUID);
-    print(appointmentModel.id);
-    print(appointmentModel.staffUID);
+    // print('Success added appointment');
+    // print(appointmentModel.memberUID);
+    // print(appointmentModel.id);
+    // print(appointmentModel.staffUID);
   });
   return appointmentModel;
 }
@@ -34,7 +34,7 @@ Future getGuests(UserProvider userProvider, AppointmentProvider appointmentProvi
     latestGuests.removeWhere((element) => element.staffUID != userProvider.user.uid);
     // print(latestAppointments.toString());
     (latestGuests.isNotEmpty) ? appointmentProvider.setGuests(latestGuests) : null;
-    (latestGuests.isNotEmpty) ? print(appointmentProvider.getGuests[0].name) : null;
+    // (latestGuests.isNotEmpty) ? print(appointmentProvider.getGuests[0].name) : null;
   });
 }
 
@@ -42,22 +42,24 @@ Future<Guest> addGuest({required Guest guest}) async {
   await FirebaseFirestore.instance.collection('guests').add(guest.toMap()).then((doc) async {
     guest.memberUID = doc.id;
     await FirebaseFirestore.instance.collection('guests').doc(doc.id).update(guest.toMap());
-    print('Success added guest');
-    print(guest.memberUID);
-    print(guest.name);
-    print(guest.staffUID);
+    // print('Success added guest');
+    // print(guest.memberUID);
+    // print(guest.name);
+    // print(guest.staffUID);
   });
   return guest;
 }
 
-Future getAppointments(UserProvider userProvider, AppointmentProvider appointmentProvider) async {
+Future<List<AppointmentModel>> getAppointments(UserProvider userProvider, AppointmentProvider appointmentProvider) async {
+  List<AppointmentModel> latestAppointments = [];
   await FirebaseFirestore.instance.collection('Appointments').get().then((snapshot) {
     List<AppointmentModel> latestAppointments = snapshot.docs.map((e) => AppointmentModel.fromMap(e.data())).toList();
     latestAppointments.removeWhere((element) => element.staffUID != userProvider.user.uid);
     // print(latestAppointments.toString());
     (latestAppointments.isNotEmpty) ? appointmentProvider.setAppointments(latestAppointments) : null;
-    (latestAppointments.isNotEmpty) ? print(appointmentProvider.getAppointmentList[0].id) : null;
+    // (latestAppointments.isNotEmpty) ? print(appointmentProvider.getAppointmentList[0].id) : null;
   });
+  return latestAppointments;
 }
 
 Future updateProfile(BuildContext context, UserModel userModel) async {
