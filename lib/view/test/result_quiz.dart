@@ -100,7 +100,10 @@ class _ResultScreenState extends State<ResultScreen> {
   @override
   Widget build(BuildContext context) {
     final userProvider = context.read<UserProvider>();
+
     Future<Uint8List> makePdf() async {
+      final netImage = await networkImage(
+          'https://firebasestorage.googleapis.com/v0/b/mynda-map.appspot.com/o/My%20project%20(3).png?alt=media&token=8badf69b-e0a6-4c83-8aad-f5e8a0cc2c5d');
       final pdf = pw.Document();
       pdf.addPage(
         pw.Page(
@@ -178,6 +181,14 @@ class _ResultScreenState extends State<ResultScreen> {
                 pw.SizedBox(
                   height: 100.0,
                 ),
+                pw.Text(
+                  "Created by:",
+                  style: const pw.TextStyle(
+                    color: PdfColors.black,
+                    fontSize: 25.0,
+                  ),
+                ),
+                pw.Image(netImage),
               ],
             ),
           ),
