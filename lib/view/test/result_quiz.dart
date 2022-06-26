@@ -7,9 +7,14 @@ import 'package:mynda/provider/result_provider.dart';
 import 'package:mynda/view/test/category_view.dart';
 import 'package:mynda/view/dashboard.dart';
 import 'package:provider/provider.dart';
-import '../../model/question_model.dart';
-import '../../provider/article_notifier.dart';
-import '../../services/api.dart';
+import 'dart:typed_data';
+import 'package:mynda/provider/user_provider.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
+import 'package:mynda/model/question_model.dart';
+import 'package:mynda/provider/article_notifier.dart';
+import 'package:mynda/services/api.dart';
 
 class ResultScreen extends StatefulWidget {
 //  final List<String> dropdownValueAnswer = []; //simpan list of answer
@@ -94,9 +99,105 @@ class _ResultScreenState extends State<ResultScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = context.read<UserProvider>();
+    Future<Uint8List> makePdf() async {
+      final pdf = pw.Document();
+      pdf.addPage(
+        pw.Page(
+          build: (context) => pw.Container(
+            child: pw.Column(
+              mainAxisAlignment: pw.MainAxisAlignment.center,
+              crossAxisAlignment: pw.CrossAxisAlignment.center,
+              children: [
+                pw.SizedBox(
+                  width: double.infinity,
+                  child: pw.Text(
+                    "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}",
+                    textAlign: pw.TextAlign.center,
+                    style: pw.TextStyle(
+                      color: PdfColors.black,
+                      fontSize: 25.0,
+                      fontWeight: pw.FontWeight.bold,
+                    ),
+                  ),
+                ),
+                pw.SizedBox(
+                  width: double.infinity,
+                  child: pw.Text(
+                    (userProvider.user.role != 'Guest') ? "Name: ${userProvider.user.fullName}" : "As a ${userProvider.user.role}",
+                    textAlign: pw.TextAlign.center,
+                    style: pw.TextStyle(
+                      color: PdfColors.black,
+                      fontSize: 25.0,
+                      fontWeight: pw.FontWeight.bold,
+                    ),
+                  ),
+                ),
+                pw.SizedBox(
+                  width: double.infinity,
+                  child: pw.Text(
+                    "$result Symptom",
+                    textAlign: pw.TextAlign.center,
+                    style: pw.TextStyle(
+                      color: PdfColors.black,
+                      fontSize: 25.0,
+                      fontWeight: pw.FontWeight.bold,
+                    ),
+                  ),
+                ),
+                pw.Text(
+                  "You Score is",
+                  style: const pw.TextStyle(
+                    color: PdfColors.black,
+                    fontSize: 34.0,
+                  ),
+                ),
+                pw.SizedBox(
+                  height: 20.0,
+                ),
+                pw.Text(
+                  "$score",
+                  style: pw.TextStyle(
+                    color: PdfColors.black,
+                    fontSize: 85.0,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                ),
+                pw.SizedBox(
+                  height: 100.0,
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      return pdf.save();
+    }
+
     calcScore();
     resultText();
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          String text =
+              "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}-${userProvider.user.role != 'Guest' ? userProvider.user.fullName : userProvider.user.role}.pdf";
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: ((context) => SafeArea(
+                    child: Scaffold(
+                      appBar: AppBar(),
+                      body: PdfPreview(
+                        pdfFileName: text,
+                        build: (format) => makePdf(),
+                      ),
+                    ),
+                  )),
+            ),
+          );
+        },
+        child: const Icon(Icons.picture_as_pdf),
+      ),
       backgroundColor: Colors.blueAccent,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,

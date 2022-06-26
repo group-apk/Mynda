@@ -84,7 +84,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
             future: getAppointments(userProvider, appointmentProvider).then((value) {
               events.addAll(Map.fromIterable(appointmentProvider.getAppointmentList.map(
                 (e) {
-                  print({e.appointmentAt!.toDate().toUtc(): e});
+                  // print({e.appointmentAt!.toDate().toUtc(): e});
                   return {e.appointmentAt!.toDate(): e};
                 },
               )));
@@ -93,7 +93,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const CircularProgressIndicator();
               }
-              print(events);
+              // print(events);
               return SingleChildScrollView(
                 child: Card(
                   color: Colors.blue[50],
