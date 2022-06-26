@@ -9,7 +9,7 @@ import 'package:mynda/services/api.dart';
 import 'package:flutter_randomcolor/flutter_randomcolor.dart';
 import 'package:provider/provider.dart';
 import '../test_staff/statistic_test.dart';
-import '../test_staff/article_chart.dart';
+import 'article_chart.dart';
 import 'add_article.dart';
 import 'article_edit.dart';
 

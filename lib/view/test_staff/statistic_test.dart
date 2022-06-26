@@ -58,7 +58,7 @@ class _StatisticTestState extends State<StatisticTest> {
                   groupBy: (elements) => DateFormat('MMMM yyyy').format(elements.createdAt!.toDate()),
                   groupComparator: (value1, value2) => value2.compareTo(value1),
                   itemComparator: (item1, item2) =>
-                      item1.quizTitle.compareTo(item2.quizTitle),
+                      item1.createdAt.compareTo(item2.createdAt),
                   order: GroupedListOrder.DESC,
                   useStickyGroupSeparators: true,
                   groupSeparatorBuilder: (String value) => Padding(

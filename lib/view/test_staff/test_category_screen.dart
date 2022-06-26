@@ -4,7 +4,7 @@ import 'package:mynda/services/api.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:mynda/view/test_staff/question_manager.dart';
 import 'package:mynda/view/test_staff/statistic_test.dart';
-import 'package:mynda/view/test_staff/article_chart.dart';
+import 'package:mynda/view/article_staff/article_chart.dart';
 import 'package:provider/provider.dart';
 
 import 'add_test.dart';
