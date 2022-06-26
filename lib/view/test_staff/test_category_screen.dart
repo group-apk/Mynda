@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mynda/provider/test_notifier.dart';
 import 'package:mynda/services/api.dart';
-import 'package:mynda/view/test_staff/add_test.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:mynda/view/test_staff/question_manager.dart';
+import 'package:mynda/view/test_staff/statistic_test.dart';
+import 'package:mynda/view/article_staff/article_chart.dart';
 import 'package:provider/provider.dart';
+
+import 'add_test.dart';
 
 class HealthTestCategoryScreen extends StatefulWidget {
   const HealthTestCategoryScreen({Key? key}) : super(key: key);
@@ -36,6 +40,16 @@ class _HealthTestCategoryScreenState extends State<HealthTestCategoryScreen> {
     return index;
   }
 
+  List<String> getQuizList() {
+    TestNotifier testNotifier =
+        Provider.of<TestNotifier>(context, listen: false);
+    List<String> quizList = [];
+    for (int i = 0; i < testNotifier.testList.length; i++) {
+      quizList.add(testNotifier.testList[i].quizTitle.toString());
+    }
+    return quizList;
+  }
+
   @override
   Widget build(BuildContext context) {
     TestNotifier testNotifier =
@@ -43,13 +57,37 @@ class _HealthTestCategoryScreenState extends State<HealthTestCategoryScreen> {
     Widget body = WillPopScope(
       onWillPop: (() async => false),
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: 
+        /*FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const AddTestScreen()));
           },
-        ),
+        ),*/
+        SpeedDial(
+          icon: Icons.list,
+          backgroundColor: Color.fromARGB(255, 43, 112, 240),
+          children: [
+            SpeedDialChild(
+              child: const Icon(Icons.add),
+              label: 'Add Quiz',
+              backgroundColor: Color.fromARGB(255, 116, 234, 255),
+              onTap: () {
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const AddTestScreen()));
+              },
+            ),
+            SpeedDialChild(
+              child: const Icon(Icons.history),
+              label: 'Quiz History',
+              backgroundColor: Color.fromARGB(255, 116, 234, 255),
+              onTap: () {
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const StatisticTest()));
+              },
+            ),
+          ]),
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -58,6 +96,16 @@ class _HealthTestCategoryScreenState extends State<HealthTestCategoryScreen> {
               color: Colors.blue, fontSize: 20.0, fontWeight: FontWeight.bold),
           elevation: 2,
           automaticallyImplyLeading: false,
+          actions: [
+          IconButton(
+              onPressed: () {
+                showSearch(
+                    context: context,
+                    delegate: CustomSearchDelegate(getQuizList()));
+              },
+              icon: const Icon(Icons.search),
+              color: Colors.blue)
+        ],
         ),
         body: Container(
           color: Colors.transparent,
@@ -139,5 +187,96 @@ class _HealthTestCategoryScreenState extends State<HealthTestCategoryScreen> {
     );
 
     return body;
+  }
+}
+
+class CustomSearchDelegate extends SearchDelegate {
+  List<String> searchTerms = [];
+  CustomSearchDelegate(this.searchTerms);
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: const Icon(Icons.clear),
+        onPressed: () {
+          if (query.isEmpty) {
+            close(context, null);
+          } else {
+            query = '';
+          }
+        },
+      )
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+        onPressed: () {
+          close(context, null);
+        },
+        icon: const Icon(Icons.arrow_back));
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    List<String> matchQuery = [];
+    for (var quiz in searchTerms) {
+      if (quiz.toLowerCase().contains(query.toLowerCase())) {
+        matchQuery.add(quiz);
+      }
+    }
+    return ListView.builder(
+      itemCount: matchQuery.length,
+      itemBuilder: (context, index) {
+        var result = matchQuery[index];
+        return ListTile(
+          title: Text(result),
+          onTap: () {
+            query = result;
+            TestNotifier testNotifier =
+                Provider.of<TestNotifier>(context, listen: false);
+            testNotifier.currentTestModel =
+                testNotifier.testList[searchTerms.indexOf(query)];
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => EditTestScreen(testName: query)));
+            showResults(context);
+          },
+        );
+      },
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    List<String> matchQuery = [];
+    for (var quiz in searchTerms) {
+      if (quiz.toLowerCase().contains(query.toLowerCase())) {
+        matchQuery.add(quiz);
+      }
+    }
+    return ListView.builder(
+      itemCount: matchQuery.length,
+      itemBuilder: (context, index) {
+        var result = matchQuery[index];
+        return ListTile(
+          title: Text(result),
+          onTap: () {
+            query = result;
+            TestNotifier testNotifier =
+                Provider.of<TestNotifier>(context, listen: false);
+            testNotifier.currentTestModel =
+                testNotifier.testList[searchTerms.indexOf(query)];
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => EditTestScreen(testName: query)));
+            // showResults(context);
+          },
+        );
+      },
+    );
   }
 }

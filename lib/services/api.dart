@@ -11,6 +11,10 @@ import 'package:mynda/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:mynda/model/article_model.dart';
 import 'package:mynda/provider/article_notifier.dart';
+import "package:collection/collection.dart";
+
+import '../model/result_model.dart';
+import '../provider/result_provider.dart';
 
 Future<AppointmentModel> addAppointment({required AppointmentModel appointmentModel}) async {
   await FirebaseFirestore.instance.collection('Appointments').add(appointmentModel.toMap()).then((doc) async {
@@ -202,4 +206,31 @@ Future<TestModel> addNewAnswer(TestModel test, int index) async {
 deleteExistingAnswer(TestModel test, int index) async {
   final CollectionReference db = FirebaseFirestore.instance.collection('QuizList').doc(test.quizId).collection('Questions');
   await db.doc(test.questions![index].qid).update({"option": test.questions![index].option});
+}
+
+getResult(ResultProvider resultProvider) async {
+  QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('ResultQuiz').get();
+  List<ResultModel> resultList = snapshot.docs.map((e) => ResultModel.fromMap(e.data() as Map<String, dynamic>)).toList();
+
+  resultProvider.resultList = resultList;
+}
+
+Future getResultFuture(ResultProvider resultProvider) async {
+  QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('ResultQuiz').get();
+  List<ResultModel> resultList = snapshot.docs.map((e) => ResultModel.fromMap(e.data() as Map<String, dynamic>)).toList();
+
+  resultProvider.resultList = resultList;
+
+}
+
+
+Future<ResultModel> uploadNewResult(ResultModel result) async {
+  final CollectionReference db = FirebaseFirestore.instance.collection('ResultQuiz');
+  result.id = await db.add({
+    'marks': result.marks,
+    'quizTitle': result.quizTitle,
+    'createdAt': Timestamp.now(),
+  }).then((doc) => doc.id);
+  await db.doc(result.id).update({"id": result.id});
+  return result;
 }
