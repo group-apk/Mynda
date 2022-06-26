@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mynda/provider/test_notifier.dart';
 import 'package:mynda/services/api.dart';
-import 'package:mynda/view/test_staff/add_test.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:mynda/view/test_staff/question_manager.dart';
+import 'package:mynda/view/test_staff/statistic_test.dart';
+import 'package:mynda/view/test_staff/article_chart.dart';
 import 'package:provider/provider.dart';
+
+import 'add_test.dart';
 
 class HealthTestCategoryScreen extends StatefulWidget {
   const HealthTestCategoryScreen({Key? key}) : super(key: key);
@@ -43,13 +47,37 @@ class _HealthTestCategoryScreenState extends State<HealthTestCategoryScreen> {
     Widget body = WillPopScope(
       onWillPop: (() async => false),
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: 
+        /*FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const AddTestScreen()));
           },
-        ),
+        ),*/
+        SpeedDial(
+          icon: Icons.list,
+          backgroundColor: Color.fromARGB(255, 43, 112, 240),
+          children: [
+            SpeedDialChild(
+              child: const Icon(Icons.add),
+              label: 'Add Quiz',
+              backgroundColor: Color.fromARGB(255, 116, 234, 255),
+              onTap: () {
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const AddTestScreen()));
+              },
+            ),
+            SpeedDialChild(
+              child: const Icon(Icons.history),
+              label: 'Quiz History',
+              backgroundColor: Color.fromARGB(255, 116, 234, 255),
+              onTap: () {
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const StatisticTest()));
+              },
+            ),
+          ]),
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.white,
