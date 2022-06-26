@@ -112,6 +112,18 @@ class _ResultScreenState extends State<ResultScreen> {
                 pw.SizedBox(
                   width: double.infinity,
                   child: pw.Text(
+                    widget.namaTest,
+                    textAlign: pw.TextAlign.center,
+                    style: pw.TextStyle(
+                      color: PdfColors.black,
+                      fontSize: 25.0,
+                      fontWeight: pw.FontWeight.bold,
+                    ),
+                  ),
+                ),
+                pw.SizedBox(
+                  width: double.infinity,
+                  child: pw.Text(
                     "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}",
                     textAlign: pw.TextAlign.center,
                     style: pw.TextStyle(
